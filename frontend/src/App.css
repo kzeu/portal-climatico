@@ -1,0 +1,409 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f6f8fb;
+  color: #222;
+}
+
+
+/* HEADER */
+
+.header {
+  background: #ffffff;
+  border-bottom: 1px solid #cfcfcf;
+
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+
+/*.top-bar {
+  height: 5px;
+  background: #0b5e5e;
+}
+*/
+
+.header-top {
+  max-width: 1200px;
+  margin: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 10px;
+ 
+}
+
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.logo-img {
+  height: 50px;
+  width: auto;
+}
+
+
+.titles {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.country {
+  font-weight: 700;
+}
+
+
+.header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+
+
+
+.lang {
+  border-radius: 6px;
+  padding: 3px 4px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+}
+
+
+
+.admin-btn {
+  background: transparent;
+  border: 1px solid #bbb;
+  color: #333;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.admin-btn:hover {
+  background: #e6e6e6;
+}
+
+
+
+.search-box {
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #d0d0d0;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  padding: 3px 8px;
+
+}
+
+.search-input {
+
+  border: none;
+  outline: none;
+
+  font-size: 14px;
+
+  background: transparent;
+
+  width: 260px;
+
+}
+
+.search-input::placeholder {
+  color: #888;
+}
+
+.search-icon {
+  color: #999;
+  cursor: pointer;
+}
+
+
+
+.menu {
+  background: #2c7fb8;
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+
+  padding: 13px;
+
+  position: fixed;
+  top: 110px;
+  left: 0;
+  width: 100%;
+
+  z-index: 999;
+}
+
+.menu span {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  font-size: 14px;
+}
+
+.menu span:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+
+
+.content {
+  max-width: 1100px;
+  margin: auto;
+ 
+
+  min-height: 70vh;
+  
+}
+
+
+
+.hero {
+  text-align: center;
+  padding: 50px 20px;
+
+  background: #eaf3fb;
+
+  border-radius: 8px;
+  margin: 20px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.hero p {
+  margin-top: 10px;
+  color: #555;
+}
+
+
+
+.cards {
+  display: flex;
+  grid-template-columns: repeat(4, 1fr);
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+
+  border-radius: 8px;
+
+  padding: 20px;
+
+  min-height: 120px;
+
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+
+  border-top: 3px solid #2c7fb8;
+
+  transition: 0.15s;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+}
+
+
+
+
+.section {
+  background: white;
+
+  margin: 20px;
+  padding: 20px;
+
+  border-radius: 8px;
+
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+
+
+.footer {
+  background: #f0f0f0;
+  margin-top: 30px;
+  border-top: 2px solid #2c7fb8;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+
+  max-width: 1100px;
+  margin: auto;
+
+  padding: 15px;
+
+  font-size: 14px;
+}
+
+.footer-bottom {
+  background: #e0e0e0;
+  text-align: center;
+  padding: 10px;
+  font-size: 13px;
+}
+
+
+body, html {
+  height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+
+.super-bar {
+
+  background: #ececec;
+
+  font-size: 14px;
+
+  font-weight: 750;
+
+  color: #8b8686;
+
+  padding: 5px 12px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #d5d5d5;
+
+}
+
+.super-bar-inner {
+
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 5px 10px;
+
+  font-size: 14px;
+
+  font-weight: 750;
+
+  color: #777;
+
+}
+
+
+.menu-item {
+  position: relative;
+}
+
+
+
+
+.submenu {
+
+  position: absolute;
+
+  top: calc(100% + 12px);
+
+  left: 0;
+
+  background: #5cab7d;
+
+  color: white;
+
+  min-width: 240px;
+
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+
+  z-index: 2000;
+
+
+
+}
+
+
+.submenu div {
+
+  padding: 8px 12px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+}
+
+
+.submenu div:hover {
+
+  background: #2f6f4f;
+
+}
+
+
+
+
+/* RESPONSIVO  */
+
+@media (max-width: 900px) {
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: stretch;
+    top: 125px;
+  }
+
+  .content {
+    margin-top: 180px;
+   
+    min-height: 75vh;
+  }
+
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    
+  }
+
+  
+  .submenu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+  }
+
+
+
+}
