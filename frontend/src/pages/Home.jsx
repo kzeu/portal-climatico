@@ -26,8 +26,7 @@ function Home() {
 
         <p>
           Este conteúdo é apenas para teste de layout.
-          O portal poderá conter dados climáticos,
-          relatórios, mapas e documentos.
+         
         </p>
 
         <p>
