@@ -31,7 +31,7 @@ function Home() {
         </p>
 
         <p>
-          Texto adicional para aumentar o tamanho da página.
+          Texto  para aumentar o tamanho da página.
         </p>
       </div>
 
@@ -41,12 +41,11 @@ function Home() {
 
         <p>
          Este conteúdo é apenas para teste de layout.
-          O portal poderá conter dados climáticos,
-          relatórios, mapas e documentos.
+        
         </p>
 
         <p>
-          Texto adicional para aumentar o tamanho da página.
+          Texto  para aumentar o tamanho da página.
         </p>
       </div>
 
@@ -56,12 +55,11 @@ function Home() {
 
         <p>
            Este conteúdo é apenas para teste de layout.
-          O portal poderá conter dados climáticos,
-          relatórios, mapas e documentos.
+         
         </p>
 
         <p>
-       Texto adicional para aumentar o tamanho da página.
+       Texto  para aumentar o tamanho da página.
         </p>
       </div>
 
@@ -71,12 +69,11 @@ function Home() {
 
         <p>
            Este conteúdo é apenas para teste de layout.
-          O portal poderá conter dados climáticos,
-          relatórios, mapas e documentos.
+         
         </p>
 
         <p>
-            Texto adicional para aumentar o tamanho da página.
+            Texto  para aumentar o tamanho da página.
         </p>
       </div>
 
@@ -86,13 +83,12 @@ function Home() {
 
         <p>
            Este conteúdo é apenas para teste de layout.
-          O portal poderá conter dados climáticos,
-          relatórios, mapas e documentos.
+      
         </p>
 
         <p>
           
-            Texto adicional para aumentar o tamanho da página.
+            Texto  para aumentar o tamanho da página.
         </p>
       </div>
 
