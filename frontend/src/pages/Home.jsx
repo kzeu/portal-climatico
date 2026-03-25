@@ -30,7 +30,7 @@ function Home() {
         </p>
 
         <p>
-          Texto  para aumentar o tamanho da página.
+          Texto  para aumentar o tamanho da página.   Texto  para aumentar o tamanho da página.
         </p>
       </div>
 
