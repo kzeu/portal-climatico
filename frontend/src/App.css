@@ -395,7 +395,108 @@ body, html {
 }
 
 
+/* CONTAINER */
 
+.form-container {
+
+  max-width: 700px;
+
+  margin: 40px auto;
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+}
+
+
+/* TÍTULO */
+
+.form-container h1 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.form-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+
+/* FORM */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* LABEL */
+
+.form label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* INPUTS */
+
+.form input,
+.form textarea {
+
+  padding: 10px;
+
+  border-radius: 8px;
+
+  border: 1px solid #ccc;
+
+  font-size: 14px;
+
+  transition: 0.2s;
+
+}
+
+.form input:focus,
+.form textarea:focus {
+  border-color: #2c7fb8;
+  outline: none;
+}
+
+
+/* BOTÃO */
+
+.btn-enviar {
+
+  margin-top: 15px;
+
+  background: #2c7fb8;
+
+  color: white;
+
+  border: none;
+
+  padding: 12px;
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+.btn-enviar:hover {
+  background: #1f5f8a;
+}
 
 /* RESPONSIVO  */
 
