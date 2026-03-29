@@ -82,13 +82,6 @@ function Header() {
           </div>
 
 
-          <select className="lang">
-            <option>PT</option>
-            <option>EN</option>
-          </select>
-
-
-
         </div>
 
 

@@ -37,11 +37,15 @@ function Menu({ setPage }) {
           <div className="submenu">
 
             <div onClick={() => go("home")}>
-              Introdução
+              Seguimento do NAP
             </div>
 
             <div onClick={() => go("home")}>
-              Destaques
+              Mapas de Climatologia
+            </div>
+
+            <div onClick={() => go("home")}>
+              Mapas de risco climático
             </div>
 
           </div>
@@ -66,13 +70,7 @@ function Menu({ setPage }) {
         {open === "adaptacao" && (
           <div className="submenu">
 
-            <div onClick={() => go("adaptacao")}>
-              Plano Nacional
-            </div>
-
-            <div onClick={() => go("adaptacao")}>
-              Projetos
-            </div>
+           
 
           </div>
         )}
@@ -96,13 +94,7 @@ function Menu({ setPage }) {
         {open === "mitigacao" && (
           <div className="submenu">
 
-            <div onClick={() => go("mitigacao")}>
-              Inventário
-            </div>
-
-            <div onClick={() => go("mitigacao")}>
-              Políticas
-            </div>
+           
 
           </div>
         )}
@@ -127,12 +119,10 @@ function Menu({ setPage }) {
           <div className="submenu">
 
             <div onClick={() => go("engajamento")}>
-              Eventos
+              Submissões de Ações Climáticas
             </div>
 
-            <div onClick={() => go("engajamento")}>
-              Participação
-            </div>
+           
 
           </div>
         )}
@@ -156,13 +146,7 @@ function Menu({ setPage }) {
         {open === "biblioteca" && (
           <div className="submenu">
 
-            <div onClick={() => go("biblioteca")}>
-              Documentos
-            </div>
-
-            <div onClick={() => go("biblioteca")}>
-              Relatórios
-            </div>
+            
 
           </div>
         )}
@@ -186,13 +170,7 @@ function Menu({ setPage }) {
         {open === "contato" && (
           <div className="submenu">
 
-            <div onClick={() => go("contato")}>
-              Fale conosco
-            </div>
-
-            <div onClick={() => go("contato")}>
-              Localização
-            </div>
+           
 
           </div>
         )}
