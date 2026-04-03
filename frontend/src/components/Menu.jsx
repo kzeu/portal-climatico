@@ -36,15 +36,15 @@ function Menu({ setPage }) {
         {open === "home" && (
           <div className="submenu">
 
-            <div onClick={() => go("home")}>
+            <div onClick={() => go("seguimento_nap")}>
               Seguimento do NAP
             </div>
 
-            <div onClick={() => go("home")}>
+            <div onClick={() => go("mapas_climatologia")}>
               Mapas de Climatologia
             </div>
 
-            <div onClick={() => go("home")}>
+            <div onClick={() => go("mapas_riscos")}>
               Mapas de risco climático
             </div>
 
@@ -118,7 +118,7 @@ function Menu({ setPage }) {
         {open === "engajamento" && (
           <div className="submenu">
 
-            <div onClick={() => go("engajamento")}>
+            <div onClick={() => go("form_submissao")}>
               Submissões de Ações Climáticas
             </div>
 

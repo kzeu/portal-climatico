@@ -10,6 +10,10 @@ import Mitigacao from "./pages/Mitigacao";
 import Biblioteca from "./pages/Biblioteca";
 import Engajamento from "./pages/Engajamento";
 import Contato from "./pages/Contato";
+import Seguimento_Nap from "./pages/Seguimento_nap";
+import Mapas_climatologia from "./pages/Mapas_climatologia";
+import Mapas_riscos from "./pages/Mapas_riscos";
+import Form_submissao_climatica from "./pages/Form_submissao_climatica"
 
 import "./App.css";
 
@@ -50,12 +54,16 @@ function App() {
 
   let Content;
 
-  if (page === "adaptacao") Content = <Adaptacao />;
-  else if (page === "mitigacao") Content = <Mitigacao />;
-  else if (page === "biblioteca") Content = <Biblioteca />;
-  else if (page === "engajamento") Content = <Engajamento />;
-  else if (page === "contato") Content = <Contato />;
-  else Content = <Home />;
+  if (page === "adaptacao") Content = <Adaptacao setPage={setPage} />;
+else if (page === "mitigacao") Content = <Mitigacao setPage={setPage} />;
+else if (page === "biblioteca") Content = <Biblioteca setPage={setPage} />;
+else if (page === "engajamento") Content = <Engajamento setPage={setPage} />;
+else if (page === "contato") Content = <Contato setPage={setPage} />;
+else if (page === "seguimento_nap") Content = <Seguimento_Nap setPage={setPage} />;
+else if (page === "mapas_climatologia") Content = <Mapas_climatologia setPage={setPage} />;
+else if (page === "mapas_riscos") Content = <Mapas_riscos setPage={setPage} />;
+else if (page === "form_submissao") Content = <Form_submissao_climatica setPage={setPage} />;
+else Content = <Home setPage={setPage} />;
 
 
   return (
