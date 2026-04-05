@@ -74,10 +74,8 @@ function Adaptacao({ setPage }) {
           </div>
         </div>
 
-      </div>
 
-
-      <div className="card">
+        <div className="card">
           <div className="card-header">Eventos</div>
           <div className="card-body">
             * Jovens e Mulheres na Ação Climática
@@ -144,7 +142,12 @@ function Adaptacao({ setPage }) {
 
 
 
-    </div>
+
+
+      </div>
+
+
+          </div>
   );
 }
 

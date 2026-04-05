@@ -1,62 +1,25 @@
+import "../App.css";
+import mapa from "../assets/Map1.jpg";
+
 function Mapas_riscos() {
-   return (
-    <div className="content" id="content">
+  return (
+    <div className="content full-page" id="content">
 
       {/* HERO */}
-
       <div className="hero">
-        <h1>Portal Climático da Guiné-Bissau</h1>
+        <h1>Mapas de Risco Climático</h1>
 
         <p>
-        [Em desenvolvimento] - Resultados de consultorias apoiadas pelo projeto PNUD GCF para a formulação do NAP da Guiné-Bissau
+          [Em desenvolvimento] - Resultados de consultorias apoiadas pelo projeto PNUD GCF para a formulação do NAP da Guiné-Bissau
         </p>
       </div>
 
+      {/* IMAGEM FULL */}
+      <div className="mapa-full">
 
-      {/* CARDS PRINCIPAIS */}
-
-      <div className="cards">
-
-        
-
-       
-
-      
-
-       
-
-        <div className="card">
-          <div className="card-header">Mitigação</div>
-          <div className="card-body">
-            Inventário de Gases de Efeito Estufa e políticas climáticas nacionais.
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card-header">Relatórios Nacionais</div>
-          <div className="card-body">
-            Relatórios oficiais submetidos à UNFCCC pela Guiné-Bissau.
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card-header">Treinamento em Transparência Climática</div>
-          <div className="card-body">
-            [Em desenvolvimento] - Oportunidade treinamento online para stakeholders ...
-.
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card-header">Chamadas para propostas</div>
-          <div className="card-body">
-            [Em desenvolvimento].
-          </div>
-        </div>
+        <img src={mapa} alt="Mapa de risco climático" />
 
       </div>
-
-
 
     </div>
   );

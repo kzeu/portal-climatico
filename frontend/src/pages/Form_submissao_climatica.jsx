@@ -3,37 +3,87 @@ import "../App.css";
 function Form_submissao_climatica() {
   return (
     <div className="content" id="content">
-
       <div className="form-container">
 
-        <h1>Formulário Submissao</h1>
+        <h1>Submissão Climática</h1>
 
-        <p className="form-subtitle">
-          Envie suas dúvidas ou sugestões através do formulário abaixo.
-        </p>
+        {/* ================= IDENTIFICAÇÃO ================= */}
+        <div className="form-box">
+          <h2>Identificação</h2>
 
-        <form className="form">
-
-          <label>Nome completo *</label>
-          <input type="text" placeholder="Digite seu nome completo" />
+          <label>Organismo *</label>
+          <select>
+            <option>-- Selecione --</option>
+            <option>Governo</option>
+            <option>ONG</option>
+            <option>Privado</option>
+          </select>
 
           <label>E-mail *</label>
-          <input type="email" placeholder="Digite seu e-mail" />
+          <input type="email" placeholder="Digite seu email" />
 
-          <label>Assunto *</label>
-          <input type="text" placeholder="Digite o assunto" />
+          <label>Nome completo responsável *</label>
+          <input type="text" placeholder="Digite seu nome completo" />
 
-          <label>Mensagem *</label>
-          <textarea placeholder="Digite sua mensagem..." rows="5"></textarea>
+          <label>Papel na instituição</label>
+          <input type="text" placeholder="Informe seu papel" />
 
-          <button type="submit" className="btn-enviar">
-            Enviar mensagem
-          </button>
+          <label>Website</label>
+          <input type="text" placeholder="Ex: www.seusite.gw" />
+        </div>
 
-        </form>
+        {/* ================= INFORMAÇÃO ================= */}
+        <div className="form-box">
+          <h2>Informação sobre Submissão</h2>
+
+          <label>Tipo de submissão *</label>
+          <select>
+            <option>-- Selecione --</option>
+            <option>Projeto</option>
+            <option>Pesquisa</option>
+            <option>Evento</option>
+          </select>
+
+          <div className="row">
+            <div>
+              <label>Título *</label>
+              <input type="text" placeholder="Digite o título" />
+            </div>
+
+            <div>
+              <label>Descrição</label>
+              <textarea placeholder="Descreva o conteúdo"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= TAGS ================= */}
+        <div className="form-box">
+          <h2>Tags</h2>
+
+          <div className="tags">
+            <label><input type="checkbox" /> Adaptação</label>
+            <label><input type="checkbox" /> Mitigação</label>
+            <label><input type="checkbox" /> Agricultura</label>
+            <label><input type="checkbox" /> Água</label>
+            <label><input type="checkbox" /> Energia</label>
+            <label><input type="checkbox" /> Biodiversidade</label>
+          </div>
+        </div>
+
+        {/* ================= UPLOAD ================= */}
+        <div className="form-box">
+          <h2>Upload de documentos</h2>
+
+          <input type="file" />
+        </div>
+
+        {/* ================= BOTÃO ================= */}
+        <button className="btn-enviar">
+          Enviar submissão
+        </button>
 
       </div>
-
     </div>
   );
 }

@@ -134,7 +134,7 @@ body {
 
 
 .menu {
-  background: #2c7fb8;
+  background: #7f8081;   /*#2c7fb8;*/
   color: white;
 
   display: flex;
@@ -549,6 +549,70 @@ body, html {
   text-decoration: none;
   color: black;
 }
+
+
+
+
+.form-container {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 20px;
+}
+
+.form-container h1 {
+  margin-bottom: 20px;
+}
+
+/* caixas cinza */
+.form-box {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* títulos */
+.form-box h2 {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+/* inputs */
+.form input,
+.form select,
+.form textarea,
+.form-box input,
+.form-box select,
+.form-box textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* linha dupla */
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.row div {
+  flex: 1;
+}
+
+/* tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tags label {
+  font-size: 14px;
+}
+
 
 /* RESPONSIVO  */
 
