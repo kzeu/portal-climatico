@@ -14,13 +14,19 @@ function Form_submissao_climatica() {
           <label>Organismo *</label>
           <select>
             <option>-- Selecione --</option>
-            <option>Governo</option>
-            <option>ONG</option>
-            <option>Privado</option>
+            <option>Instituição</option>
+            <option>Organização</option>
+          
           </select>
+
+           <label>Data *</label>
+          <input type="Data" value={Date.now} />
 
           <label>E-mail *</label>
           <input type="email" placeholder="Digite seu email" />
+
+          <label>Nome da Entidade *</label>
+          <input type="entidade" placeholder="Digite o nome da entidade" />
 
           <label>Nome completo responsável *</label>
           <input type="text" placeholder="Digite seu nome completo" />
@@ -39,9 +45,20 @@ function Form_submissao_climatica() {
           <label>Tipo de submissão *</label>
           <select>
             <option>-- Selecione --</option>
-            <option>Projeto</option>
-            <option>Pesquisa</option>
             <option>Evento</option>
+            <option>Workshop</option>
+            <option>Treinamento</option>
+            <option>Concurso</option>
+            <option>Noticia</option>
+            <option>Iniciativa local</option>
+            <option>Iniciativa nacional</option>
+            <option>Projeto Curto</option>
+            <option>Projeto climático de mais de 6 meses</option>
+            <option>Publicação</option>
+            <option>Relatorio</option>
+            <option>Base de dados</option>
+            <option>Mapa estático</option>
+            <option>Outro</option>
           </select>
 
           <div className="row">
