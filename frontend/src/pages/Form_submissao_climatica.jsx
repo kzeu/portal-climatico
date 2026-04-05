@@ -62,6 +62,12 @@ function Form_submissao_climatica() {
           </select>
 
           <div className="row">
+
+             <div>
+              <label>Lingua submissão *</label>
+              <input type="text" placeholder="Lingua submissão" />
+            </div>
+
             <div>
               <label>Título *</label>
               <input type="text" placeholder="Digite o título" />
@@ -72,6 +78,29 @@ function Form_submissao_climatica() {
               <textarea placeholder="Descreva o conteúdo"></textarea>
             </div>
           </div>
+        </div>
+
+        <div className="form-box">
+          <h2>Dados Eventos</h2>
+
+
+
+        </div>´
+
+
+        <div className="form-box">
+          <h2>Dados Projetos</h2>
+
+
+
+        </div>
+
+
+          <div className="form-box">
+          <h2>Dados Outros</h2>
+
+
+
         </div>
 
         {/* ================= TAGS ================= */}
