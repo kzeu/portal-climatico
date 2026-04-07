@@ -1,287 +1,167 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap');
 
-body {
+/* RESET */
+* {
   margin: 0;
-  font-family:  'Baloo 2', Arial, sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Baloo 2', sans-serif;
+}
+
+body {
   background: #f6f8fb;
   color: #222;
 }
 
-* {
-  font-family: 'Baloo 2', sans-serif;
-}
+/* =========================
+   MENU GRANDE + FIXO
+========================= */
 
-/* HEADER */
-
-.header {
-  background: #7f8081;
-  border-bottom: 1px solid #cfcfcf;
-
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-
-/*.top-bar {
-  height: 5px;
-  background: #0b5e5e;
-}
-*/
-
-.header-top {
-  max-width: 1200px;
-  margin: auto;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 10px 10px;
- 
-}
-
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-
-.logo-img {
-  height: 120px;
-  width: auto;
-}
-
-
-.titles {
-  font-size: 14px;
-  line-height: 1.2;
-}
-
-.country {
-  font-weight: 700;
-}
-
-
-.header-right {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-
-
-
-.lang {
-  border-radius: 6px;
-  padding: 3px 4px;
-  border: 1px solid #ccc;
-  background: #ffffff;
-}
-
-
-
-.admin-btn {
-  background: transparent;
-  border: 1px solid #bbb;
-  color: #333;
-  border-radius: 6px;
-  padding: 4px 8px;
-  cursor: pointer;
-}
-
-.admin-btn:hover {
-  background: #e6e6e6;
-}
-
-
-
-.search-box {
-
-  display: flex;
-  align-items: center;
-
-  border: 1px solid #d0d0d0;
-
-  border-radius: 18px;
-
-  background: #ffffff;
-
-  padding: 3px 8px;
-
-}
-
-.search-input {
-
-  border: none;
-  outline: none;
-
-  font-size: 14px;
-
-  background: transparent;
-
-  width: 260px;
-
-}
-
-.search-input::placeholder {
-  color: #888;
-}
-
-.search-icon {
-  color: #999;
-  cursor: pointer;
-}
-
-
-
-/* MENU COMPLETO */
 .menu {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-
-  padding: 15px 40px;
-
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 9999;
 
-  background: linear-gradient(90deg, #6d6d6d, #cfcfcf);
+  background: linear-gradient(90deg, #8f8f8f, #e2e2e2);
+
+  display: flex;
+  justify-content: center;
 }
-/* LOGO + TEXTO */
+
+/* CONTAINER */
+.menu-inner {
+  max-width: 1200px;
+  width: 100%;
+height: 125px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+
+  padding: 22px 30px; /* 👈 MENU GRANDE */
+}
+
+/* LOGO */
 .menu-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
 }
 
 .menu-logo img {
-  height: 65px;
+  height: 85px; /* 👈 LOGO GRANDE */
 }
 
 .logo-text {
   color: white;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-/* MENU CENTRAL */
+/* ITENS */
 .menu-items {
   display: flex;
   gap: 25px;
 
-  flex: 1; /* 👈 ocupa espaço central */
+  flex: 1;
   justify-content: center;
 
-  white-space: nowrap; /* 👈 evita quebrar */
+  white-space: nowrap;
 }
 
 /* ITEM */
 .menu-item {
   position: relative;
   color: white;
-  font-size: 14px;
   cursor: pointer;
+}
+
+.menu-item span {
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 16px; /* 👈 MAIOR */
+}
+
+.menu-item span:hover {
+  background: rgba(255,255,255,0.4);
 }
 
 /* SUBMENU */
 .submenu {
   position: absolute;
-  top: 30px;
+  top: calc(100% + 10px);
   left: 0;
-  background: white;
-  color: black;
-  padding: 10px;
-  border-radius: 6px;
-  min-width: 200px;
+
+  background: #5cab7d;
+  color: white;
+
+  min-width: 230px;
+  border-radius: 8px;
+
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* BOTÃO DIREITA */
+.submenu div {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.submenu div:hover {
+  background: #2f6f4f;
+}
+
+/* BOTÃO LOGIN */
 .menu-login {
-  margin-left: auto;
+  flex-shrink: 0;
 }
 
-
-
-.menu-login button:hover {
-  background: #e6e6e6;
-}
-
-/* BOTÃO */
 .menu-login button {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.3);
   border: none;
   color: white;
-  padding: 8px 14px;
-  border-radius: 20px;
+
+  padding: 10px 20px;
+  border-radius: 25px;
+
+  font-size: 14px;
   cursor: pointer;
- 
 }
 
 .menu-login button:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.5);
 }
 
-.menu span {
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  font-size: 14px;
+/* =========================
+   CONTEÚDO (SEM ESPAÇO)
+========================= */
 
-
-  font-family: 'Baloo 2', sans-serif;
-
-  letter-spacing: 0.5px;
+#content {
+  padding-top: 125px; /* 👈 AJUSTADO PRO MENU GRANDE */
 }
 
-.menu span:hover {
-background: rgba(255,255,255,0.5);
-}
-
-
-
+/* CONTAINER */
 .content {
   max-width: 1100px;
   margin: auto;
- 
-margin-top: 0px;
   min-height: 70vh;
-  
-}
-#content {
-  padding-top: 90px; /* ajuste conforme altura do menu */
 }
 
-
+/* HERO COLADO */
 .hero {
   text-align: center;
   padding: 30px 20px;
 
   background: #eaf3fb;
-
   border-radius: 8px;
-  width: 100%;
-  margin: 0;
-  margin-top: 0px;
-  padding-top: 30px;
 
+  margin-top: 0; /* 👈 SEM ESPAÇO */
+  padding-top: 0;
 }
 
-
-
 .hero h1 {
-  margin: 0;
   font-weight: 600;
 }
 
@@ -290,10 +170,9 @@ margin-top: 0px;
   color: #555;
 }
 
-
-
-
-
+/* =========================
+   CARDS
+========================= */
 
 .cards {
   display: grid;
@@ -303,238 +182,40 @@ margin-top: 0px;
 }
 
 .card {
-
   background: #f5f5f5;
-
   border-radius: 10px;
-
   overflow: hidden;
-
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-
   transition: 0.2s;
-
-  cursor: pointer;
-
 }
 
 .card:hover {
   transform: translateY(-4px);
 }
 
-
-/* TOPO ESCURO */
-
 .card-header {
-
   background: #969896;
-
   color: white;
-
   padding: 12px;
-
-  font-weight: bold;
-
   text-align: center;
-
+  font-weight: bold;
 }
-
-
-/* CONTEÚDO */
 
 .card-body {
-
   padding: 15px;
-
-  font-size: 14px;
-
-  color: #333;
-
 }
 
-
-
-.section {
-  background: white;
-
-  margin: 20px;
-  padding: 20px;
-
-  border-radius: 8px;
-
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-
-.footer {
-  background: linear-gradient(90deg, #6f6f6f, #9a9a9a);
-  color: white;
-  padding: 30px 20px 10px;
-}
-
-.footer-container {
-  max-width: 1100px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-}
-
-/* BRASÃO */
-.footer-left img {
-  width: 80px;
-  opacity: 0.95;
-}
-
-/* COLUNAS */
-.footer-columns {
-  display: flex;
-  gap: 80px;
-  flex-wrap: wrap;
-}
-
-.footer-col h4 {
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-.footer-col p {
-  margin: 4px 0;
-  font-size: 14px;
-  opacity: 0.9;
-  cursor: pointer;
-}
-
-.footer-col p:hover {
-  opacity: 1;
-}
-
-/* BASE */
-.footer-bottom {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 13px;
-  opacity: 0.8;
-}
-
-.footer-left img {
-  width: 70px;
-  opacity: 0.9;
-}
-body, html {
-  height: 100%;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-
-.super-bar {
-
-display: none;
-}
-
-.super-bar-inner {
-
-  max-width: 1200px;
-
-  margin: auto;
-
-  padding: 5px 10px;
-
-  font-size: 14px;
-
-  font-weight: 750;
-
-  color: #777;
-
-}
-
-
-.menu-item {
-  position: relative;
-}
-
-
-
-
-.submenu {
-
-  position: absolute;
-
-  top: calc(100% + 12px);
-
-  left: 0;
-
-  background: #5cab7d;
-
-  color: white;
-
-  min-width: 240px;
-
-  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-
-  z-index: 2000;
-
-
-
-}
-
-
-.submenu div {
-
-  padding: 8px 12px;
-
-  cursor: pointer;
-
-  font-size: 14px;
-
-}
-
-
-.submenu div:hover {
-
-  background: #2f6f4f;
-
-}
-
-
-/* CONTAINER */
+/* =========================
+   FORM
+========================= */
 
 .form-container {
-
-  max-width: 700px;
-
+  max-width: 900px;
   margin: 20px auto;
-
   background: white;
-
   padding: 30px;
-
   border-radius: 12px;
-
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-
 }
-
-
-/* TÍTULO */
-
-.form-container h1 {
-  text-align: center;
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
-.form-subtitle {
-  text-align: center;
-  color: #666;
-  margin-bottom: 25px;
-}
-
-
-/* FORM */
 
 .form {
   display: flex;
@@ -542,230 +223,238 @@ display: none;
   gap: 12px;
 }
 
-
-/* LABEL */
-
-.form label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-
-/* INPUTS */
-
 .form input,
-.form textarea {
-
+.form textarea,
+.form select {
   padding: 10px;
-
   border-radius: 8px;
-
   border: 1px solid #ccc;
-
-  font-size: 14px;
-
-  transition: 0.2s;
-
 }
-
-.form input:focus,
-.form textarea:focus {
-  border-color: #2c7fb8;
-  outline: none;
-}
-
-
-/* BOTÃO */
 
 .btn-enviar {
-
   margin-top: 15px;
-
   background: #2c7fb8;
-
   color: white;
-
   border: none;
-
   padding: 12px;
-
   border-radius: 8px;
-
-  font-weight: 600;
-
   cursor: pointer;
-
-  transition: 0.2s;
-
 }
 
-.btn-enviar:hover {
-  background: #1f5f8a;
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+  background: linear-gradient(90deg, #7c7c7c, #a5a5a5);
+  color: white;
+  padding: 30px 20px 10px;
 }
 
-/* CONTROLES */
+.footer-container {
+  max-width: 1100px;
+  margin: auto;
 
-.map-controls {
-  margin: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 40px;
+}
+
+.footer-left img {
+  width: 70px;
+  height: 80px;
+}
+
+.footer-columns {
+  display: flex;
+  gap: 60px;
+
+  margin-left: 0;
+}
+
+.footer-bottom {
   text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+}
+/* =========================
+   MENU FIXO CORRIGIDO
+========================= */
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+
+  background: linear-gradient(90deg, #8f8f8f, #e2e2e2);
+
+  display: flex;
+  justify-content: center;
 }
 
-.map-controls select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+/* CONTAINER INTERNO */
+.menu-inner {
+  max-width: 1200px;
+  width: 100%;
+
+  display: flex;
+  align-items: center; /* 🔥 CENTRALIZA VERTICAL */
+  justify-content: space-between;
+
+  gap: 20px;
+
+  height: 110px; /* 🔥 ALTURA FIXA (resolve o problema) */
+  padding: 0 25px;
 }
 
+/* =========================
+   LOGO
+========================= */
 
-/* MAPA */
-
-/* SEÇÃO DE MAPA */
-
-.map-section {
-  margin: 30px 20px;
+.menu-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
 }
 
-/* TÍTULO */
+.menu-logo img {
+  height: 70px;
+}
 
-.map-section h3 {
-  margin-bottom: 10px;
+.logo-text {
+  color: white;
+  font-size: 18px;
   font-weight: 600;
 }
 
-/* MAPA */
+/* =========================
+   ITENS CENTRAL
+========================= */
 
-.map-box {
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.item {
-  background: #f9f2f2;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-}
-
-.item a {
-  font-weight: bold;
-  text-decoration: none;
-  color: black;
-}
-
-
-
-
-.form-container {
-  max-width: 900px;
-  margin: 120px auto;
-  padding: 20px;
-}
-
-.form-container h1 {
-  margin-bottom: 20px;
-}
-
-/* caixas cinza */
-.form-box {
-  background: #f5f5f5;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-/* títulos */
-.form-box h2 {
-  margin-bottom: 15px;
-  font-size: 18px;
-}
-
-/* inputs */
-.form input,
-.form select,
-.form textarea,
-.form-box input,
-.form-box select,
-.form-box textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-/* linha dupla */
-.row {
+.menu-items {
   display: flex;
-  gap: 20px;
-}
+  align-items: center; /* 🔥 CENTRALIZA TEXTO */
+  justify-content: center;
 
-.row div {
+  gap: 25px;
   flex: 1;
 }
 
-/* tags */
-.tags {
+/* ITEM */
+.menu-item {
+  position: relative;
+  color: white;
+  cursor: pointer;
+
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  align-items: center; /* 🔥 GARANTE CENTRALIZAÇÃO */
 }
 
-.tags label {
+.menu-item span {
+  font-size: 15px;
+  font-weight: 600;
+
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.menu-item span:hover {
+  background: rgba(255,255,255,0.4);
+}
+
+/* =========================
+   SUBMENU
+========================= */
+
+.submenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+
+  background: #5cab7d;
+  color: white;
+
+  min-width: 230px;
+  border-radius: 8px;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.submenu div {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.submenu div:hover {
+  background: #2f6f4f;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.menu-login {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.menu-login button {
+  background: rgba(255,255,255,0.3);
+  border: none;
+  color: white;
+
+  padding: 10px 18px;
+  border-radius: 20px;
+
   font-size: 14px;
+  cursor: pointer;
 }
 
-
-/* RESPONSIVO  */
-
-@media (max-width: 900px) {
-
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+.menu-login button:hover {
+  background: rgba(255,255,255,0.5);
 }
+
+/* =========================
+   CONTENT / HERO
+========================= */
+
+#content {
+  padding-top: 110px; /* 👈 EXATAMENTE IGUAL AO MENU */
+}
+
+.hero {
+  margin-top: 0;
+  padding: 25px 20px;
+}
+
+.hero h1 {
+  margin-top: 0; /* 🔥 remove espaço */
+}
+/* =========================
+   RESPONSIVO
+========================= */
 
 @media (max-width: 600px) {
-
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
-  .menu {
+  .menu-inner {
     flex-direction: column;
-    align-items: stretch;
-    top: 125px;
   }
 
-  .content {
-    margin-top: 0px;
-   
-    min-height: 75vh;
+  .menu-items {
+    flex-wrap: wrap;
   }
 
-  .header-top {
-    flex-direction: column;
-    align-items: flex-start;
-    
-  }
-
-  
   .submenu {
     position: static;
     width: 100%;
-    box-shadow: none;
   }
 
- .footer-container {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer-columns {
+  .footer-container {
     flex-direction: column;
     gap: 20px;
   }
-
 }
