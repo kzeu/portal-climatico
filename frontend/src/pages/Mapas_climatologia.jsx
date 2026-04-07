@@ -14,12 +14,10 @@ function MapaItem({ file, titulo, cores }) {
       .then((json) => setData(json));
   }, [file]);
 
-  // ✅ pega código correto
   function getCodigo(props) {
     return props.code || "";
   }
 
-  // ✅ CORREÇÃO PRINCIPAL (SEU CASO)
   function getNome(props) {
     return props.adm1_name || "Região";
   }
@@ -40,7 +38,6 @@ function MapaItem({ file, titulo, cores }) {
 
     layer.bindPopup(nome);
 
-    // 👇 nome ao passar mouse
     layer.bindTooltip(nome, {
       permanent: false,
       direction: "center",
@@ -54,7 +51,7 @@ function MapaItem({ file, titulo, cores }) {
       <MapContainer
         key={file}
         center={[12.1, -15.6]}
-        zoom={8} // 👈 zoom melhor
+        zoom={8}
         style={{
           height: "400px",
           width: "100%",
@@ -98,9 +95,6 @@ function Mapas_climatologia() {
     },
   };
 
-  /* =========================
-     🎨 CORES POR CÓDIGO
-  ========================= */
   const coresPorMapa = {
     "1": {
       "GNB.1051385": "#cc191d",
@@ -148,34 +142,35 @@ function Mapas_climatologia() {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "1100px", // 👈 largura igual ao seu layout
-        margin: "120px auto 0 auto",
-        padding: "20px",
-      }}
-    >
-      <h2 style={{ marginBottom: "15px" }}>
-        Mapas de Climatologia
-      </h2>
+    <div className="content" id="content">
+      {/* HERO */}
+      <div className="hero">
+        <h1>Mapas de Climatologia</h1>
+        <p>
+          Visualização das projeções climáticas para a Guiné-Bissau,
+         
+        </p>
+      </div>
 
       {/* SELECT */}
-      <select
-        value={mapaSelecionado}
-        onChange={(e) => setMapaSelecionado(e.target.value)}
-        style={{
-          width: "280px",
-          padding: "10px",
-          borderRadius: "8px",
-          border: "1px solid #ccc",
-          marginBottom: "10px", // 👈 espaço menor
-        }}
-      >
-        <option value="1">Temperatura 2040–2059</option>
-        <option value="2">Temperatura 2080–2099</option>
-        <option value="3">Precipitação 2040–2059</option>
-        <option value="4">Precipitação 2080–2099</option>
-      </select>
+      <div style={{ marginTop: "10px" }}>
+        <select
+          value={mapaSelecionado}
+          onChange={(e) => setMapaSelecionado(e.target.value)}
+          style={{
+            width: "280px",
+            padding: "10px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            marginBottom: "10px",
+          }}
+        >
+          <option value="1">Temperatura 2040–2059</option>
+          <option value="2">Temperatura 2080–2099</option>
+          <option value="3">Precipitação 2040–2059</option>
+          <option value="4">Precipitação 2080–2099</option>
+        </select>
+      </div>
 
       {/* MAPA */}
       <MapaItem

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import Header from "./components/Header";
+
 import Menu from "./components/Menu";
 import Footer from "./components/Footer";
 
@@ -24,32 +24,11 @@ function App() {
 
   //AJUSTAR ALTURA AUTOMATICAMENTE
 
-  useEffect(() => {
+useEffect(() => {
 
-    function ajustarAltura() {
 
-      const header = document.getElementById("header");
-      const menu = document.getElementById("menu");
-      const content = document.getElementById("content");
 
-      if (header && menu && content) {
-
-        const h = header.offsetHeight;
-        const m = menu.offsetHeight;
-
-        content.style.paddingTop = (h + m + 10) + "px";
-
-      }
-
-    }
-
-    ajustarAltura();
-
-    window.addEventListener("resize", ajustarAltura);
-
-    return () => window.removeEventListener("resize", ajustarAltura);
-
-  }, [page]);
+}, [page]);
 
 
   let Content;
@@ -69,7 +48,7 @@ else Content = <Home setPage={setPage} />;
   return (
     <div>
 
-      <Header />
+      
 
       <Menu setPage={setPage} />
 
