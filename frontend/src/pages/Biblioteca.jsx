@@ -1,101 +1,104 @@
 import { useState } from "react";
+import "../App.css";
 
-function Biblioteca({setPage}) {
+function Biblioteca({ setPage }) {
+
 
   const dados = [
+
     {
-      titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 4 | Comunicações Nacionais (NC) | 17-Nov-2025",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/654402"
-    },
-    {
-      titulo: "Relatório Bienal de Transparência (BTR) - BTR1. CTF-FTC |planilhas de dados estruturados | Formatos Tabulares Comuns – Apoio (CTF-S) | 14-Aug-2025",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/649217"
+    titulo: "Primeira NDC da Guiné (submissão atualizada)",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "12/out/21",
+    link: "https://unfccc.int/documents/497521"
+  },
+  {
+    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 4",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "17 Nov 2025",
+    link: "https://unfccc.int/documents/654402"
+  },
+  {
+    titulo: "Primeira NDC da Guiné-Bissau (Arquivada)",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "22/out/18",
+    link: "https://unfccc.int/documents/497511"
+  },
+  {
+    titulo: "Relatório Bienal de Transparência (BTR) - BTR1. CTF-FTC |planilhas de dados estruturados",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "14/ago/25",
+    link: "https://unfccc.int/documents/649217"
+  },
 
-    },
-    {
-      titulo: "Relatório Bienal de Transparência (BTR) - BTR1 | documento narrativo | Relatórios Bienais de Transparência (BTR) | 26-Dec-2024",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/645093"
-    },
-
-     {
-      titulo: "Guiné-Bissau. 2024 Documento de Inventário Nacional (NID) | Documento de Inventário Nacional (NID) | 26-Dec-2024",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/645094"
-    },
-
-     {
-      titulo: "Guiné-Bissau. 2024 Relatório Bienal de Transparência (BTR). BTR1. CTF-NDC | Formatos Tabulares Comuns – Progresso (CTF-P) | 25-Dec-2024",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/645095"
-    },
-
-     {
-      titulo: "Guiné-Bissau. 2024 Tabela Comum de Reporte (CRT). [Guiné-Bissau. 2024 Relatório Bienal de Transparência (BTR). BTR1. CTF-NDC (2024)] | Tabelas Comuns de Reporte (CRT) | 25-Dec-2024",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/645312"
-    },
-
-     {
-      titulo: "Primeira NDC da Guiné (submissão atualizada) | Contribuições Nacionalmente Determinadas (NDCs) | 12-Oct-2021",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/497521"
-    },
-
-     {
-      titulo: "Relatório FREL sobre a avaliação técnica do nível de referência de emissões florestais proposto pela Guiné-Bissau (submetido em 2019) | Estudo Florestal | 15-Jan-2020",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/209416"
-    },
-
-     {
-      titulo: "Primeira NDC da Guiné-Bissau (Arquivada) | Contribuições Nacionalmente Determinadas (NDCs) | 22-Oct-2018",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/497511"
-    },
-
-     {
-      titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 3 | Comunicações Nacionais (NC) | 09-Mar-2018",
-      tipo: "Relatório Nacional para a UNFCCC)",
-      link: "https://unfccc.int/documents/64689"
-    },
-
-     {
-      titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 2 | Comunicações Nacionais (NC) | 29-Oct-2011",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/79689"
-    },
-
-     {
-      titulo: "Programa Nacional de Ação para a Adaptação às Mudanças Climáticas (NAPA) - histórico | Estratégia nacional para adaptação | 16-Dec-2006",
-      tipo: "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/resource/docs/napa/gnb01.pdf"
-    },
-
-     {
-      titulo: "Guiné-Bissau. Relatório Bienal de Atualização (BUR). BUR 1 | Relatórios Bienais de Atualização (BUR) | 22-Sep-2020",
-      tipo:"Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/251917"
-    },
-
-     {
-      titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 1 | Comunicações Nacionais (NC) | 01-Dec-2005",
-      tipo:  "Relatório Nacional para a UNFCCC",
-      link: "https://unfccc.int/documents/106948"
-    },
-
-
-     {
-      titulo: "Mapa: Climatologia e riscos para o novo projeto GEF8 BD (somente como exemplo para o protótipo)",
-      tipo: "Mapa estático",
-      pagina: "mapas_climatologia"
-    }
-
-
-    
-  ];
+  {
+    titulo: "Guiné-Bissau. 2024 Documento de Inventário Nacional (NID)",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "26-Dec-24",
+    link: "https://unfccc.int/documents/645094"
+  },
+  {
+    titulo: "Relatório Bienal de Transparência (BTR) - BTR1. CTF-FTC |planilhas de dados estruturados",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "14/ago/25",
+    link: "https://unfccc.int/documents/649217"
+  },
+  {
+    titulo: "Relatório Bienal de Transparência (BTR) - BTR1 | documento narrativo",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "26-Dec-24",
+    link: "https://unfccc.int/documents/645093"
+  },
+  {
+    titulo: "Guiné-Bissau. 2024 Relatório Bienal de Transparência (BTR). BTR1. CTF-NDC",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "25-Dec-24",
+    link: "https://unfccc.int/documents/645095"
+  },
+  {
+    titulo: "Guiné-Bissau. Relatório Bienal de Atualização (BUR). BUR 1",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "22-Sep-20",
+    link: "https://unfccc.int/documents/251917"
+  },
+  {
+    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 3",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "9-Mar-18",
+    link: "https://unfccc.int/documents/64689"
+  },
+  {
+    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 2",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "29-Oct-11",
+    link: "https://unfccc.int/documents/79689"
+  },
+  {
+    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 1",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "1-Dec-05",
+    link: "https://unfccc.int/documents/106948"
+  },
+  {
+    titulo: "Guiné-Bissau. 2024 Tabela Comum de Reporte (CRT). [Guiné-Bissau. 2024 Relatório Bienal de Transparência (BTR). BTR1. CTF-NDC (2024)]",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "25-Dec-24",
+    link: "https://unfccc.int/documents/645312"
+  },
+  {
+    titulo: "Relatório FREL sobre a avaliação técnica do nível de referência de emissões florestais proposto pela Guiné-Bissau (submetido em 2019)",
+    tipo: "Relatório Nacional para a UNFCCC",
+    data: "15-Jan-20",
+    link: "https://unfccc.int/documents/209416"
+  },
+  
+  {
+    titulo: "Programa Nacional de Ação para a Adaptação às Mudanças Climáticas (NAPA) - histórico",
+    tipo: "Mapa estático",
+    data: "16/dez/06",
+    pagina: "mapas_climatologia"
+  }
+];
 
   const [filtro, setFiltro] = useState("");
 
@@ -106,53 +109,88 @@ function Biblioteca({setPage}) {
   return (
     <div className="content" id="content">
 
+      {/* HERO */}
       <div className="hero">
         <h1>Biblioteca Climática</h1>
         <p>
-        A Biblioteca do Portal Climático reúne documentos, relatórios, estudos e publicações relevantes sobre mudanças climáticas na Guiné-Bissau. Este espaço facilita o acesso a informações oficiais e científicas, apoiando a tomada de decisão, a pesquisa e o desenvolvimento de políticas climáticas. 
+          A Biblioteca do Portal Climático reúne documentos, relatórios e estudos
+          relevantes sobre mudanças climáticas na Guiné-Bissau.
         </p>
       </div>
 
-      <select onChange={(e) => setFiltro(e.target.value)}
-         style={{
-                borderRadius: "10px",
-                padding: "8px",
-                border: "1px solid #ccc"
-              }}>
-        <option value="">Todos</option>
-        <option value="Relatório Nacional para a UNFCCC">Relatório Nacional para a UNFCCC</option>
-        <option value="Relatórios de consultoria selecionados">Relatórios de consultoria selecionados</option>
-        <option value="Projeto climático de mais de 6 meses">Projeto climático de mais de 6 meses</option>
-        <option value="Publicação">Publicação</option>
-        <option value="Relatório">Relatório</option>
-        <option value="Base de dados">Base de dados</option>
-        <option value="Mapa estático">Mapa estático</option>
-        <option value="Outros">Outros</option>
-      </select>
+      {/* FILTRO */}
+      <div style={{ marginBottom: "15px" }}>
+        <select
+          onChange={(e) => setFiltro(e.target.value)}
+          style={{
+            borderRadius: "10px",
+            padding: "8px",
+            border: "1px solid #ccc"
+          }}
+        >
+          <option value="">Todos</option>
+          <option value="Relatório Nacional para a UNFCCC">
+            Relatórios UNFCCC
+          </option>
+          <option value="Mapa estático">
+            Mapas
+          </option>
+        </select>
+      </div>
 
-      <div className="lista">
-        {dadosFiltrados.map((item, index) => (
-          <div key={index} className="item">
+      {/* TABELA */}
+     <table className="tabela-biblioteca">
 
-            {item.link ? (
-            <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ cursor: "pointer", color: "blue" }}>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Documento</th>
+      <th>Tipo</th>
+      <th>Data</th> {/* NOVA COLUNA */}
+      <th>Acesso</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {dadosFiltrados.map((item, index) => (
+      <tr key={index}>
+
+        <td>{index + 1}</td>
+
+        <td className="col-titulo">
+          {item.link ? (
+            <a href={item.link} target="_blank" rel="noopener noreferrer">
               {item.titulo}
             </a>
           ) : (
-            <span
-              style={{ cursor: "pointer", color: "blue" }}
-              onClick={() => setPage(item.pagina)}
-            >
+            <span onClick={() => setPage(item.pagina)}>
               {item.titulo}
             </span>
-)}
-            
+          )}
+        </td>
 
-            
-            <p>{item.tipo}</p>
-          </div>
-        ))}
-      </div>
+        <td>{item.tipo}</td>
+
+        {/* NOVA COLUNA DATA */}
+        <td>{item.data}</td>
+
+        <td>
+          {item.link ? (
+            <a href={item.link} target="_blank" rel="noopener noreferrer" className="btn-link">
+              🔗 Acessar
+            </a>
+          ) : (
+            <span className="btn-link" onClick={() => setPage(item.pagina)}>
+              🔗 Ver página
+            </span>
+          )}
+        </td>
+
+      </tr>
+    ))}
+  </tbody>
+
+</table>
 
     </div>
   );
