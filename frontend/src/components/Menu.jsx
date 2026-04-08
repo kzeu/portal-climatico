@@ -38,27 +38,32 @@ function Menu({ setPage }) {
         </div>
 
         {/* ADAPTAÇÃO */}
-        <div
-          className="menu-item"
-          onMouseEnter={() => setOpen("adaptacao")}
-          onClick={() => toggleMenu("adaptacao")}
-        >
-          <span onClick={() => go("adaptacao")}>ADAPTAÇÃO</span>
+<div
+  className="menu-item"
+  onMouseEnter={() => setOpen("adaptacao")}
+  onClick={() => toggleMenu("adaptacao")}
+>
+  <span onClick={() => go("adaptacao")}>
+    ADAPTAÇÃO
+    <span className={`arrow ${open === "adaptacao" ? "open" : ""}`}>
+      ▾
+    </span>
+  </span>
 
-          {open === "adaptacao" && (
-            <div className="submenu">
-              <div onClick={() => go("seguimento_nap")}>
-                Seguimento do NAP
-              </div>
-              <div onClick={() => go("mapas_climatologia")}>
-                Mapas de Climatologia
-              </div>
-              <div onClick={() => go("mapas_riscos")}>
-                Mapas de risco climático
-              </div>
-            </div>
-          )}
-        </div>
+  {open === "adaptacao" && (
+    <div className="submenu">
+      <div onClick={() => go("seguimento_nap")}>
+        Seguimento do NAP
+      </div>
+      <div onClick={() => go("mapas_climatologia")}>
+        Mapas de Climatologia
+      </div>
+      <div onClick={() => go("mapas_riscos")}>
+        Mapas de risco climático
+      </div>
+    </div>
+  )}
+</div>
 
         {/* MITIGAÇÃO */}
         <div
@@ -69,22 +74,27 @@ function Menu({ setPage }) {
           <span onClick={() => go("mitigacao")}>MITIGAÇÃO</span>
         </div>
 
-        {/* ENGAJAMENTO */}
-        <div
-          className="menu-item"
-          onMouseEnter={() => setOpen("engajamento")}
-          onClick={() => toggleMenu("engajamento")}
-        >
-          <span onClick={() => go("engajamento")}>ENGAJAMENTO</span>
+       {/* ENGAJAMENTO */}
+<div
+  className="menu-item"
+  onMouseEnter={() => setOpen("engajamento")}
+  onClick={() => toggleMenu("engajamento")}
+>
+  <span onClick={() => go("engajamento")}>
+    ENGAJAMENTO
+    <span className={`arrow ${open === "engajamento" ? "open" : ""}`}>
+      ▾
+    </span>
+  </span>
 
-          {open === "engajamento" && (
-            <div className="submenu">
-              <div onClick={() => go("form_submissao")}>
-                Submissões de Ações Climáticas
-              </div>
-            </div>
-          )}
-        </div>
+  {open === "engajamento" && (
+    <div className="submenu">
+      <div onClick={() => go("form_submissao")}>
+        Submissões de Ações Climáticas
+      </div>
+    </div>
+  )}
+</div>
 
         {/* BIBLIOTECA */}
         <div
