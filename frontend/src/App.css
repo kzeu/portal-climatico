@@ -63,15 +63,7 @@ height: 125px;
 }
 
 /* ITENS */
-.menu-items {
-  display: flex;
-  gap: 25px;
 
-  flex: 1;
-  justify-content: center;
-
-  white-space: nowrap;
-}
 
 /* ITEM */
 .menu-item {
@@ -332,7 +324,7 @@ height: 125px;
   align-items: center; /* 🔥 CENTRALIZA TEXTO */
   justify-content: center;
 
-  gap: 25px;
+  gap: 15px;
   flex: 1;
 }
 
