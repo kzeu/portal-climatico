@@ -22,7 +22,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 110px;
+  height: auto;
 
   display: flex;
   justify-content: center;
@@ -557,4 +557,79 @@ height: 125px;
     flex-direction: column;
     gap: 20px;
   }
+}
+
+/* HAMBURGUER */
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+}
+
+/* SETA */
+.arrow {
+  margin-left: 6px;
+  transition: transform 0.3s;
+}
+
+.arrow.open {
+  transform: rotate(90deg);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .menu-inner {
+    flex-wrap: wrap;
+    height: auto;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .menu-items {
+    width: 100%;
+    flex-direction: column;
+    display: none;
+    background: #9c9c9c;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .menu-items.active {
+    display: flex;
+  }
+
+  .menu-item {
+    width: 100%;
+  }
+
+  .menu-item span {
+    display: block;
+    padding: 12px;
+  }
+
+  .submenu {
+    position: static;
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  /* LOGIN */
+  .menu-login.desktop {
+    display: none;
+  }
+
+  .menu-login.mobile {
+    display: block;
+    margin-top: 10px;
+  }
+}
+
+/* DESKTOP */
+.menu-login.mobile {
+  display: none;
 }
