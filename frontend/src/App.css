@@ -83,8 +83,8 @@ height: 125px;
 .menu-item span {
   padding: 8px 12px;
   border-radius: 5px;
-  font-weight: 600;
-  font-size: 16px; /* 👈 MAIOR */
+  font-weight: 700;
+  font-size: 17px; /* 👈 MAIOR */
 }
 
 .menu-item span:hover {
@@ -128,7 +128,8 @@ height: 125px;
   padding: 10px 20px;
   border-radius: 25px;
 
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -268,8 +269,8 @@ height: 125px;
 }
 
 .footer-left img {
-  width: 70px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
 }
 
 .footer-columns {
@@ -320,11 +321,7 @@ height: 125px;
   height: 70px;
 }
 
-.logo-text {
-  color: white;
-  font-size: 18px;
-  font-weight: 600;
-}
+
 
 /* =========================
    ITENS CENTRAL
@@ -349,13 +346,7 @@ height: 125px;
   align-items: center; /* 🔥 GARANTE CENTRALIZAÇÃO */
 }
 
-.menu-item span {
-  font-size: 15px;
-  font-weight: 600;
 
-  padding: 8px 12px;
-  border-radius: 5px;
-}
 
 .menu-item span:hover {
   background: rgba(255,255,255,0.4);

@@ -24,6 +24,7 @@ function Footer() {
             <h4>Redes Sociais</h4>
             <p>Facebook</p>
             <p>Twitter</p>
+             <p>Instagran</p>
             <p>LinkedIn</p>
           </div>
 

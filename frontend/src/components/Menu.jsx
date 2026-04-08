@@ -19,8 +19,8 @@ function Menu({ setPage }) {
       {/* LOGO */}
      <div className="menu-logo" onClick={() => go("home")}>
       <img src={logo} alt="logo" />
-      <span className="logo-text">
-        Plataforma 
+      <span className="logo-text" >
+        Portal 
         Climático
       </span>
     </div>
@@ -109,7 +109,7 @@ function Menu({ setPage }) {
       {/* BOTÃO ENTRAR */}
       <div className="menu-login">
         <button onClick={() => alert("Login aqui")}>
-          🔒 Entrar
+          🔒 ENTRAR
         </button>
       </div>
 
