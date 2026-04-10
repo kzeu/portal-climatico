@@ -52,9 +52,7 @@ height: 125px;
   cursor: pointer;
 }
 
-.menu-logo img {
-  height: 85px; /* 👈 LOGO GRANDE */
-}
+
 
 .logo-text {
   color: white;
@@ -247,7 +245,8 @@ height: 125px;
 .footer {
   background: linear-gradient(90deg, #7c7c7c, #a5a5a5);
   color: white;
-  padding: 30px 20px 10px;
+  padding: 20px 30px;
+  margin-top: 20px;
 }
 
 .footer-container {
@@ -258,11 +257,12 @@ height: 125px;
   justify-content: flex-start;
   align-items: center;
   gap: 40px;
+  justify-content: space-between;
 }
 
 .footer-left img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: auto;
 }
 
 .footer-columns {
@@ -310,7 +310,7 @@ height: 125px;
 }
 
 .menu-logo img {
-  height: 70px;
+  height: 100px;
 }
 
 

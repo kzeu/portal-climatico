@@ -79,19 +79,19 @@ function Mapas_climatologia() {
   const mapas = {
     "1": {
       file: "Temp_mean_2040_59.geojson",
-      titulo: "Temperatura média (2040–2059)",
+      titulo: "Mapa 1) Cenário: Futuro próximo, 2040-2059 | Climatologia projetada para a anomalia na temperatura média anual da superfície do ar | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
     },
     "2": {
       file: "Temp_mean_2080_99.geojson",
-      titulo: "Temperatura média (2080–2099)",
+      titulo: "Mapa 2) Cenário: Fim do século, 2080-2099 | Climatologia projetada para a anomalia na temperatura média anual da superfície do ar | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
     },
     "3": {
       file: "Precip_2040_59.geojson",
-      titulo: "Precipitação (2040–2059)",
+      titulo: "Mapa 3) Cenário: Futuro próximo, 2040-2059 | Climatologia projetada para a anomalia na precipitação média projetada | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
     },
     "4": {
       file: "Precip_2080_99.geojson",
-      titulo: "Precipitação (2080–2099)",
+      titulo: "Mapa 4) Fim do século, 2080-2099 | Climatologia projetada para a anomalia na precipitação média projetada | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
     },
   };
 
