@@ -50,7 +50,7 @@ function MapaItem({ file, titulo, cores }) {
 
       <MapContainer
         key={file}
-        center={[12.1, -15.6]}
+      center={[11.80, -15.00]}
         zoom={8}
         style={{
           height: "400px",
