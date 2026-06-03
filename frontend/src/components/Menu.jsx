@@ -46,7 +46,19 @@ function Menu({ setPage }) {
 
           {/* ADAPTAÇÃO */}
           <div className="menu-item">
-            <span onClick={() => toggleMenu("adaptacao")}>
+            <span
+                onClick={() => {
+
+                  go("adaptacao");
+
+                  setOpen(
+                    open === "adaptacao"
+                      ? null
+                      : "adaptacao"
+                  );
+
+                }}
+              >
               ADAPTAÇÃO
               <span className={`arrow ${open === "adaptacao" ? "open" : ""}`}>
                 ▾
@@ -103,7 +115,7 @@ function Menu({ setPage }) {
 
           {/* LOGIN MOBILE */}
           <div className="menu-login mobile">
-            <button onClick={() => alert("Login aqui")}>
+            <button onClick={() => go("login")}>
               🔒 ENTRAR
             </button>
           </div>
@@ -112,7 +124,7 @@ function Menu({ setPage }) {
 
         {/* LOGIN DESKTOP */}
         <div className="menu-login desktop">
-          <button onClick={() => alert("Login aqui")}>
+          <button onClick={() => go("login")}>
             🔒 ENTRAR
           </button>
         </div>
