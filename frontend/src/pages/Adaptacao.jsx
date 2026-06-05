@@ -1,5 +1,6 @@
 import "../App.css";
 import { useEffect, useState } from "react";
+import API_URL from "../config";
 
 function Adaptacao({
   setPage,
@@ -12,7 +13,7 @@ function Adaptacao({
   useEffect(() => {
 
     fetch(
-      "http://localhost:3000/cards/adaptacao"
+      `${API_URL}/cards/adaptacao`
     )
       .then(res => res.json())
       .then(data => setCards(data))
@@ -69,7 +70,7 @@ function Adaptacao({
             {card.imagem_card && (
 
               <img
-                src={`http://localhost:3000/uploads/${card.imagem_card}`}
+                src={`${API_URL}/uploads/${card.imagem_card}`}
                 alt={card.titulo}
                 className="card-image"
               />

@@ -55,15 +55,27 @@ function App() {
 
   );
 
-  else if (page === "mitigacao") {
+else if (page === "mitigacao") {
 
-    Content = (
-      <Mitigacao
-        setPage={setPage}
-      />
-    );
+  Content = (
 
-  }
+    <Mitigacao
+
+      setPage={setPage}
+
+      setCardSelecionado={
+        setCardSelecionado
+      }
+
+      setPaginaAnterior={
+        setPaginaAnterior
+      }
+
+    />
+
+  );
+
+}
 
   else if (page === "biblioteca") {
 

@@ -1,5 +1,6 @@
 import "../App.css";
 import { useEffect, useState } from "react";
+import API_URL from "../config";
 
 function Mitigacao({
   setPage,
@@ -12,7 +13,7 @@ function Mitigacao({
   useEffect(() => {
 
     fetch(
-      "http://localhost:3000/cards/mitigacao"
+      `${API_URL}/cards/mitigacao`
     )
       .then(res => res.json())
       .then(data => setCards(data))
@@ -63,7 +64,7 @@ function Mitigacao({
             {card.imagem_card && (
 
               <img
-                src={`http://localhost:3000/uploads/${card.imagem_card}`}
+                src={`${API_URL}/uploads/${card.imagem_card}`}
                 alt={card.titulo}
                 className="card-image"
               />

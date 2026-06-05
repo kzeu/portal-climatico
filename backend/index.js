@@ -102,6 +102,182 @@ app.get("/cards", async (req, res) => {
 
 });
 
+app.get("/usuarios", async (req, res) => {
+
+  try {
+
+    const resultado = await db.query(
+      `
+      SELECT *
+      FROM usuarios
+      ORDER BY id
+      `
+    );
+
+    res.json(resultado.rows);
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: "Erro servidor"
+    });
+
+  }
+
+});
+
+app.post("/usuarios", async (req, res) => {
+
+  try {
+
+    const {
+
+      nome,
+      usuario,
+      senha,
+      perfil
+
+    } = req.body;
+
+    await db.query(
+
+      `
+      INSERT INTO usuarios
+      (
+        nome,
+        usuario,
+        senha,
+        perfil
+      )
+      VALUES
+      (
+        $1,$2,$3,$4
+      )
+      `,
+
+      [
+        nome,
+        usuario,
+        senha,
+        perfil
+      ]
+
+    );
+
+    res.json({
+      sucesso: true
+    });
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: "Erro servidor"
+    });
+
+  }
+
+});
+
+app.put("/usuarios/:id", async (req, res) => {
+
+  try {
+
+    const id = req.params.id;
+
+    const {
+
+      nome,
+      usuario,
+      senha,
+      perfil
+
+    } = req.body;
+
+    await db.query(
+
+      `
+      UPDATE usuarios
+      SET
+
+        nome = $1,
+        usuario = $2,
+        senha = $3,
+        perfil = $4
+
+      WHERE id = $5
+      `,
+
+      [
+        nome,
+        usuario,
+        senha,
+        perfil,
+        id
+      ]
+
+    );
+
+    res.json({
+      sucesso: true
+    });
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: "Erro servidor"
+    });
+
+  }
+
+});
+
+app.delete("/usuarios/:id", async (req, res) => {
+
+  try {
+
+    const id = req.params.id;
+
+    await db.query(
+
+      `
+      DELETE FROM usuarios
+      WHERE id = $1
+      `,
+
+      [id]
+
+    );
+
+    res.json({
+      sucesso: true
+    });
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: "Erro servidor"
+    });
+
+  }
+
+});
+
 app.get("/cards/:pagina", async (req, res) => {
 
   try {
@@ -1065,10 +1241,12 @@ app.delete(
    SERVIDOR
 ========================= */
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
 
   console.log(
-    "Servidor rodando porta 3000"
+    `Servidor rodando porta ${PORT}`
   );
 
 });

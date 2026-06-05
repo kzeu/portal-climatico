@@ -731,6 +731,8 @@ footer-columns {
   grid-template-columns: 1fr 1fr;
 
   gap: 20px;
+   align-items: start;
+
 
 }
 
@@ -1244,6 +1246,81 @@ footer-columns {
   font-weight: bold;
 
 }
+.btn-editar,
+.btn-excluir {
+
+  padding: 6px 12px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+
+}
+
+.btn-editar {
+
+  background: #3b82c4;
+
+  color: white;
+
+}
+
+.btn-editar:hover {
+
+  background: #2d6da3;
+
+}
+
+.btn-excluir {
+
+  background: #dc3545;
+
+  color: white;
+
+}
+
+.btn-excluir:hover {
+
+  background: #bb2d3b;
+
+}
+
+.acoes-card {
+
+  display: flex;
+
+  gap: 10px;
+
+  justify-content: center;
+
+  align-items: center;
+
+}
+
+.botoes-form {
+
+  grid-column: 1 / -1;
+
+  display: flex;
+
+  gap: 15px;
+
+  justify-content: flex-start;
+
+  align-items: center;
+
+  margin-top: 20px;
+
+}
+
 
 
 /* =========================

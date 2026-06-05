@@ -2,6 +2,9 @@
 
 import "../App.css";
 import { useState, useEffect } from "react";
+import API_URL from "../config";
+
+
 
 function Admin_cards() {
 
@@ -49,8 +52,8 @@ function Admin_cards() {
   async function carregarCards() {
 
     const response = await fetch(
-  "http://localhost:3000/cards"
-);
+    `${API_URL}/cards`
+  );
 
     const data = await response.json();
 
@@ -132,7 +135,9 @@ function Admin_cards() {
 
       await fetch(
 
-        `http://localhost:3000/cards/${editando}`,
+         `${API_URL}/cards/${editando}`,
+
+        
 
         {
 
@@ -154,7 +159,7 @@ function Admin_cards() {
 
       await fetch(
 
-        "http://localhost:3000/cards",
+       `${API_URL}/cards`,
 
         {
 
@@ -207,20 +212,56 @@ function Admin_cards() {
 
   }
 
+  function limparFormulario() {
+
+  setEditando(null);
+
+  setImagens([]);
+
+  setImagensExistentes([]);
+
+  setForm({
+
+    pagina: "home",
+
+    titulo: "",
+
+    conteudo: "",
+
+    link: "",
+
+    tipo_link: "interno",
+
+    ordem: 0,
+
+    imagem_card: null,
+
+    pagina_detalhe: "nao",
+
+    titulo_pagina: "",
+
+    texto_pagina: "",
+
+    data_publicacao: ""
+
+  });
+
+}
+
 
   async function carregarImagensPagina(cardId) {
 
   try {
 
     const respostaPagina = await fetch(
-      `http://localhost:3000/pagina/${cardId}`
+      `${API_URL}/pagina/${cardId}`
     );
 
     const pagina =
       await respostaPagina.json();
 
     const respostaImagens = await fetch(
-      `http://localhost:3000/pagina-imagens/${pagina.id}`
+      `${API_URL}/pagina-imagens/${pagina.id}`
     );
 
     const imagens =
@@ -246,7 +287,7 @@ function Admin_cards() {
 
     await fetch(
 
-      `http://localhost:3000/cards/${id}`,
+      `${API_URL}/cards/${id}`,
 
       {
 
@@ -270,7 +311,7 @@ function Admin_cards() {
 
   await fetch(
 
-    `http://localhost:3000/pagina-imagem/${idImagem}`,
+    `${API_URL}/pagina-imagem/${idImagem}`,
 
     {
 
@@ -436,7 +477,7 @@ function Admin_cards() {
                   name="link"
                   value={form.link}
                   onChange={handleChange}
-                  placeholder="Ex: https://site.com ou pagina_interna"
+                  placeholder=" site ou pagina_interna"
                 />
 
               </div>
@@ -465,7 +506,7 @@ function Admin_cards() {
 
                             <img
 
-                              src={`http://localhost:3000/uploads/${form.imagem_card}`}
+                              src={`${API_URL}/uploads/${form.imagem_card}`}
 
                               alt=""
 
@@ -590,7 +631,7 @@ function Admin_cards() {
                               >
 
                                 <img
-                                  src={`http://localhost:3000/uploads/${img.imagem}`}
+                                  src={`${API_URL}/uploads/${img.imagem}`}
                                   alt=""
                                 />
 
@@ -711,20 +752,38 @@ function Admin_cards() {
 
             {/* BOTÃO */}
 
-            <div className="full-width">
-
-              <button
-                type="submit"
-                className="btn-enviar"
+           <div
+                className="full-width botoes-form"
               >
 
-                {editando
-                  ? "Atualizar"
-                  : "Salvar"}
+                <button
+                  type="submit"
+                  className="btn-enviar"
+                >
 
-              </button>
+                  {editando
+                    ? "Atualizar"
+                    : "Salvar"}
 
-            </div>
+                </button>
+
+                <button
+
+                  type="button"
+
+                  className="btn-enviar"
+
+                  onClick={
+                    limparFormulario
+                  }
+
+                >
+
+                  Limpar
+
+                </button>
+
+              </div>
 
           </form>
 
@@ -780,84 +839,92 @@ function Admin_cards() {
 
                   </td>
 
-                  <td>
+                <td>
 
-                    <button
+                    <div className="acoes-card">
 
-                     onClick={async () => {
+                      <button
 
-                                  setEditando(card.id);
+                        className="btn-editar"
 
-                                  let dadosPagina = null;
+                        onClick={async () => {
 
-                                  if (card.pagina_detalhe) {
+                          setEditando(card.id);
 
-                                    const respostaPagina = await fetch(
-                                      `http://localhost:3000/pagina/${card.id}`
-                                    );
+                          let dadosPagina = null;
 
-                                    dadosPagina =
-                                      await respostaPagina.json();
+                          if (card.pagina_detalhe) {
 
-                                    await carregarImagensPagina(
-                                      card.id
-                                    );
+                            const respostaPagina = await fetch(
+                              `${API_URL}/pagina/${card.id}`
+                            );
 
-                                  }
+                            dadosPagina =
+                              await respostaPagina.json();
 
-                                  setForm({
+                            await carregarImagensPagina(
+                              card.id
+                            );
 
-                                    ...card,
+                          }
 
-                                    pagina_detalhe:
-                                      card.pagina_detalhe
-                                        ? "sim"
-                                        : "nao",
+                          setForm({
 
-                                    titulo_pagina:
-                                      dadosPagina?.titulo || "",
+                            ...card,
 
-                                    texto_pagina:
-                                      dadosPagina?.texto || "",
+                            pagina_detalhe:
+                              card.pagina_detalhe
+                                ? "sim"
+                                : "nao",
 
-                                    data_publicacao:
-                                      dadosPagina?.data_publicacao
-                                        ? dadosPagina.data_publicacao.substring(0, 10)
-                                        : ""
+                            titulo_pagina:
+                              dadosPagina?.titulo || "",
 
-                                  });
+                            texto_pagina:
+                              dadosPagina?.texto || "",
 
-                                }}
+                            data_publicacao:
+                              dadosPagina?.data_publicacao
+                                ? dadosPagina.data_publicacao.substring(0, 10)
+                                : ""
 
-                    >
+                          });
 
-                      Editar
+                        }}
 
-                    </button>
+                      >
 
-                   <button
+                        ✏️ Editar
 
-                    onClick={() => {
+                      </button>
 
-                      const confirmar = window.confirm(
+                      <button
 
-                        `Deseja excluir o card "${card.titulo}"?`
+                        className="btn-excluir"
 
-                      );
+                        onClick={() => {
 
-                      if (confirmar) {
+                          const confirmar = window.confirm(
 
-                        excluir(card.id);
+                            `Deseja excluir o card "${card.titulo}"?`
 
-                      }
+                          );
 
-                    }}
+                          if (confirmar) {
 
-                  >
+                            excluir(card.id);
 
-                    Excluir
+                          }
 
-                  </button>
+                        }}
+
+                      >
+
+                        🗑️ Excluir
+
+                      </button>
+
+                    </div>
 
                   </td>
 

@@ -1,7 +1,8 @@
 import "../App.css";
 import { useEffect, useState } from "react";
+import API_URL from "../config";
 
-function Pagina_detalhe({ cardId, setPage }) {
+function Pagina_detalhe({ cardId, setPage,paginaAnterior }) {
 
   const [pagina, setPagina] = useState(null);
   const [imagens, setImagens] = useState([]);
@@ -9,7 +10,7 @@ function Pagina_detalhe({ cardId, setPage }) {
   useEffect(() => {
 
     fetch(
-      `http://localhost:3000/pagina/${cardId}`
+      `${API_URL}/pagina/${cardId}`
     )
 
       .then(res => res.json())
@@ -19,7 +20,7 @@ function Pagina_detalhe({ cardId, setPage }) {
         setPagina(data);
 
         const respostaImagens = await fetch(
-          `http://localhost:3000/pagina-imagens/${data.id}`
+          `${API_URL}/pagina-imagens/${data.id}`
         );
 
         const imagensData =
@@ -51,6 +52,22 @@ function Pagina_detalhe({ cardId, setPage }) {
 
   }
 
+  const nomePagina = {
+
+  home: "Home",
+
+  adaptacao: "Adaptação",
+
+  mitigacao: "Mitigação",
+
+  biblioteca: "Biblioteca",
+
+  engajamento: "Engajamento",
+
+  contato: "Contato"
+
+}[paginaAnterior] || "Home";
+
   return (
 
     <div className="content">
@@ -61,7 +78,7 @@ function Pagina_detalhe({ cardId, setPage }) {
 
         <button
           className="btn-voltar"
-          onClick={() => setPage("home")}
+          onClick={() => setPage(paginaAnterior)}
         >
           ← Voltar
         </button>
@@ -72,9 +89,9 @@ function Pagina_detalhe({ cardId, setPage }) {
 
           <span
             className="breadcrumb-link"
-            onClick={() => setPage("home")}
+            onClick={() => setPage(paginaAnterior)}
           >
-            Home
+            {nomePagina}
           </span>
 
           <span className="sep">
@@ -126,7 +143,7 @@ function Pagina_detalhe({ cardId, setPage }) {
                   key={index}
 
                   src={
-                    `http://localhost:3000/uploads/${img.imagem}`
+                    `${API_URL}/uploads/${img.imagem}`
                   }
 
                   alt={`Foto ${index + 1}`}

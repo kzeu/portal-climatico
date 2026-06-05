@@ -1,5 +1,6 @@
 import "../App.css";
 import { useEffect, useState } from "react";
+import API_URL from "../config";
 
 function Home({
 
@@ -16,7 +17,7 @@ function Home({
   useEffect(() => {
 
     fetch(
-      "http://localhost:3000/cards/home"
+      `${API_URL}/cards/home`
     )
       .then(res => res.json())
       .then(data => setCards(data))
@@ -69,7 +70,7 @@ function Home({
               <img
 
                 src={
-                  `http://localhost:3000/uploads/${card.imagem_card}`
+                 `${API_URL}/uploads/${card.imagem_card}`
                 }
 
                 alt={card.titulo}

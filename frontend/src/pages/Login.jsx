@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../App.css";
+import API_URL from "../config";
 
 function Login({ setPage }) {
 
@@ -9,7 +10,7 @@ function Login({ setPage }) {
   async function entrar() {
 
     const resposta = await fetch(
-      "http://localhost:3000/login",
+      `${API_URL}/login`,
       {
         method: "POST",
         headers: {
@@ -24,15 +25,16 @@ function Login({ setPage }) {
 
     const dados = await resposta.json();
 
-    if (dados.sucesso) {
+        if (dados.sucesso) {
 
-      setPage("admin");
+        localStorage.setItem(
+          "logado",
+          "sim"
+        );
 
-    } else {
+        setPage("admin");
 
-      alert("Usuário ou senha inválidos");
-
-    }
+      }
 
   }
 
