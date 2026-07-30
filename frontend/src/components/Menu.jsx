@@ -52,13 +52,7 @@ function Menu({ setPage }) {
 
           <img src={logo} alt="logo" />
 
-          <span className="logo-text">
-
-            Portal
-            <br />
-            Climático
-
-          </span>
+         
 
         </div>
 

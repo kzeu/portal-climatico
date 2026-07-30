@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 /* =========================
    UPLOADS
 ========================= */
@@ -1235,6 +1235,507 @@ app.delete(
   }
 
 );
+
+/* =========================
+   BIBLIOTECA
+========================= */
+
+app.get("/biblioteca", async (req, res) => {
+  try {
+    const resultado = await db.query(`
+      SELECT *
+      FROM biblioteca
+      WHERE ativo = true
+      ORDER BY ordem, id
+    `);
+
+    res.json(resultado.rows);
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      erro: err.message
+    });
+  }
+});
+
+
+app.post(
+    "/biblioteca",
+
+    upload.single("arquivo"),
+
+    async (req,res)=>{
+
+          console.log("CONTENT-TYPE:", req.headers["content-type"]);
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
+  try {
+    const {
+      titulo,
+      tipo,
+      data,
+      link,
+      pagina,
+      ordem
+    } = req.body;
+
+    let arquivo = null;
+      let nome_arquivo = null;
+
+      if(req.file){
+
+          arquivo = req.file.filename;
+
+          nome_arquivo = req.file.originalname;
+
+      }
+
+    const resultado = await db.query(
+      `
+      INSERT INTO biblioteca
+      (
+        titulo,
+        tipo,
+        data,
+        link,
+        pagina,
+        ordem,
+        arquivo,
+        nome_arquivo
+
+      )
+      VALUES
+      ($1,$2,$3,$4,$5,$6,$7,$8)
+      RETURNING *
+      `,
+      [
+        titulo,
+        tipo,
+        data,
+        link || null,
+        pagina || null,
+        ordem || 0,
+        arquivo,
+        nome_arquivo
+      ]
+    );
+
+    res.json({
+      sucesso: true,
+      registro: resultado.rows[0]
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      erro: err.message
+    });
+  }
+});
+
+/* =========================
+   SUBMISSÕES CLIMÁTICAS
+========================= */
+
+app.get("/submissoes", async (req, res) => {
+
+  try {
+
+    const resultado = await db.query(`
+      SELECT *
+      FROM submissoes_climaticas
+      ORDER BY data_submissao DESC
+    `);
+
+    res.json(resultado.rows);
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: err.message
+    });
+
+  }
+
+});
+
+app.get("/submissoes/:id", async (req, res) => {
+
+  try {
+
+    const resultado = await db.query(
+      `
+      SELECT *
+      FROM submissoes_climaticas
+      WHERE id=$1
+      `,
+      [req.params.id]
+    );
+
+    res.json(resultado.rows[0]);
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: err.message
+    });
+
+  }
+
+});
+
+
+app.post("/submissoes", async (req, res) => {
+
+  try {
+
+    const {
+
+      email,
+      tipo_proponente,
+      nome_responsavel,
+      entidade,
+      cargo,
+      website,
+      tipo_submissao,
+      idioma,
+      titulo,
+      titulo_curto,
+      descricao,
+      data_publicacao,
+      data_retirada,
+      data_inicio,
+      hora_inicio,
+      data_fim,
+      hora_fim,
+      evento_online,
+      local1,
+      local2,
+      link,
+      permissao_publicacao,
+      motivo_publicacao,
+      descricao_documento,
+      tags
+
+    } = req.body;
+
+    // Campos opcionais
+    const websiteFinal = website || null;
+    const dataPublicacao = data_publicacao || null;
+    const dataRetirada = data_retirada || null;
+    const dataInicio = data_inicio || null;
+    const horaInicio = hora_inicio || null;
+    const dataFim = data_fim || null;
+    const horaFim = hora_fim || null;
+    const local1Final = local1 || null;
+    const local2Final = local2 || null;
+    const linkFinal = link || null;
+    const motivoPublicacao = motivo_publicacao || null;
+    const descricaoDocumento = descricao_documento || null;
+    const tagsFinal = tags || null;
+
+    const resultado = await db.query(
+
+      `
+      INSERT INTO submissoes_climaticas
+      (
+        email,
+        tipo_proponente,
+        nome_responsavel,
+        entidade,
+        cargo,
+        website,
+        tipo_submissao,
+        idioma,
+        titulo,
+        titulo_curto,
+        descricao,
+        data_publicacao,
+        data_retirada,
+        data_inicio,
+        hora_inicio,
+        data_fim,
+        hora_fim,
+        evento_online,
+        local1,
+        local2,
+        link,
+        permissao_publicacao,
+        motivo_publicacao,
+        descricao_documento,
+        tags
+      )
+
+      VALUES
+      (
+        $1,$2,$3,$4,$5,
+        $6,$7,$8,$9,$10,
+        $11,$12,$13,$14,$15,
+        $16,$17,$18,$19,$20,
+        $21,$22,$23,$24,$25
+      )
+
+      RETURNING *
+      `,
+
+      [
+        email,
+        tipo_proponente,
+        nome_responsavel,
+        entidade,
+        cargo,
+        websiteFinal,
+        tipo_submissao,
+        idioma,
+        titulo,
+        titulo_curto,
+        descricao,
+        dataPublicacao,
+        dataRetirada,
+        dataInicio,
+        horaInicio,
+        dataFim,
+        horaFim,
+        evento_online,
+        local1Final,
+        local2Final,
+        linkFinal,
+        permissao_publicacao,
+        motivoPublicacao,
+        descricaoDocumento,
+        tagsFinal
+      ]
+
+    );
+
+    res.json({
+      sucesso: true,
+      registro: resultado.rows[0]
+    });
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: err.message
+    });
+
+  }
+
+});
+
+app.put("/submissoes/:id", async (req,res)=>{
+
+   try{
+
+      const id=req.params.id;
+
+      const {
+
+         status,
+         observacao_admin
+
+      }=req.body;
+
+      await db.query(
+
+      `
+
+      UPDATE submissoes_climaticas
+
+      SET
+
+      status=$1,
+
+      observacao_admin=$2
+
+      WHERE id=$3
+
+      `,
+
+      [
+
+         status,
+
+         observacao_admin,
+
+         id
+
+      ]
+
+      );
+
+      res.json({
+
+         sucesso:true
+
+      });
+
+   }
+
+   catch(err){
+
+      console.log(err);
+
+      res.status(500).json({
+
+         erro:err.message
+
+      });
+
+   }
+
+});
+
+
+app.delete("/submissoes/:id", async (req,res)=>{
+
+   try{
+
+      await db.query(
+
+      `
+      DELETE FROM submissoes_climaticas
+      WHERE id=$1
+      `,
+
+      [
+
+         req.params.id
+
+      ]
+
+      );
+
+      res.json({
+
+         sucesso:true
+
+      });
+
+   }
+
+   catch(err){
+
+      console.log(err);
+
+      res.status(500).json({
+
+         erro:err.message
+
+      });
+
+   }
+
+});
+
+
+app.put(
+    "/biblioteca/:id",
+
+    upload.single("arquivo"),
+
+    async (req, res) => {
+
+        try {
+
+            const id = req.params.id;
+
+            const {
+                titulo,
+                tipo,
+                data,
+                link,
+                pagina,
+                ordem
+            } = req.body;
+
+            let arquivo = null;
+            let nome_arquivo = null;
+
+            if (req.file) {
+
+                arquivo = req.file.filename;
+                nome_arquivo = req.file.originalname;
+
+            }
+
+            await db.query(
+                `
+                UPDATE biblioteca
+                SET
+                    titulo = $1,
+                    tipo = $2,
+                    data = $3,
+                    link = $4,
+                    pagina = $5,
+                    ordem = $6,
+                    arquivo = COALESCE($7, arquivo),
+                    nome_arquivo = COALESCE($8, nome_arquivo)
+                WHERE id = $9
+                `,
+                [
+                    titulo,
+                    tipo,
+                    data,
+                    link || null,
+                    pagina || null,
+                    ordem || 0,
+                    arquivo,
+                    nome_arquivo,
+                    id
+                ]
+            );
+
+            res.json({
+                sucesso: true
+            });
+
+        } catch (err) {
+
+            console.log(err);
+
+            res.status(500).json({
+                erro: err.message
+            });
+
+        }
+
+    }
+);
+
+
+app.delete("/biblioteca/:id", async (req, res) => {
+  try {
+    await db.query(
+      `
+      DELETE FROM biblioteca
+      WHERE id = $1
+      `,
+      [req.params.id]
+    );
+
+    res.json({
+      sucesso: true
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      erro: err.message
+    });
+  }
+});
 
 
 /* =========================

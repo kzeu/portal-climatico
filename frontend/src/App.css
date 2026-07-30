@@ -30,7 +30,12 @@ body {
 
   z-index: 9999;
 
-  background: linear-gradient(90deg, #8f8f8f, #e2e2e2); /* ✅ ESSENCIAL */
+      background: linear-gradient(
+      90deg,
+        #005f73,
+        #0d8b73,
+        #15a34a
+    );
 }
 /* CONTAINER */
 .menu-inner {
@@ -125,7 +130,7 @@ height: 125px;
 }
 
 .menu-login button:hover {
-  background: rgba(255,255,255,0.5);
+  background: #146c43;
 }
 
 /* =========================
@@ -140,11 +145,10 @@ height: 125px;
 
 /* CONTAINER */
 .content {
-  width: 92%;
-  max-width: 1600px;
+  width: 100%;
+  max-width: 1200px;
   margin: auto;
   min-height: 70vh;
-
   padding-top: 100px;
 }
 
@@ -153,18 +157,31 @@ height: 125px;
   margin-top: 0;
   padding: 60px 30px; /* 👈 altura ideal */
 
-  background: #dfeaf3;
+ background:
+        linear-gradient(
+            rgba(0,0,0,.55),
+            rgba(0,0,0,.45)
+        ),
+        url("/hero.jpg");
+
+    background-size:cover;
+    background-position:center;
   border-radius: 12px;
 
   text-align: center;
 }
 
 .hero h1 {
+
+  color:white;
+    font-size:48px;
   margin-bottom: 8px;
   font-size: 28px;
 }
 
 .hero p {
+
+  color:#ececec;
   margin: 0 auto;
   max-width: 850px;
   font-size: 15px;
@@ -199,7 +216,7 @@ height: 125px;
 }
 
 .card-header {
-  background: #969896;
+  background: #198754;
   color: white;
   padding: 12px;
   text-align: center;
@@ -252,7 +269,10 @@ height: 125px;
 ========================= */
 
 .footer {
-  background: linear-gradient(90deg, #7c7c7c, #a5a5a5);
+  background: linear-gradient(
+        180deg,
+        #4b4b4b,
+        #383838);
   color: white;
   padding: 25px 40px;
   margin-top: 20px;
@@ -342,7 +362,7 @@ footer-columns {
 }
 
 .menu-logo img {
-  height: 100px;
+  height: 160px;
 }
 
 
@@ -426,7 +446,7 @@ footer-columns {
 }
 
 .menu-login button:hover {
-  background: rgba(255,255,255,0.5);
+  background: #146c43;
 }
 
 /* =========================
@@ -516,7 +536,7 @@ footer-columns {
 
 /* HEADER */
 .tabela-biblioteca thead {
-  background: #4a67d6;
+  background: #198754;
   color: white;
 }
 
@@ -810,7 +830,7 @@ footer-columns {
 
   border-radius: 10px;
 
-  background: #3d84b8;
+  background: #198754;
 
   color: white;
 
@@ -824,7 +844,7 @@ footer-columns {
 
 .admin-form button:hover {
 
-  background: #2f6d99;
+  background: #146c43;
 
 }
 
@@ -1237,7 +1257,7 @@ footer-columns {
 
   border-radius: 6px;
 
-  background: #2f4f68;
+  background: #198754;
 
   color: white;
 
@@ -1321,7 +1341,355 @@ footer-columns {
 
 }
 
+/* ===========================
+   ADMIN BIBLIOTECA
+=========================== */
 
+.admin-card{
+    max-width:1100px;
+    margin:30px auto;
+    background:#fff;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.admin-card h1{
+    margin-bottom:5px;
+    color:#1f3b57;
+}
+
+.admin-card p{
+    margin-bottom:25px;
+    color:#666;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
+}
+
+.form-group label{
+    font-weight:600;
+    margin-bottom:6px;
+    color:#444;
+}
+
+.form-group input,
+.form-group select{
+    padding:10px;
+    border:1px solid #d9d9d9;
+    border-radius:6px;
+    font-size:14px;
+    outline:none;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#0d6efd;
+}
+
+.admin-card button{
+    padding:10px 18px;
+    border:none;
+    border-radius:6px;
+    background:#198754;
+    color:#fff;
+    cursor:pointer;
+    margin-right:10px;
+    font-size:14px;
+}
+
+.admin-card button:hover{
+    background:#146c43;
+}
+
+.admin-card hr{
+    margin:30px 0;
+}
+
+.admin-card table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.admin-card th{
+    background:#0d6efd;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+.admin-card td{
+    padding:10px;
+    border-bottom:1px solid #e5e5e5;
+}
+
+.admin-card tr:hover{
+    background:#f8f9fa;
+}
+
+/* ===========================
+   FORMULÁRIO SUBMISSÃO
+=========================== */
+
+/* ===========================
+   GRID DOS FORMULÁRIOS
+=========================== */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(320px,1fr));
+    gap:22px;
+    margin-top:20px;
+}
+
+.campo{
+    display:flex;
+    flex-direction:column;
+}
+
+.campo-2{
+    grid-column:1 / -1;
+}
+
+.campo label{
+    margin-bottom:8px;
+    font-size:15px;
+    font-weight:600;
+    color:#334155;
+}
+
+.campo input,
+.campo select,
+.campo textarea{
+
+    width:100%;
+    padding:12px 14px;
+    border:1px solid #d6dbe1;
+    border-radius:8px;
+    font-size:14px;
+    background:#fff;
+    transition:.2s;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus{
+
+    outline:none;
+    border-color:#198754;
+    box-shadow:0 0 0 3px rgba(25,135,84,.15);
+
+}
+
+.campo textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+
+.form-grid button{
+
+    padding:12px 24px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.form-grid button[type="submit"]{
+
+    background:#198754;
+
+    color:white;
+
+}
+
+.form-grid button[type="submit"]:hover{
+
+    background:#146c43;
+
+}
+
+.form-grid button[type="button"]{
+
+    background:#e5e7eb;
+
+    color:#374151;
+
+}
+
+.form-grid button[type="button"]:hover{
+
+    background:#d1d5db;
+
+}
+.biblioteca-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+
+    gap:18px;
+
+    margin-top:25px;
+
+}
+
+.biblioteca-card{
+
+    background:#fff;
+
+    border-radius:12px;
+
+    padding:16px;
+
+    text-align:center;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+    transition:.2s;
+
+}
+
+.biblioteca-card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
+
+}
+
+.biblioteca-icone{
+
+    font-size:28px;
+
+    margin-bottom:8px;
+
+}
+
+.biblioteca-card h3{
+
+  font-size:15px;
+
+    line-height:1.35;
+
+    margin:10px 0;
+
+    color:#183153;
+
+    font-weight:600;
+
+    min-height:60px;
+
+    overflow:visible;
+
+    word-break:break-word;
+
+   
+
+}
+
+
+
+.biblioteca-data{
+
+     font-size:12px;
+
+    color:#777;
+
+    margin-bottom:12px;
+
+}
+
+.biblioteca-footer{
+
+    margin-top:30px;
+
+}
+
+.btn-biblioteca{
+
+    display:block;
+
+    width:100%;
+
+    padding:8px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    background:#198754;
+
+    color:#fff;
+
+    text-decoration:none;
+
+}
+
+.btn-biblioteca:hover{
+
+    background:#146c43;
+
+}
+
+.sem-documentos{
+
+    grid-column:1/-1;
+
+    text-align:center;
+
+    padding:50px;
+
+    font-size:18px;
+
+}
+@media (max-width:900px){
+
+.form-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.campo-2{
+
+grid-column:auto;
+
+}
+
+.acoes-biblioteca{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    align-items:center;
+}
+
+.acoes-biblioteca .btn-editar,
+.acoes-biblioteca .btn-excluir{
+
+    width:auto !important;
+    display:inline-block !important;
+    margin:0 !important;
+    padding:8px 14px;
+
+}
+
+
+
+}
 
 /* =========================
    RESPONSIVO

@@ -1,126 +1,71 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import API_URL from "../config";
 import "../App.css";
 
 function Biblioteca({ setPage }) {
 
-
-  const dados = [
-
-    {
-    titulo: "Primeira NDC da Guiné (submissão atualizada)",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "12/out/21",
-    link: "https://unfccc.int/documents/497521"
-  },
-  {
-    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 4",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "17 Nov 2025",
-    link: "https://unfccc.int/documents/654402"
-  },
-  {
-    titulo: "Primeira NDC da Guiné-Bissau (Arquivada)",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "22/out/18",
-    link: "https://unfccc.int/documents/497511"
-  },
-  {
-    titulo: "Relatório Bienal de Transparência (BTR) - BTR1. CTF-FTC |planilhas de dados estruturados",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "14/ago/25",
-    link: "https://unfccc.int/documents/649217"
-  },
-
-  {
-    titulo: "Guiné-Bissau. 2024 Documento de Inventário Nacional (NID)",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "26-Dec-24",
-    link: "https://unfccc.int/documents/645094"
-  },
-  {
-    titulo: "Relatório Bienal de Transparência (BTR) - BTR1. CTF-FTC |planilhas de dados estruturados",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "14/ago/25",
-    link: "https://unfccc.int/documents/649217"
-  },
-  {
-    titulo: "Relatório Bienal de Transparência (BTR) - BTR1 | documento narrativo",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "26-Dec-24",
-    link: "https://unfccc.int/documents/645093"
-  },
-  {
-    titulo: "Guiné-Bissau. 2024 Relatório Bienal de Transparência (BTR). BTR1. CTF-NDC",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "25-Dec-24",
-    link: "https://unfccc.int/documents/645095"
-  },
-  {
-    titulo: "Guiné-Bissau. Relatório Bienal de Atualização (BUR). BUR 1",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "22-Sep-20",
-    link: "https://unfccc.int/documents/251917"
-  },
-  {
-    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 3",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "9-Mar-18",
-    link: "https://unfccc.int/documents/64689"
-  },
-  {
-    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 2",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "29-Oct-11",
-    link: "https://unfccc.int/documents/79689"
-  },
-  {
-    titulo: "Guiné-Bissau. Comunicação Nacional (NC). NC 1",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "1-Dec-05",
-    link: "https://unfccc.int/documents/106948"
-  },
-  {
-    titulo: "Guiné-Bissau. 2024 Tabela Comum de Reporte (CRT). [Guiné-Bissau. 2024 Relatório Bienal de Transparência (BTR). BTR1. CTF-NDC (2024)]",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "25-Dec-24",
-    link: "https://unfccc.int/documents/645312"
-  },
-  {
-    titulo: "Relatório FREL sobre a avaliação técnica do nível de referência de emissões florestais proposto pela Guiné-Bissau (submetido em 2019)",
-    tipo: "Relatório Nacional para a UNFCCC",
-    data: "15-Jan-20",
-    link: "https://unfccc.int/documents/209416"
-  },
-  
-  {
-    titulo: "Programa Nacional de Ação para a Adaptação às Mudanças Climáticas (NAPA) - histórico",
-    tipo: "Mapa estático",
-    data: "16/dez/06",
-    pagina: "mapas_climatologia"
-  }
-];
-
+  const [dados, setDados] = useState([]);
   const [filtro, setFiltro] = useState("");
+
+  useEffect(() => {
+
+    async function carregarBiblioteca() {
+
+      try {
+
+        const response = await fetch(`${API_URL}/biblioteca`);
+
+        if (!response.ok) {
+          throw new Error("Erro ao carregar biblioteca.");
+        }
+
+        const resultado = await response.json();
+
+        if (Array.isArray(resultado)) {
+          setDados(resultado);
+        } else {
+          console.error("A API não retornou uma lista:", resultado);
+          setDados([]);
+        }
+
+      } catch (erro) {
+
+        console.error("Erro ao carregar biblioteca:", erro);
+        setDados([]);
+
+      }
+
+    }
+
+    carregarBiblioteca();
+
+  }, []);
 
   const dadosFiltrados = filtro
     ? dados.filter(item => item.tipo === filtro)
     : dados;
 
   return (
+
     <div className="content" id="content">
 
       {/* HERO */}
       <div className="hero">
         <h1>Biblioteca Climática</h1>
+
         <p>
-          A Biblioteca do Portal Climático reúne documentos, relatórios e estudos
-          relevantes sobre mudanças climáticas na Guiné-Bissau.
+          A Biblioteca do Portal Climático reúne documentos,
+          relatórios e estudos relevantes sobre mudanças
+          climáticas na Guiné-Bissau.
         </p>
       </div>
 
       {/* FILTRO */}
+
       <div style={{ marginBottom: "15px" }}>
+
         <select
+          value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
           style={{
             borderRadius: "10px",
@@ -128,72 +73,114 @@ function Biblioteca({ setPage }) {
             border: "1px solid #ccc"
           }}
         >
+
           <option value="">Todos</option>
+
           <option value="Relatório Nacional para a UNFCCC">
             Relatórios UNFCCC
           </option>
+
           <option value="Mapa estático">
             Mapas
           </option>
+
+          <option value="Estudo">
+            Estudos
+          </option>
+
+          <option value="Publicação">
+            Publicações
+          </option>
+
         </select>
+
       </div>
 
       {/* TABELA */}
-     <table className="tabela-biblioteca">
 
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Documento</th>
-      <th>Tipo</th>
-      <th>Data</th> {/* NOVA COLUNA */}
-      <th>Acesso</th>
-    </tr>
-  </thead>
+      <div className="biblioteca-grid">
 
-  <tbody>
-    {dadosFiltrados.map((item, index) => (
-      <tr key={index}>
+    {dadosFiltrados.length === 0 ? (
 
-        <td>{index + 1}</td>
+        <div className="sem-documentos">
+            Nenhum documento encontrado.
+        </div>
 
-        <td className="col-titulo">
-          {item.link ? (
-            <a href={item.link} target="_blank" rel="noopener noreferrer">
-              {item.titulo}
-            </a>
-          ) : (
-            <span onClick={() => setPage(item.pagina)}>
-              {item.titulo}
-            </span>
-          )}
-        </td>
+    ) : (
 
-        <td>{item.tipo}</td>
+        dadosFiltrados.map((item) => (
 
-        {/* NOVA COLUNA DATA */}
-        <td>{item.data}</td>
+            <div className="biblioteca-card" key={item.id}>
 
-        <td>
-          {item.link ? (
-            <a href={item.link} target="_blank" rel="noopener noreferrer" className="btn-link">
-              🔗 Acessar
-            </a>
-          ) : (
-            <span className="btn-link" onClick={() => setPage(item.pagina)}>
-              🔗 Ver página
-            </span>
-          )}
-        </td>
+                <div className="biblioteca-icone">
 
-      </tr>
-    ))}
-  </tbody>
+                    {item.tipo === "Mapa estático" && "🗺️"}
+                    {item.tipo === "Estudo" && "📘"}
+                    {item.tipo === "Publicação" && "📚"}
+                    {item.tipo === "Relatório Nacional para a UNFCCC" && "🌍"}
 
-</table>
+                </div>
+
+                <h3>{item.titulo}</h3>
+
+                <span className="biblioteca-tipo">
+                    {item.tipo}
+                </span>
+
+                <div className="biblioteca-data">
+                    📅 {item.data}
+                </div>
+
+                <div className="biblioteca-footer">
+
+                    {item.arquivo ? (
+
+                        <a
+                            href={`${API_URL}/uploads/${item.arquivo}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={item.nome_arquivo}
+                            className="btn-biblioteca"
+                        >
+                            📥 Download
+                        </a>
+
+                    ) : item.link ? (
+
+                        <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-biblioteca"
+                        >
+                            🔗 Acessar
+                        </a>
+
+                    ) : (
+
+                        <button
+                            className="btn-biblioteca"
+                            onClick={() => setPage(item.pagina)}
+                        >
+                            📄 Ver página
+                        </button>
+
+                    )}
+
+                </div>
+
+            </div>
+
+        ))
+
+    )}
+
+</div>
 
     </div>
+
   );
+
 }
 
 export default Biblioteca;

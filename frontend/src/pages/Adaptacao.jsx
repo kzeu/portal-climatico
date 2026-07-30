@@ -35,20 +35,9 @@ function Adaptacao({
 
         <p>
 
-          A adaptação é essencial para a
-          Guiné-Bissau devido à sua elevada
-          vulnerabilidade a impactos como a
-          subida do nível do mar, inundações
-          e variabilidade das chuvas.
-
-          Esses riscos afetam setores vitais
-          como agricultura, água e zonas
-          costeiras.
-
-          Fortalecer a adaptação permite
-          reduzir perdas, proteger populações
-          vulneráveis e promover um
-          desenvolvimento mais resiliente.
+         A adaptação é essencial para a Guiné-Bissau devido à sua elevada vulnerabilidade a impactos como a subida do nível do mar, inundações e variabilidade das chuvas. 
+         Riscos climáticos afetam setores vitais como agricultura, água e zonas costeiras. 
+         Fortalecer a adaptação permite reduzir perdas, proteger populações vulneráveis e promover um desenvolvimento mais resiliente, sensível ao género.
 
         </p>
 

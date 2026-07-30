@@ -35,14 +35,8 @@ function Mitigacao({
 
         <p>
 
-          A ação climática cabe a todos nós.
-          Refere-se aos esforços do país para
-          reduzir os riscos climáticos e as
-          emissões de gases de efeito estufa,
-          ao mesmo tempo em que fortalece a
-          resiliência em setores-chave como
-          agricultura, zonas costeiras, água
-          e ecossistemas.
+         A mitigação é importante para a Guiné-Bissau ao reduzir emissões e promover um desenvolvimento sustentável. 
+         Mesmo com baixas emissões, ações em florestas, energia e uso da terra são essenciais e abrem acesso a financiamento climático.
 
         </p>
 
