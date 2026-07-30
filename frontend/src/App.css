@@ -1539,7 +1539,7 @@ footer-columns {
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    grid-template-columns:repeat(5,1fr);
 
     gap:18px;
 
@@ -1548,34 +1548,32 @@ footer-columns {
 }
 
 .biblioteca-card{
-
-    background:#fff;
-
+   background:#fff;
     border-radius:12px;
-
     padding:16px;
-
     text-align:center;
 
+    display:flex;
+    flex-direction:column;
+
+    min-height:390px;
+
     box-shadow:0 3px 10px rgba(0,0,0,.08);
-
     transition:.2s;
-
 }
 
 .biblioteca-card:hover{
 
-    transform:translateY(-3px);
+    transform:translateY(-6px);
 
-    box-shadow:0 8px 18px rgba(0,0,0,.12);
+    box-shadow:0 16px 32px rgba(0,0,0,.16);
 
 }
 
 .biblioteca-icone{
 
-    font-size:28px;
-
-    margin-bottom:8px;
+   font-size:34px;
+    margin-bottom:12px;
 
 }
 
@@ -1591,13 +1589,37 @@ footer-columns {
 
     font-weight:600;
 
-    min-height:60px;
-
+   
     overflow:visible;
 
     word-break:break-word;
 
+
+     min-height:110px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
    
+
+}
+
+.biblioteca-tipo{
+
+    min-height:55px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:15px;
+
+    color:#555;
+
+    margin-bottom:8px;
 
 }
 
@@ -1611,11 +1633,14 @@ footer-columns {
 
     margin-bottom:12px;
 
+    min-height:30px;
+
 }
 
 .biblioteca-footer{
 
-    margin-top:30px;
+  margin-top:auto;
+    padding-top:16px;
 
 }
 

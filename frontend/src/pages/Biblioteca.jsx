@@ -112,6 +112,8 @@ function Biblioteca({ setPage }) {
 
             <div className="biblioteca-card" key={item.id}>
 
+              
+
                 <div className="biblioteca-icone">
 
                     {item.tipo === "Mapa estático" && "🗺️"}
@@ -169,7 +171,8 @@ function Biblioteca({ setPage }) {
 
                 </div>
 
-            </div>
+              </div> 
+           
 
         ))
 
