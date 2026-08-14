@@ -4,6 +4,7 @@ import { useState } from "react";
 import Admin_cards from "./Admin_cards";
 import Admin_usuarios from "./Admin_usuarios";
 import Admin_biblioteca from "./Admin_biblioteca";
+import Admin_mapas from "./Admin_mapas";
 
 function Admin({ setPage }) {
 
@@ -56,6 +57,22 @@ function Admin({ setPage }) {
         >
           Biblioteca
         </div>
+
+        <div
+          className={`admin-menu-item ${
+            menu === "mapas"
+              ? "active"
+              : ""
+          }`}
+          onClick={() =>
+            setMenu("mapas")
+          }
+        >
+          Mapas Climáticos
+        </div>
+
+
+        
 
         <div
           className={`admin-menu-item ${
@@ -120,6 +137,10 @@ function Admin({ setPage }) {
           <Admin_biblioteca />
 
         )}
+
+        {menu=== "mapas" && (
+        <Admin_mapas />
+         )}
 
         {menu === "usuarios" && (
 

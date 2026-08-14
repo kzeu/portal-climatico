@@ -42,6 +42,19 @@ function Admin_cards() {
 
   });
 
+  const paginasInternas = [
+  { value: "home", label: "Home" },
+  { value: "adaptacao", label: "Adaptação" },
+  { value: "mitigacao", label: "Mitigação" },
+  { value: "engajamento", label: "Engajamento" },
+  { value: "biblioteca", label: "Biblioteca" },
+  { value: "contato", label: "Contato" },
+  { value: "seguimento_nap", label: "Seguimento do NAP" },
+  { value: "mapas_climatologia", label: "Mapas Climatologia" },
+  { value: "mapas_riscos", label: "Mapas de Risco" },
+  { value: "form_submissao", label: "Formulário de Submissão Climática" }
+];
+
 
   
 
@@ -468,19 +481,52 @@ function Admin_cards() {
 
             {/* TIPO LINK */}
 
-            <div className="form-group">
+           <div className="form-group">
 
-                <label>Link</label>
+              <label>
+                  {form.tipo_link === "interno"
+                      ? "Página"
+                      : "Link"}
+              </label>
 
-                <input
-                  type="text"
-                  name="link"
-                  value={form.link}
-                  onChange={handleChange}
-                  placeholder=" site ou pagina_interna"
-                />
+              {form.tipo_link === "interno" ? (
 
-              </div>
+                  <select
+                      name="link"
+                      value={form.link}
+                      onChange={handleChange}
+                  >
+
+                      <option value="">
+                          Selecione...
+                      </option>
+
+                      {paginasInternas.map((pagina) => (
+
+                          <option
+                              key={pagina.value}
+                              value={pagina.value}
+                          >
+                              {pagina.label}
+                          </option>
+
+                      ))}
+
+                  </select>
+
+              ) : (
+
+                  <input
+                      type="text"
+                      name="link"
+                      value={form.link}
+                      onChange={handleChange}
+                      placeholder="https://..."
+                  />
+
+              )}
+
+          </div>
 
           
 

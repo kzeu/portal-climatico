@@ -1,185 +1,763 @@
 import { useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+const API_URL = "http://localhost:3000";
+
 
 /* =========================
    MAPA
 ========================= */
-function MapaItem({ file, titulo, cores }) {
-  const [data, setData] = useState(null);
 
-  useEffect(() => {
-    fetch(`/maps/${file}`)
-      .then((res) => res.json())
-      .then((json) => setData(json));
-  }, [file]);
+function MapaItem({
+    file,
+    campo,
+    titulo,
+    classificacoes
+}) {
 
-  function getCodigo(props) {
-    return props.code || "";
-  }
+    const [data, setData] = useState(null);
 
-  function getNome(props) {
-    return props.adm1_name || "Região";
-  }
+    useEffect(() => {
 
-  const style = (feature) => {
-    const codigo = getCodigo(feature.properties);
+        if (!file) {
+            return;
+        }
+
+       fetch(`${API_URL}/maps/${file}`)
+            .then((res) => res.json())
+            .then((json) => {
+                setData(json);
+            })
+            .catch((erro) => {
+                console.error(
+                    "Erro ao carregar GeoJSON:",
+                    erro
+                );
+            });
+
+    }, [file]);
+
+
+    function getNome(props) {
+
+        return (
+            props.adm1_name ||
+            "Região"
+        );
+
+    }
+
+           const style = (feature) => {
+
+    const valor =
+        Number(
+            feature.properties?.[campo]
+        );
+
+
+    const classificacao =
+        classificacoes.find(
+            (item) => {
+
+                const minimo =
+                    Number(item.minimo);
+
+                const maximo =
+                    Number(item.maximo);
+
+                return (
+                    valor >= minimo &&
+                    valor <= maximo
+                );
+
+            }
+        );
+
+
+    console.log(
+        "Região:",
+        feature.properties?.adm1_name,
+        "Campo:",
+        campo,
+        "Valor:",
+        valor,
+        "Cor:",
+        classificacao?.cor
+    );
+
 
     return {
-      fillColor: cores[codigo] || "#ccc",
-      color: "#333",
-      weight: 1,
-      fillOpacity: 0.8,
+
+        fillColor:
+            classificacao?.cor ||
+            "#cccccc",
+
+        color: "#333",
+
+        weight: 1,
+
+        fillOpacity: 0.8
+
     };
-  };
 
-  const onEachFeature = (feature, layer) => {
-    const nome = getNome(feature.properties);
+};
 
-    layer.bindPopup(nome);
 
-    layer.bindTooltip(nome, {
-      permanent: false,
-      direction: "center",
-    });
-  };
+    const onEachFeature = (
+        feature,
+        layer
+    ) => {
 
-  return (
-    <div style={{ marginTop: "10px" }}>
-      <h3 style={{ marginBottom: "10px" }}>{titulo}</h3>
+        const nome =
+            getNome(
+                feature.properties
+            );
 
-      <MapContainer
-        key={file}
-      center={[11.80, -15.00]}
-        zoom={8}
-        style={{
-          height: "400px",
-          width: "100%",
-          borderRadius: "10px",
-        }}
-      >
-        {data && (
-          <GeoJSON
-            data={data}
-            style={style}
-            onEachFeature={onEachFeature}
-          />
-        )}
-      </MapContainer>
-    </div>
-  );
+        layer.bindPopup(nome);
+
+        layer.bindTooltip(nome, {
+            permanent: false,
+            direction: "center"
+        });
+
+    };
+
+
+    return (
+
+        <div
+            style={{
+                marginTop: "10px"
+            }}
+        >
+
+            <h3
+                style={{
+                    marginBottom: "10px"
+                }}
+            >
+                {titulo}
+            </h3>
+
+
+            <MapContainer
+                key={file}
+                center={[
+                    11.80,
+                    -15.00
+                ]}
+                zoom={8}
+                style={{
+                    height: "400px",
+                    width: "100%",
+                    borderRadius: "10px"
+                }}
+            >
+
+                {data && (
+
+                    <GeoJSON
+                        data={data}
+                        style={style}
+                        onEachFeature={
+                            onEachFeature
+                        }
+                    />
+
+                )}
+
+                {classificacoes.length > 0 && (
+
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: "20px",
+                            right: "20px",
+                            zIndex: 1000,
+                            background: "white",
+                            padding: "12px 15px",
+                            borderRadius: "8px",
+                            boxShadow:
+                                "0 2px 8px rgba(0,0,0,0.25)",
+                            fontSize: "13px",
+                            minWidth: "170px"
+                        }}
+                    >
+
+                        <strong
+                            style={{
+                                display: "block",
+                                marginBottom: "8px"
+                            }}
+                        >
+                            Legenda
+                        </strong>
+
+
+                        {classificacoes.map(
+                            (item) => (
+
+                                <div
+                                    key={item.id}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        marginBottom: "5px"
+                                    }}
+                                >
+
+                                    <span
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                            background:
+                                                item.cor,
+                                            display: "inline-block",
+                                            marginRight: "8px",
+                                            border:
+                                                "1px solid #777"
+                                        }}
+                                    />
+
+                                    <span>
+                                        Classe {item.classe}
+                                        {" "}
+                                        ({item.minimo} – {item.maximo})
+                                    </span>
+
+                                </div>
+
+                            )
+                        )}
+
+                    </div>
+
+                )}
+
+            </MapContainer>
+
+        </div>
+
+    );
+
 }
+
 
 /* =========================
    PRINCIPAL
 ========================= */
+
 function Mapas_climatologia() {
-  const [mapaSelecionado, setMapaSelecionado] = useState("1");
 
-  const mapas = {
-    "1": {
-      file: "Temp_mean_2040_59.geojson",
-      titulo: "Mapa 1) Cenário: Futuro próximo, 2040-2059 | Climatologia projetada para a anomalia na temperatura média anual da superfície do ar | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
-    },
-    "2": {
-      file: "Temp_mean_2080_99.geojson",
-      titulo: "Mapa 2) Cenário: Fim do século, 2080-2099 | Climatologia projetada para a anomalia na temperatura média anual da superfície do ar | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
-    },
-    "3": {
-      file: "Precip_2040_59.geojson",
-      titulo: "Mapa 3) Cenário: Futuro próximo, 2040-2059 | Climatologia projetada para a anomalia na precipitação média projetada | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
-    },
-    "4": {
-      file: "Precip_2080_99.geojson",
-      titulo: "Mapa 4) Fim do século, 2080-2099 | Climatologia projetada para a anomalia na precipitação média projetada | Modelo da projeção climática SSP5-8.5 | agregação multimodelos à probabilidade P50 | Período de referência: 1995-2014 |",
-    },
-  };
+    const [
+        mapaSelecionado,
+        setMapaSelecionado
+    ] = useState("");
 
-  const coresPorMapa = {
-    "1": {
-      "GNB.1051385": "#cc191d",
-      "GNB.1051386": "#fdc6af",
-      "GNB.1051387": "#ffffff",
-      "GNB.1051388": "#fee3d6",
-      "GNB.1051389": "#a91016",
-      "GNB.1051390": "#ea372a",
-      "GNB.1051391": "#fc8161",
-      "GNB.1051392": "#fca486",
-      "GNB.1051393": "#f85d42",
-    },
-    "2": {
-      "GNB.1051385": "#d7191c",
-      "GNB.1051386": "#f4a582",
-      "GNB.1051387": "#f7f7f7",
-      "GNB.1051388": "#fddbc7",
-      "GNB.1051389": "#b2182b",
-      "GNB.1051390": "#ef3b2c",
-      "GNB.1051391": "#fb6a4a",
-      "GNB.1051392": "#fcae91",
-    },
-    "3": {
-      "GNB.1051385": "#d8c49c",
-      "GNB.1051386": "#62a84a",
-      "GNB.1051387": "#3f7f2f",
-      "GNB.1051388": "#5ea646",
-      "GNB.1051389": "#a6611a",
-      "GNB.1051390": "#bf8c4a",
-      "GNB.1051391": "#a9cba0",
-      "GNB.1051392": "#7fbf6a",
-      "GNB.1051393": "#e6d7b8",
-    },
-    "4": {
-      "GNB.1051385": "#9ec28f",
-      "GNB.1051386": "#7fc466",
-      "GNB.1051387": "#f7f7f7",
-      "GNB.1051388": "#79bf5f",
-      "GNB.1051389": "#5aa03c",
-      "GNB.1051390": "#a7cfa0",
-      "GNB.1051391": "#c28a3a",
-      "GNB.1051392": "#e6d7b8",
-      "GNB.1051393": "#a6611a",
-    },
-  };
 
-  return (
-    <div className="content" id="content">
-      {/* HERO */}
-      <div className="hero">
-        <h1>Mapas de Climatologia</h1>
-        <p>
-          Visualização das projeções climáticas para a Guiné-Bissau,
-         
-        </p>
-      </div>
+    const [
+        mapas,
+        setMapas
+    ] = useState([]);
 
-      {/* SELECT */}
-      <div style={{ marginTop: "10px" }}>
-        <select
-          value={mapaSelecionado}
-          onChange={(e) => setMapaSelecionado(e.target.value)}
-          style={{
-            width: "280px",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            marginBottom: "10px",
-          }}
+    const [
+    indicadores,
+    setIndicadores
+] = useState([]);
+
+const [
+    indicadorSelecionado,
+    setIndicadorSelecionado
+] = useState("");
+
+
+    const [
+        carregandoMapas,
+        setCarregandoMapas
+    ] = useState(true);
+
+    const [
+            classificacoes,
+            setClassificacoes
+        ] = useState([]);
+
+        const [filtroPeriodo, setFiltroPeriodo] =
+    useState("");
+
+const [filtroSSP, setFiltroSSP] =
+    useState("");
+
+const [filtroPercentil, setFiltroPercentil] =
+    useState("");
+
+
+    useEffect(() => {
+
+    async function carregarIndicadores() {
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/clima/indicadores`
+            );
+
+            const dados =
+                await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    dados.erro ||
+                    "Erro ao carregar indicadores."
+                );
+
+            }
+
+            console.log(
+                "INDICADORES:",
+                dados
+            );
+
+            setIndicadores(dados);
+
+            if (dados.length > 0) {
+
+                setIndicadorSelecionado(
+                    String(dados[0].id)
+                );
+
+            }
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar indicadores:",
+                erro
+            );
+
+        }
+
+    }
+
+    carregarIndicadores();
+
+}, []);
+
+    /* =========================
+       BUSCAR MAPAS
+    ========================= */
+
+    useEffect(() => {
+
+        async function carregarMapas() {
+
+            if (!indicadorSelecionado) {
+                    return;
+                }
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/clima/mapas/${indicadorSelecionado}`
+                    );
+
+
+                const dados =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        dados.erro ||
+                        "Erro ao carregar mapas."
+                    );
+
+                }
+
+
+                console.log(
+                    "MAPAS:",
+                    dados
+                );
+
+
+                setMapas(dados);
+
+
+                if (
+                    dados.length > 0
+                ) {
+
+                    setMapaSelecionado(
+                        String(
+                            dados[0].id
+                        )
+                    );
+
+                }
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Erro:",
+                    erro
+                );
+
+            }
+
+            finally {
+
+                setCarregandoMapas(
+                    false
+                );
+
+            }
+
+        }
+
+
+        carregarMapas();
+
+    }, [indicadorSelecionado]);
+
+        useEffect(() => {
+
+            async function carregarClassificacoes() {
+
+                if (!indicadorSelecionado) {
+                    return;
+                }
+
+                try {
+
+                    const indicador =
+                        indicadores.find(
+                            (item) =>
+                                String(item.id) ===
+                                String(indicadorSelecionado)
+                        );
+
+                    if (!indicador) {
+                        return;
+                    }
+
+                    console.log(
+                        "INDICADOR PARA CLASSIFICAÇÃO:",
+                        indicador
+                    );
+
+                    const response =
+                        await fetch(
+                            `${API_URL}/clima/classificacoes/${indicador.codigo}`
+                        );
+
+                    const dados =
+                        await response.json();
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            dados.erro ||
+                            "Erro ao carregar classificações."
+                        );
+
+                    }
+
+                    console.log(
+                        "CLASSIFICAÇÕES:",
+                        dados
+                    );
+
+                    setClassificacoes(dados);
+
+                } catch (erro) {
+
+                    console.error(
+                        "Erro ao carregar classificações:",
+                        erro
+                    );
+
+                    setClassificacoes([]);
+
+                }
+
+            }
+
+            carregarClassificacoes();
+
+        }, [
+            indicadorSelecionado,
+            indicadores
+        ]);
+
+const periodos = [
+    ...new Set(
+        mapas
+            .map((mapa) => mapa.periodo)
+            .filter(Boolean)
+    )
+];
+
+const ssps = [
+    ...new Set(
+        mapas
+            .map((mapa) => mapa.ssp)
+            .filter(Boolean)
+    )
+];
+
+const percentis = [
+    ...new Set(
+        mapas
+            .map((mapa) => mapa.percentil)
+            .filter(Boolean)
+    )
+];
+
+const mapasFiltrados = mapas.filter((mapa) => {
+
+    const periodoOk =
+        !filtroPeriodo ||
+        mapa.periodo === filtroPeriodo;
+
+    const sspOk =
+        !filtroSSP ||
+        mapa.ssp === filtroSSP;
+
+    const percentilOk =
+        !filtroPercentil ||
+        mapa.percentil === filtroPercentil;
+
+    return (
+        periodoOk &&
+        sspOk &&
+        percentilOk
+    );
+
+});
+
+
+    /* =========================
+       MAPA SELECIONADO
+    ========================= */
+
+    const mapaAtual =
+    mapasFiltrados.find(
+        (mapa) =>
+            String(mapa.id) ===
+            String(mapaSelecionado)
+    ) ||
+    mapasFiltrados[0];
+
+    
+
+
+    return (
+
+        <div
+            className="content"
+            id="content"
         >
-          <option value="1">Temperatura 2040–2059</option>
-          <option value="2">Temperatura 2080–2099</option>
-          <option value="3">Precipitação 2040–2059</option>
-          <option value="4">Precipitação 2080–2099</option>
-        </select>
-      </div>
 
-      {/* MAPA */}
-      <MapaItem
-        file={mapas[mapaSelecionado].file}
-        titulo={mapas[mapaSelecionado].titulo}
-        cores={coresPorMapa[mapaSelecionado]}
-      />
-    </div>
-  );
+            {/* HERO */}
+
+            <div className="hero">
+
+                <h1>
+                    Mapas de Climatologia
+                </h1>
+
+                <p>
+                    Visualização das projeções
+                    climáticas para a
+                    Guiné-Bissau.
+                </p>
+
+            </div>
+
+
+            {/* SELECT */}
+
+            <div
+                style={{
+                    marginTop: "10px"
+                }}
+            >
+
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "10px",
+                        flexWrap: "wrap",
+                        marginTop: "20px",
+                        marginBottom: "15px"
+                    }}
+                >
+
+                <select
+
+
+                value={filtroPeriodo}
+                onChange={(e) => {
+                    setFiltroPeriodo(e.target.value);
+                    setMapaSelecionado("");
+                }}
+                style={{
+                    padding: "10px",
+                    borderRadius: "8px",
+                    border: "1px solid #ccc"
+                }}
+            >
+                <option value="">
+                    Todos os períodos
+                </option>
+
+                {periodos.map((periodo) => (
+                    <option
+                        key={periodo}
+                        value={periodo}
+                    >
+                        {periodo}
+                    </option>
+                ))}
+            </select>
+
+            <select
+                value={filtroSSP}
+                onChange={(e) => {
+                    setFiltroSSP(e.target.value);
+                    setMapaSelecionado("");
+                }}
+                style={{
+                    padding: "10px",
+                    borderRadius: "8px",
+                    border: "1px solid #ccc"
+                }}
+            >
+                <option value="">
+                    Todos os SSP
+                </option>
+
+                {ssps.map((ssp) => (
+                    <option
+                        key={ssp}
+                        value={ssp}
+                    >
+                        SSP {ssp}
+                    </option>
+                ))}
+            </select>
+
+            <select
+                value={filtroPercentil}
+                onChange={(e) => {
+                    setFiltroPercentil(e.target.value);
+                    setMapaSelecionado("");
+                }}
+                style={{
+                    padding: "10px",
+                    borderRadius: "8px",
+                    border: "1px solid #ccc"
+                }}
+            >
+                <option value="">
+                    Todos os percentis
+                </option>
+
+                {percentis.map((percentil) => (
+                    <option
+                        key={percentil}
+                        value={percentil}
+                    >
+                        {percentil}
+                    </option>
+                ))}
+            </select>
+
+                <select
+                    value={
+                        mapaSelecionado
+                    }
+                    onChange={(e) =>
+                        setMapaSelecionado(
+                            e.target.value
+                        )
+                    }
+                    style={{
+                        width: "280px",
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border:
+                            "1px solid #ccc",
+                        marginBottom:
+                            "10px"
+                    }}
+                >
+
+                    {carregandoMapas ? (
+
+                        <option>
+                            Carregando mapas...
+                        </option>
+
+                    ) : (
+
+                        mapasFiltrados.map(
+                            (mapa) => (
+
+                                <option
+                                    key={
+                                        mapa.id
+                                    }
+                                    value={
+                                        mapa.id
+                                    }
+                                >
+                                    {mapa.campo}
+                                </option>
+
+                            )
+                        )
+
+                    )}
+
+                </select>
+
+            </div>
+
+            </div>
+
+
+            {/* MAPA */}
+
+            {mapaAtual && (
+
+                <MapaItem
+                    file={
+                        mapaAtual.arquivo
+                    }
+
+                    campo={
+                        mapaAtual.campo
+                    }
+
+                    titulo={
+                        mapaAtual.campo
+                    }
+
+                    classificacoes={
+                        classificacoes
+                    }
+                />
+
+            )}
+
+        </div>
+    );
 }
 
 export default Mapas_climatologia;

@@ -179,6 +179,7 @@ function Form_submissao_climatica() {
                 required
             >
                 <option value="">-- Selecione --</option>
+                 <option value="Individuo">Individuo</option>
                 <option value="Instituição">Instituição</option>
                 <option value="Organização">Organização</option>
             </select>
@@ -816,9 +817,7 @@ function Form_submissao_climatica() {
             Mitigação
         </option>
 
-        <option value="Engajamento">
-            Engajamento
-        </option>
+       
 
     </select>
 

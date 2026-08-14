@@ -113,13 +113,30 @@ function Home({
 
                   onClick={() => {
 
-                    setCardSelecionado(card.id);
+                    // Página de notícia
+                    if (card.pagina_detalhe) {
 
-                    setPaginaAnterior("home");
+                        setCardSelecionado(card.id);
+                        setPaginaAnterior("home");
+                        setPage("pagina_detalhe");
 
-                    setPage("pagina_detalhe");
+                    }
 
-                  }}
+                    // Link externo
+                    else if (card.tipo_link === "externo") {
+
+                        window.open(card.link, "_blank");
+
+                    }
+
+                    // Página interna
+                    else {
+
+                        setPage(card.link);
+
+                    }
+
+                }}
 
                 >
 

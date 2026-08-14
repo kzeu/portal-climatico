@@ -94,53 +94,36 @@ function Adaptacao({
 
                   className="btn-card"
 
-                  onClick={() => {
+               onClick={() => {
 
-                    /* Página detalhe */
+                  console.log(card);
 
-                    if (card.pagina_detalhe) {
+                  if (
+                      card.pagina_detalhe === true ||
+                      card.pagina_detalhe === "sim"
+                  ) {
 
-                      setCardSelecionado(
-                        card.id
-                      );
+                      setCardSelecionado(card.id);
+                      setPaginaAnterior("home");
+                      setPage("pagina_detalhe");
 
-                      setPaginaAnterior(
-                        "adaptacao"
-                      );
+                  }
+                  else if (card.tipo_link === "externo") {
 
-                      setPage(
-                        "pagina_detalhe"
-                      );
+                      const url = card.link.startsWith("http")
+                          ? card.link
+                          : `https://${card.link}`;
 
-                    }
+                      window.open(url, "_blank");
 
-                    /* Link externo */
+                  }
+                  else if (card.link) {
 
-                    else if (
-                      card.tipo_link ===
-                      "externo"
-                    ) {
+                      setPage(card.link);
 
-                      window.open(
-                        card.link,
-                        "_blank"
-                      );
+                  }
 
-                    }
-
-                    /* Página interna */
-
-                    else if (
-                      card.link
-                    ) {
-
-                      setPage(
-                        card.link
-                      );
-
-                    }
-
-                  }}
+              }}
 
                 >
 
