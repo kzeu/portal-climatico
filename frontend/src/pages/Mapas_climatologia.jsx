@@ -613,7 +613,7 @@ const mapasFiltrados = mapas.filter((mapa) => {
                 }}
             >
                 <option value="">
-                    Todos os períodos
+                    Periodo
                 </option>
 
                 {periodos.map((periodo) => (
@@ -639,7 +639,7 @@ const mapasFiltrados = mapas.filter((mapa) => {
                 }}
             >
                 <option value="">
-                    Todos os SSP
+                    SSP
                 </option>
 
                 {ssps.map((ssp) => (
@@ -665,7 +665,7 @@ const mapasFiltrados = mapas.filter((mapa) => {
                 }}
             >
                 <option value="">
-                    Todos os percentis
+                    percentis
                 </option>
 
                 {percentis.map((percentil) => (
