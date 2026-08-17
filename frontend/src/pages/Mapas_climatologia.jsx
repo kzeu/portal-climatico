@@ -249,117 +249,523 @@ function MapaItem({
 
 function Mapas_climatologia() {
 
+    // ==========================================
+    // DADOS DOS MAPAS + FILTROS
+    // ==========================================
+
     const [
-        mapaSelecionado,
-        setMapaSelecionado
+        dadosFiltros,
+        setDadosFiltros
+    ] = useState([]);
+
+
+    // ==========================================
+    // FILTROS
+    // ==========================================
+
+    const [
+    indicadorSelecionado,
+    setIndicadorSelecionado
+    ] = useState("");
+
+    const [
+        tipoSelecionado,
+        setTipoSelecionado
+    ] = useState("");
+
+    const [
+        filtroPeriodo,
+        setFiltroPeriodo
+    ] = useState("");
+
+    const [
+        filtroSSP,
+        setFiltroSSP
+    ] = useState("");
+
+    const [
+        filtroPercentil,
+        setFiltroPercentil
     ] = useState("");
 
 
+    // ==========================================
+    // CLASSIFICAÇÕES
+    // ==========================================
+
     const [
-        mapas,
-        setMapas
+        classificacoes,
+        setClassificacoes
     ] = useState([]);
 
-    const [
-    indicadores,
-    setIndicadores
-] = useState([]);
 
-const [
-    indicadorSelecionado,
-    setIndicadorSelecionado
-] = useState("");
-
-
-    const [
-        carregandoMapas,
-        setCarregandoMapas
-    ] = useState(true);
-
-    const [
-            classificacoes,
-            setClassificacoes
-        ] = useState([]);
-
-        const [filtroPeriodo, setFiltroPeriodo] =
-    useState("");
-
-const [filtroSSP, setFiltroSSP] =
-    useState("");
-
-const [filtroPercentil, setFiltroPercentil] =
-    useState("");
-
+    // ==========================================
+    // CARREGAR DADOS DOS FILTROS
+    // ==========================================
 
     useEffect(() => {
 
-    async function carregarIndicadores() {
+        async function carregarDadosFiltros() {
 
-        try {
+            try {
 
-            const response = await fetch(
-                `${API_URL}/clima/indicadores`
-            );
-
-            const dados =
-                await response.json();
-
-            if (!response.ok) {
-
-                throw new Error(
-                    dados.erro ||
-                    "Erro ao carregar indicadores."
+                const response = await fetch(
+                    `${API_URL}/clima/mapas-filtros`
                 );
+
+                const dados =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        dados.erro ||
+                        "Erro ao carregar dados dos filtros."
+                    );
+
+                }
+
+                console.log(
+                    "DADOS DOS FILTROS:",
+                    dados
+                );
+
+                setDadosFiltros(dados);
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao carregar dados dos filtros:",
+                    erro
+                );
+
+                setDadosFiltros([]);
 
             }
 
-            console.log(
-                "INDICADORES:",
-                dados
-            );
+        }
 
-            setIndicadores(dados);
+        carregarDadosFiltros();
 
-            if (dados.length > 0) {
+    }, []);
 
-                setIndicadorSelecionado(
-                    String(dados[0].id)
-                );
 
-            }
+    // ==========================================
+    // TIPOS
+    // ==========================================
 
-        } catch (erro) {
+    const tipos = [
+        ...new Set(
+            dadosFiltros
+                .map(
+                    (item) => item.tipo
+                )
+                .filter(Boolean)
+        )
+    ];
 
-            console.error(
-                "Erro ao carregar indicadores:",
-                erro
+
+    // ==========================================
+    // SELECIONAR PRIMEIRO TIPO
+    // ==========================================
+
+    useEffect(() => {
+
+        if (
+            tipos.length > 0 &&
+            !tipoSelecionado
+        ) {
+
+            setTipoSelecionado(
+                tipos[0]
             );
 
         }
 
-    }
+    }, [
+        tipos,
+        tipoSelecionado
+    ]);
 
-    carregarIndicadores();
 
-}, []);
+    // ==========================================
+    // DADOS DO TIPO
+    // ==========================================
 
-    /* =========================
-       BUSCAR MAPAS
-    ========================= */
+    const dadosTipo =
+        dadosFiltros.filter(
+            (item) =>
+                !tipoSelecionado ||
+                item.tipo === tipoSelecionado
+        );
+
+
+        const indicadoresTipo = [
+            ...new Map(
+                dadosTipo.map((item) => [
+                    item.codigo,
+                    item
+                ])  
+            ).values()
+        ];
+
+
+        // ==========================================
+            // SELECIONAR PRIMEIRO INDICADOR
+            // ==========================================
+
+            useEffect(() => {
+
+                if (
+                    indicadoresTipo.length === 0
+                ) {
+
+                    setIndicadorSelecionado("");
+
+                    return;
+
+                }
+
+                if (
+                    !indicadoresTipo.some(
+                        (item) =>
+                            String(item.codigo).toLowerCase() ===
+                            String(indicadorSelecionado).toLowerCase()
+                    )
+                ) {
+
+                    setIndicadorSelecionado(
+                        String(
+                            indicadoresTipo[0].codigo
+                        )
+                    );
+
+                }
+
+            }, [
+                tipoSelecionado,
+                indicadoresTipo,
+                indicadorSelecionado
+            ]);
+
+
+
+            // ==========================================
+            // DADOS DO INDICADOR
+            // ==========================================
+
+            const dadosIndicador =
+                dadosTipo.filter(
+                    (item) =>
+                        !indicadorSelecionado ||
+                        String(item.codigo).toLowerCase() ===
+                        String(indicadorSelecionado).toLowerCase()
+                );
+
+
+    // ==========================================
+    // PERÍODOS
+    // ==========================================
+
+        const periodos = [
+            ...new Set(
+                dadosIndicador
+                    .map(
+                        (item) => item.period
+                    )
+                    .filter(Boolean)
+            )
+        ];
+
+
+    // ==========================================
+    // SELECIONAR PRIMEIRO PERÍODO
+    // ==========================================
 
     useEffect(() => {
 
-        async function carregarMapas() {
+        if (
+            periodos.length === 0
+        ) {
 
-            if (!indicadorSelecionado) {
-                    return;
-                }
+            setFiltroPeriodo("");
+
+            return;
+
+        }
+
+        if (
+            !periodos.includes(
+                filtroPeriodo
+            )
+        ) {
+
+            setFiltroPeriodo(
+                periodos[0]
+            );
+
+        }
+
+    }, [
+        tipoSelecionado,
+        periodos,
+        filtroPeriodo
+    ]);
+
+
+    // ==========================================
+    // DADOS DO PERÍODO
+    // ==========================================
+
+   const dadosPeriodo =
+    dadosIndicador.filter(
+            (item) =>
+                !filtroPeriodo ||
+                String(item.period) ===
+                String(filtroPeriodo)
+        );
+
+
+    // ==========================================
+    // SSP
+    // ==========================================
+
+    const ssps = [
+        ...new Set(
+            dadosPeriodo
+                .map(
+                    (item) => item.scenario
+                )
+                .filter(Boolean)
+        )
+    ];
+
+
+    // ==========================================
+    // SELECIONAR PRIMEIRO SSP
+    // ==========================================
+
+    useEffect(() => {
+
+        if (
+            ssps.length === 0
+        ) {
+
+            setFiltroSSP("");
+
+            return;
+
+        }
+
+        if (
+            !ssps.includes(
+                filtroSSP
+            )
+        ) {
+
+            setFiltroSSP(
+                ssps[0]
+            );
+
+        }
+
+    }, [
+        filtroPeriodo,
+        ssps,
+        filtroSSP
+    ]);
+
+
+    // ==========================================
+    // DADOS DO SSP
+    // ==========================================
+
+    const dadosSSP =
+        dadosPeriodo.filter(
+            (item) =>
+                !filtroSSP ||
+                String(item.scenario) ===
+                String(filtroSSP)
+        );
+
+
+    // ==========================================
+    // PERCENTIS
+    // ==========================================
+
+    const percentis = [
+        ...new Set(
+            dadosSSP
+                .map(
+                    (item) => item.uncertainty
+                )
+                .filter(Boolean)
+        )
+    ];
+
+
+    // ==========================================
+    // NORMALIZAR PERCENTIL
+    // ==========================================
+
+    const normalizarPercentil = (
+        valor
+    ) => {
+
+        const texto =
+            String(valor || "")
+                .trim()
+                .replace("%", "")
+                .replace(",", ".");
+
+        const numero =
+            Number(texto);
+
+        if (
+            Number.isNaN(numero)
+        ) {
+
+            return "";
+
+        }
+
+        if (
+            numero > 1
+        ) {
+
+            return numero / 100;
+
+        }
+
+        return numero;
+
+    };
+
+
+    // ==========================================
+    // SELECIONAR PRIMEIRO PERCENTIL
+    // ==========================================
+
+    useEffect(() => {
+
+        if (
+            percentis.length === 0
+        ) {
+
+            setFiltroPercentil("");
+
+            return;
+
+        }
+
+        if (
+            !percentis.includes(
+                filtroPercentil
+            )
+        ) {
+
+            setFiltroPercentil(
+                percentis[0]
+            );
+
+        }
+
+    }, [
+        filtroSSP,
+        percentis,
+        filtroPercentil
+    ]);
+
+
+    // ==========================================
+    // MAPA CORRESPONDENTE
+    // ==========================================
+
+    const mapasSelecionados =
+        dadosFiltros.filter(
+            (item) => {
+
+                const indicadorOk =
+                !indicadorSelecionado ||
+                String(item.codigo).toLowerCase() ===
+                String(indicadorSelecionado).toLowerCase();
+
+                const tipoOk =
+                    !tipoSelecionado ||
+                    item.tipo ===
+                    tipoSelecionado;
+
+
+                const periodoOk =
+                    !filtroPeriodo ||
+                    String(item.period) ===
+                    String(filtroPeriodo);
+
+
+                const sspOk =
+                    !filtroSSP ||
+                    String(item.scenario) ===
+                    String(filtroSSP);
+
+
+                const percentilOk =
+                    !filtroPercentil ||
+                    normalizarPercentil(
+                        item.uncertainty
+                    ) ===
+                    normalizarPercentil(
+                        filtroPercentil
+                    );
+
+
+                return (
+                    indicadorOk &&
+                    tipoOk &&
+                    periodoOk &&
+                    sspOk &&
+                    percentilOk
+                );
+
+            }
+        );
+
+
+    // ==========================================
+    // PRIMEIRO MAPA ENCONTRADO
+    // ==========================================
+
+    const mapaAtual =
+        mapasSelecionados[0];
+
+
+    // ==========================================
+    // CLASSIFICAÇÕES DO INDICADOR
+    // ==========================================
+
+    useEffect(() => {
+
+        async function carregarClassificacoes() {
+
+            if (
+                !mapaAtual?.codigo
+            ) {
+
+                setClassificacoes([]);
+
+                return;
+
+            }
 
             try {
 
+                console.log(
+                    "INDICADOR PARA CLASSIFICAÇÃO:",
+                    mapaAtual.codigo
+                );
+
                 const response =
                     await fetch(
-                        `${API_URL}/clima/mapas/${indicadorSelecionado}`
+                        `${API_URL}/clima/classificacoes/${mapaAtual.codigo}`
                     );
 
 
@@ -371,190 +777,45 @@ const [filtroPercentil, setFiltroPercentil] =
 
                     throw new Error(
                         dados.erro ||
-                        "Erro ao carregar mapas."
+                        "Erro ao carregar classificações."
                     );
 
                 }
 
 
                 console.log(
-                    "MAPAS:",
+                    "CLASSIFICAÇÕES:",
                     dados
                 );
 
 
-                setMapas(dados);
+                setClassificacoes(
+                    dados
+                );
 
-
-                if (
-                    dados.length > 0
-                ) {
-
-                    setMapaSelecionado(
-                        String(
-                            dados[0].id
-                        )
-                    );
-
-                }
-
-            }
-
-            catch (erro) {
+            } catch (erro) {
 
                 console.error(
-                    "Erro:",
+                    "Erro ao carregar classificações:",
                     erro
                 );
 
-            }
-
-            finally {
-
-                setCarregandoMapas(
-                    false
-                );
+                setClassificacoes([]);
 
             }
 
         }
 
+        carregarClassificacoes();
 
-        carregarMapas();
-
-    }, [indicadorSelecionado]);
-
-        useEffect(() => {
-
-            async function carregarClassificacoes() {
-
-                if (!indicadorSelecionado) {
-                    return;
-                }
-
-                try {
-
-                    const indicador =
-                        indicadores.find(
-                            (item) =>
-                                String(item.id) ===
-                                String(indicadorSelecionado)
-                        );
-
-                    if (!indicador) {
-                        return;
-                    }
-
-                    console.log(
-                        "INDICADOR PARA CLASSIFICAÇÃO:",
-                        indicador
-                    );
-
-                    const response =
-                        await fetch(
-                            `${API_URL}/clima/classificacoes/${indicador.codigo}`
-                        );
-
-                    const dados =
-                        await response.json();
-
-                    if (!response.ok) {
-
-                        throw new Error(
-                            dados.erro ||
-                            "Erro ao carregar classificações."
-                        );
-
-                    }
-
-                    console.log(
-                        "CLASSIFICAÇÕES:",
-                        dados
-                    );
-
-                    setClassificacoes(dados);
-
-                } catch (erro) {
-
-                    console.error(
-                        "Erro ao carregar classificações:",
-                        erro
-                    );
-
-                    setClassificacoes([]);
-
-                }
-
-            }
-
-            carregarClassificacoes();
-
-        }, [
-            indicadorSelecionado,
-            indicadores
-        ]);
-
-const periodos = [
-    ...new Set(
-        mapas
-            .map((mapa) => mapa.periodo)
-            .filter(Boolean)
-    )
-];
-
-const ssps = [
-    ...new Set(
-        mapas
-            .map((mapa) => mapa.ssp)
-            .filter(Boolean)
-    )
-];
-
-const percentis = [
-    ...new Set(
-        mapas
-            .map((mapa) => mapa.percentil)
-            .filter(Boolean)
-    )
-];
-
-const mapasFiltrados = mapas.filter((mapa) => {
-
-    const periodoOk =
-        !filtroPeriodo ||
-        mapa.periodo === filtroPeriodo;
-
-    const sspOk =
-        !filtroSSP ||
-        mapa.ssp === filtroSSP;
-
-    const percentilOk =
-        !filtroPercentil ||
-        mapa.percentil === filtroPercentil;
-
-    return (
-        periodoOk &&
-        sspOk &&
-        percentilOk
-    );
-
-});
+    }, [
+        mapaAtual?.codigo
+    ]);
 
 
-    /* =========================
-       MAPA SELECIONADO
-    ========================= */
-
-    const mapaAtual =
-    mapasFiltrados.find(
-        (mapa) =>
-            String(mapa.id) ===
-            String(mapaSelecionado)
-    ) ||
-    mapasFiltrados[0];
-
-    
-
+    // ==========================================
+    // TELA
+    // ==========================================
 
     return (
 
@@ -580,7 +841,7 @@ const mapasFiltrados = mapas.filter((mapa) => {
             </div>
 
 
-            {/* SELECT */}
+            {/* FILTROS */}
 
             <div
                 style={{
@@ -598,145 +859,221 @@ const mapasFiltrados = mapas.filter((mapa) => {
                     }}
                 >
 
-                <select
+                   {/* INDICADOR */}
+                   
+                   {/* TIPO */}
 
+                    <select
+                        value={tipoSelecionado}
+                        onChange={(e) => {
 
-                value={filtroPeriodo}
-                onChange={(e) => {
-                    setFiltroPeriodo(e.target.value);
-                    setMapaSelecionado("");
-                }}
-                style={{
-                    padding: "10px",
-                    borderRadius: "8px",
-                    border: "1px solid #ccc"
-                }}
-            >
-                <option value="">
-                    Periodo
-                </option>
+                            setTipoSelecionado(
+                                e.target.value
+                            );
 
-                {periodos.map((periodo) => (
-                    <option
-                        key={periodo}
-                        value={periodo}
+                            setIndicadorSelecionado("");
+                            setFiltroPeriodo("");
+                            setFiltroSSP("");
+                            setFiltroPercentil("");
+
+                        }}
+                        style={{
+                            padding: "10px",
+                            borderRadius: "8px",
+                            border:
+                                "1px solid #ccc"
+                        }}
                     >
-                        {periodo}
-                    </option>
-                ))}
-            </select>
 
-            <select
-                value={filtroSSP}
-                onChange={(e) => {
-                    setFiltroSSP(e.target.value);
-                    setMapaSelecionado("");
-                }}
-                style={{
-                    padding: "10px",
-                    borderRadius: "8px",
-                    border: "1px solid #ccc"
-                }}
-            >
-                <option value="">
-                    SSP
-                </option>
-
-                {ssps.map((ssp) => (
-                    <option
-                        key={ssp}
-                        value={ssp}
-                    >
-                        SSP {ssp}
-                    </option>
-                ))}
-            </select>
-
-            <select
-                value={filtroPercentil}
-                onChange={(e) => {
-                    setFiltroPercentil(e.target.value);
-                    setMapaSelecionado("");
-                }}
-                style={{
-                    padding: "10px",
-                    borderRadius: "8px",
-                    border: "1px solid #ccc"
-                }}
-            >
-                <option value="">
-                    percentis
-                </option>
-
-                {percentis.map((percentil) => (
-                    <option
-                        key={percentil}
-                        value={percentil}
-                    >
-                        {percentil}
-                    </option>
-                ))}
-            </select>
-
-                <select
-                    value={
-                        mapaSelecionado
-                    }
-                    onChange={(e) =>
-                        setMapaSelecionado(
-                            e.target.value
-                        )
-                    }
-                    style={{
-                        width: "280px",
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border:
-                            "1px solid #ccc",
-                        marginBottom:
-                            "10px"
-                    }}
-                >
-
-                    {carregandoMapas ? (
-
-                        <option>
-                            Carregando mapas...
-                        </option>
-
-                    ) : (
-
-                        mapasFiltrados.map(
-                            (mapa) => (
+                        {tipos.map(
+                            (tipo) => (
 
                                 <option
-                                    key={
-                                        mapa.id
-                                    }
-                                    value={
-                                        mapa.id
-                                    }
+                                    key={tipo}
+                                    value={tipo}
                                 >
-                                    {mapa.campo}
+                                    {tipo}
                                 </option>
 
                             )
-                        )
+                        )}
 
-                    )}
+                    </select>
+                    <select
+                        value={
+                            indicadorSelecionado
+                        }
+                        onChange={(e) => {
 
-                </select>
+                            setIndicadorSelecionado(
+                                e.target.value
+                            );
 
-            </div>
+                            setFiltroPeriodo("");
+                            setFiltroSSP("");
+                            setFiltroPercentil("");
+
+                        }}
+                        style={{
+                            padding: "10px",
+                            borderRadius: "8px",
+                            border:
+                                "1px solid #ccc"
+                        }}
+                    >
+
+                        {indicadoresTipo.map(
+                            (indicador) => (
+
+                                <option
+                                    key={indicador.codigo}
+                                    value={indicador.codigo}
+                                >
+                                    {indicador.codigo}
+                                </option>
+
+                            )
+                        )}
+
+                    </select>
+
+
+                    {/* PERÍODO */}
+
+                    <select
+                        value={
+                            filtroPeriodo
+                        }
+                        onChange={(e) => {
+
+                            setFiltroPeriodo(
+                                e.target.value
+                            );
+
+                            setFiltroSSP("");
+                            setFiltroPercentil("");
+
+                        }}
+                        style={{
+                            padding: "10px",
+                            borderRadius: "8px",
+                            border:
+                                "1px solid #ccc"
+                        }}
+                    >
+
+
+                        {periodos.map(
+                            (periodo) => (
+
+                                <option
+                                    key={periodo}
+                                    value={periodo}
+                                >
+                                    {periodo}
+                                </option>
+
+                            )
+                        )}
+
+                    </select>
+
+
+                    {/* SSP */}
+
+                    <select
+                        value={
+                            filtroSSP
+                        }
+                        onChange={(e) => {
+
+                            setFiltroSSP(
+                                e.target.value
+                            );
+
+                            setFiltroPercentil("");
+
+                        }}
+                        style={{
+                            padding: "10px",
+                            borderRadius: "8px",
+                            border:
+                                "1px solid #ccc"
+                        }}
+                    >
+
+                       
+
+                        {ssps.map(
+                            (ssp) => (
+
+                                <option
+                                    key={ssp}
+                                    value={ssp}
+                                >
+                                    {ssp}
+                                </option>
+
+                            )
+                        )}
+
+                    </select>
+
+
+                    {/* PERCENTIL */}
+
+                    <select
+                        value={
+                            filtroPercentil
+                        }
+                        onChange={(e) => {
+
+                            setFiltroPercentil(
+                                e.target.value
+                            );
+
+                        }}
+                        style={{
+                            padding: "10px",
+                            borderRadius: "8px",
+                            border:
+                                "1px solid #ccc"
+                        }}
+                    >
+
+                    
+
+                        {percentis.map(
+                            (percentil) => (
+
+                                <option
+                                    key={percentil}
+                                    value={percentil}
+                                >
+                                    {
+                                        normalizarPercentil(
+                                            percentil
+                                        ) * 100
+                                    }%
+                                </option>
+
+                            )
+                        )}
+
+                    </select>
+
+                </div>
 
             </div>
 
 
             {/* MAPA */}
 
-            {mapaAtual && (
+            {mapaAtual && classificacoes.length > 0 && (
 
                 <MapaItem
+                    key={`${mapaAtual.arquivo}-${mapaAtual.codigo}-${classificacoes.length}`}
+
                     file={
                         mapaAtual.arquivo
                     }
@@ -757,7 +1094,8 @@ const mapasFiltrados = mapas.filter((mapa) => {
             )}
 
         </div>
-    );
-}
 
+    );
+
+}
 export default Mapas_climatologia;

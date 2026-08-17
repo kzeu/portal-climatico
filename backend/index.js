@@ -7,6 +7,8 @@ const db = require("./db");
 
 const fs =require("fs");
 
+const XLSX = require("xlsx");
+
 const app = express();
 
 /* =========================
@@ -90,6 +92,14 @@ const uploadMapa = multer({
     storage: storageMapas
 
 });
+
+
+const storageMetadata = multer.memoryStorage();
+
+const uploadMetadata = multer({
+    storage: storageMetadata
+});
+
 
 /* =========================
    TESTE
@@ -2145,9 +2155,313 @@ app.post(
 
     }
 );
+/* =====================================================
+   IMPORTAR METADADOS DOS MAPAS - EXCEL
+===================================================== */
+
+app.post(
+    "/clima/map-metadata/upload",
+    uploadMetadata.single("arquivo"),
+    async (req, res) => {
+
+        try {
+
+            if (!req.file) {
+
+                return res.status(400).json({
+                    erro: "Nenhum arquivo Excel foi enviado."
+                });
+
+            }
+
+            console.log(
+                "Excel recebido:",
+                req.file.originalname
+            );
+
+            // ==========================================
+            // LER EXCEL
+            // ==========================================
+
+            const workbook = XLSX.read(
+                req.file.buffer,
+                {
+                    type: "buffer"
+                }
+            );
+
+            const nomeAba =
+                workbook.SheetNames[0];
+
+            const worksheet =
+                workbook.Sheets[nomeAba];
+
+            const linhas =
+                XLSX.utils.sheet_to_json(
+                    worksheet,
+                    {
+                        defval: ""
+                    }
+                );
+
+            console.log(
+                "Linhas encontradas:",
+                linhas.length
+            );
+
+            if (linhas.length === 0) {
+
+                return res.status(400).json({
+                    erro: "A planilha está vazia."
+                });
+
+            }
+
+            // ==========================================
+            // VERIFICAR COLUNAS
+            // ==========================================
+
+            const primeiraLinha =
+                linhas[0];
+
+            const colunasObrigatorias = [
+                "map_code",
+                "variable_full",
+                "variable_short",
+                "period",
+                "scenario",
+                "uncertainty"
+            ];
+
+            const colunasFaltando =
+                colunasObrigatorias.filter(
+                    coluna =>
+                        !(coluna in primeiraLinha)
+                );
+
+            if (colunasFaltando.length > 0) {
+
+                return res.status(400).json({
+
+                    erro:
+                        "Colunas obrigatórias não encontradas.",
+
+                    colunas_faltando:
+                        colunasFaltando
+
+                });
+
+            }
+
+            // ==========================================
+            // TRANSAÇÃO
+            // ==========================================
+
+         const client =
+           await db.connect();
+
+            try {
+
+                await client.query("BEGIN");
+
+                // Limpa os metadados atuais
+                // para importar a nova versão completa
+
+                await client.query(
+                    `
+                    DELETE FROM climate_map_metadata
+                    `
+                );
+
+                // ==========================================
+                // INSERIR LINHAS
+                // ==========================================
+
+                let quantidadeInserida = 0;
+
+                for (const linha of linhas) {
+
+                    const mapCode =
+                        String(
+                            linha.map_code || ""
+                        ).trim();
+
+                    if (!mapCode) {
+                        continue;
+                    }
+
+                    await client.query(
+                        `
+                        INSERT INTO climate_map_metadata
+                        (
+                            map_code,
+                            variable_full,
+                            variable_short,
+                            period,
+                            scenario,
+                            uncertainty
+                        )
+                        VALUES
+                        ($1, $2, $3, $4, $5, $6)
+                        `,
+                        [
+                            mapCode,
+
+                            String(
+                                linha.variable_full || ""
+                            ).trim(),
+
+                            String(
+                                linha.variable_short || ""
+                            ).trim(),
+
+                            String(
+                                linha.period || ""
+                            ).trim(),
+
+                            String(
+                                linha.scenario || ""
+                            ).trim(),
+
+                            String(
+                                linha.uncertainty || ""
+                            ).trim()
+                        ]
+                    );
+
+                    quantidadeInserida++;
+
+                }
+
+                await client.query("COMMIT");
+
+                res.json({
+
+                    sucesso: true,
+
+                    mensagem:
+                        "Metadados importados com sucesso.",
+
+                    registros:
+                        quantidadeInserida
+
+                });
+
+            } catch (erroBanco) {
+
+                await client.query("ROLLBACK");
+
+                throw erroBanco;
+
+            } finally {
+
+                client.release();
+
+            }
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao importar metadados:",
+                erro
+            );
+
+            res.status(500).json({
+
+                erro:
+                    "Erro ao importar metadados.",
+
+                detalhe:
+                    erro.message
+
+            });
+
+        }
+
+    }
+);
+
+app.get("/clima/map-metadata", async (req, res) => {
+
+    try {
+
+        const resultado = await db.query(`
+            SELECT *
+            FROM climate_map_metadata
+            ORDER BY map_code
+        `);
+
+        res.json(resultado.rows);
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            erro: err.message
+        });
+
+    }
+
+});
 
 
+app.get("/clima/mapas-filtros", async (req, res) => {
 
+    try {
+
+        const resultado = await db.query(`
+            SELECT
+                m.map_code,
+                m.variable_short,
+                m.period,
+                m.scenario,
+                m.uncertainty,
+
+                cm.id AS mapa_id,
+                cm.indicador_id,
+                cm.arquivo,
+                cm.campo,
+                cm.ordem,
+
+                ci.codigo,
+                ci.nome,
+                ci.tipo
+
+            FROM climate_map_metadata m
+
+            INNER JOIN clima_mapas cm
+                ON cm.campo = m.map_code
+
+            INNER JOIN clima_indicadores ci
+                ON ci.id = cm.indicador_id
+
+            ORDER BY
+                ci.tipo,
+                m.period,
+                m.scenario,
+                m.uncertainty,
+                cm.ordem
+
+        `);
+
+        res.json(resultado.rows);
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar mapas para filtros:",
+            erro
+        );
+
+        res.status(500).json({
+            erro: "Erro ao carregar mapas para filtros.",
+            detalhe: erro.message
+        });
+
+    }
+
+});
 
 /* =========================
    ANALISAR GEOJSON
