@@ -18,6 +18,7 @@ import Pagina_detalhe from "./pages/Pagina_detalhe";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 
+
 import "./App.css";
 
 function App() {
@@ -174,6 +175,8 @@ else if (page === "mitigacao") {
     );
 
   }
+
+
 
    else if (page === "admin") {
 

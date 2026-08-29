@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-const API_URL = "http://localhost:3000";
+import API_URL from "../config";
 
 
 /* =========================
@@ -23,7 +23,7 @@ function MapaItem({
             return;
         }
 
-       fetch(`${API_URL}/maps/${file}`)
+       fetch(`${API_URL}/uploads/mapas/${file}`)
             .then((res) => res.json())
             .then((json) => {
                 setData(json);
@@ -859,7 +859,7 @@ function Mapas_climatologia() {
                     }}
                 >
 
-                   {/* INDICADOR */}
+                  
                    
                    {/* TIPO */}
 

@@ -146,10 +146,10 @@ height: 125px;
 /* CONTAINER */
 .content {
   width: 100%;
-  max-width: 1200px;
-  margin: auto;
+  max-width: none;
+  margin: 0;
   min-height: 70vh;
-  padding-top: 100px;
+  padding: 20px 10px 40px;
 }
 
 /* HERO COLADO */
@@ -1756,6 +1756,432 @@ grid-column:auto;
 
 .arrow.open {
   transform: rotate(90deg);
+}
+
+/* =========================================================
+   SUBMISSÕES CLIMÁTICAS - ADMIN
+========================================================= */
+
+.admin-submissoes {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+    background: #f5f7f8;
+    min-height: 100%;
+}
+
+
+/* CABEÇALHO */
+
+.admin-submissoes-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.admin-submissoes-header h1 {
+    margin: 0 0 6px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #123b32;
+}
+
+.admin-submissoes-header p {
+    margin: 0;
+    color: #68746f;
+    font-size: 15px;
+}
+
+
+/* BOTÃO ATUALIZAR */
+
+.btn-atualizar {
+    border: none;
+    background: #168c5b;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-atualizar:hover {
+    background: #107249;
+}
+
+
+/* MENSAGENS */
+
+.mensagem-sucesso {
+    background: #e5f7ed;
+    color: #147443;
+    border: 1px solid #b9e8cd;
+    padding: 13px 16px;
+    border-radius: 7px;
+    margin-bottom: 20px;
+}
+
+.mensagem-erro {
+    background: #fdeaea;
+    color: #b3261e;
+    border: 1px solid #f3c1bd;
+    padding: 13px 16px;
+    border-radius: 7px;
+    margin-bottom: 20px;
+}
+
+
+/* FILTROS */
+
+.filtros-submissoes {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.filtro {
+    border: 1px solid #d4dcda;
+    background: white;
+    color: #44504c;
+    padding: 9px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.filtro:hover {
+    background: #edf6f2;
+}
+
+.filtro.ativo {
+    background: #168c5b;
+    color: white;
+    border-color: #168c5b;
+}
+
+
+/* TABELA */
+
+.tabela-submissoes {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e1e6e4;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.tabela-submissoes table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabela-submissoes thead {
+    background: #0d716c;
+    color: white;
+}
+
+.tabela-submissoes th {
+    text-align: left;
+    padding: 14px 15px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.tabela-submissoes td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #edf0ef;
+    color: #35413d;
+    font-size: 14px;
+}
+
+.tabela-submissoes tbody tr:hover {
+    background: #f8fbfa;
+}
+
+.tabela-submissoes tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* STATUS */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-pendente {
+    background: #fff3d6;
+    color: #a66a00;
+}
+
+.status-aprovado {
+    background: #dff5e9;
+    color: #147443;
+}
+
+.status-recusado {
+    background: #fde3e3;
+    color: #b3261e;
+}
+
+.status-outro {
+    background: #eeeeee;
+    color: #555;
+}
+
+
+/* BOTÃO VER */
+
+.btn-ver {
+    border: none;
+    background: #0d716c;
+    color: white;
+    padding: 8px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn-ver:hover {
+    background: #095954;
+}
+
+
+/* ESTADO VAZIO */
+
+.estado-vazio {
+    background: white;
+    border-radius: 10px;
+    padding: 50px;
+    text-align: center;
+    color: #68746f;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.modal-submissao {
+    width: min(850px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+
+/* CABEÇALHO MODAL */
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px 28px;
+    border-bottom: 1px solid #e8ecea;
+}
+
+.modal-header span {
+    color: #168c5b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.modal-header h2 {
+    margin: 5px 0 0 0;
+    color: #123b32;
+    font-size: 24px;
+}
+
+.btn-fechar {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f3f2;
+    color: #555;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.btn-fechar:hover {
+    background: #e2e7e5;
+}
+
+
+/* CONTEÚDO */
+
+.modal-conteudo {
+    padding: 25px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.campo-detalhe {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.campo-detalhe label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #77827e;
+}
+
+.campo-detalhe strong {
+    color: #25332e;
+    font-size: 15px;
+}
+
+.campo-detalhe p {
+    margin: 0;
+    color: #45524d;
+    line-height: 1.6;
+}
+
+.campo-largo {
+    grid-column: 1 / -1;
+}
+
+.campo-detalhe a {
+    color: #0d716c;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.campo-detalhe a:hover {
+    text-decoration: underline;
+}
+
+
+/* DESTINO OUTRO */
+
+.destino-outro {
+    grid-column: 1 / -1;
+    background: #f3f8f6;
+    border: 1px solid #d8e9e3;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.destino-outro label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #35534a;
+    margin-bottom: 8px;
+}
+
+.destino-outro select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd8d3;
+    border-radius: 6px;
+    background: white;
+}
+
+
+/* RODAPÉ MODAL */
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 18px 28px;
+    border-top: 1px solid #e8ecea;
+}
+
+.btn-recusar {
+    border: 1px solid #d9534f;
+    background: white;
+    color: #c43d38;
+    padding: 10px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-recusar:hover {
+    background: #fff1f1;
+}
+
+.btn-aprovar {
+    border: none;
+    background: #168c5b;
+    color: white;
+    padding: 10px 24px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-aprovar:hover {
+    background: #107249;
+}
+
+.btn-aprovar:disabled,
+.btn-recusar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .admin-submissoes {
+        padding: 18px;
+    }
+
+    .admin-submissoes-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .tabela-submissoes {
+        overflow-x: auto;
+    }
+
+    .tabela-submissoes table {
+        min-width: 750px;
+    }
+
+    .modal-conteudo {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-largo {
+        grid-column: auto;
+    }
+
 }
 
 /* MOBILE */

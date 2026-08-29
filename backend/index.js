@@ -1,6 +1,30 @@
 const express = require("express");
 const cors = require("cors");
+
 const multer = require("multer");
+
+const uploadSubmissao = multer({
+  storage: multer.diskStorage({
+
+    destination: function (req, file, cb) {
+      cb(null, "uploads/submissoes");
+    },
+
+    filename: function (req, file, cb) {
+
+      const nomeSeguro = file.originalname
+        .replace(/\s+/g, "_")
+        .replace(/[^a-zA-Z0-9._-]/g, "");
+
+      const nomeFinal =
+        Date.now() + "_" + nomeSeguro;
+
+      cb(null, nomeFinal);
+    }
+
+  })
+});
+
 const path = require("path");
 
 const db = require("./db");
@@ -2166,6 +2190,10 @@ app.post(
 
         try {
 
+            /* =====================================================
+               VALIDAR ARQUIVO
+            ===================================================== */
+
             if (!req.file) {
 
                 return res.status(400).json({
@@ -2174,14 +2202,16 @@ app.post(
 
             }
 
+
             console.log(
                 "Excel recebido:",
                 req.file.originalname
             );
 
-            // ==========================================
-            // LER EXCEL
-            // ==========================================
+
+            /* =====================================================
+               LER EXCEL
+            ===================================================== */
 
             const workbook = XLSX.read(
                 req.file.buffer,
@@ -2190,11 +2220,26 @@ app.post(
                 }
             );
 
+
+            if (
+                !workbook.SheetNames ||
+                workbook.SheetNames.length === 0
+            ) {
+
+                return res.status(400).json({
+                    erro: "O arquivo Excel não possui nenhuma aba."
+                });
+
+            }
+
+
             const nomeAba =
                 workbook.SheetNames[0];
 
+
             const worksheet =
                 workbook.Sheets[nomeAba];
+
 
             const linhas =
                 XLSX.utils.sheet_to_json(
@@ -2204,10 +2249,12 @@ app.post(
                     }
                 );
 
+
             console.log(
                 "Linhas encontradas:",
                 linhas.length
             );
+
 
             if (linhas.length === 0) {
 
@@ -2217,27 +2264,33 @@ app.post(
 
             }
 
-            // ==========================================
-            // VERIFICAR COLUNAS
-            // ==========================================
 
-            const primeiraLinha =
-                linhas[0];
+            /* =====================================================
+               COLUNAS OBRIGATÓRIAS
+            ===================================================== */
 
             const colunasObrigatorias = [
+
                 "map_code",
                 "variable_full",
                 "variable_short",
                 "period",
                 "scenario",
                 "uncertainty"
+
             ];
+
+
+            const primeiraLinha =
+                linhas[0];
+
 
             const colunasFaltando =
                 colunasObrigatorias.filter(
                     coluna =>
                         !(coluna in primeiraLinha)
                 );
+
 
             if (colunasFaltando.length > 0) {
 
@@ -2253,46 +2306,210 @@ app.post(
 
             }
 
-            // ==========================================
-            // TRANSAÇÃO
-            // ==========================================
 
-         const client =
-           await db.connect();
+            /* =====================================================
+               VALIDAR TODOS OS REGISTROS
+            ===================================================== */
+
+            const registrosValidos = [];
+
+            const erros = [];
+
+
+            linhas.forEach(
+                (linha, index) => {
+
+                    const linhaExcel =
+                        index + 2;
+
+
+                    const registro = {
+
+                        map_code:
+                            String(
+                                linha.map_code || ""
+                            ).trim(),
+
+                        variable_full:
+                            String(
+                                linha.variable_full || ""
+                            ).trim(),
+
+                        variable_short:
+                            String(
+                                linha.variable_short || ""
+                            ).trim(),
+
+                        period:
+                            String(
+                                linha.period || ""
+                            ).trim(),
+
+                        scenario:
+                            String(
+                                linha.scenario || ""
+                            ).trim(),
+
+                        uncertainty:
+                            String(
+                                linha.uncertainty || ""
+                            ).trim()
+
+                    };
+
+
+                    /* MAP_CODE É OBRIGATÓRIO */
+
+                    if (!registro.map_code) {
+
+                        erros.push(
+                            `Linha ${linhaExcel}: map_code vazio.`
+                        );
+
+                        return;
+
+                    }
+
+
+                    registrosValidos.push(
+                        registro
+                    );
+
+                }
+            );
+
+
+            /* =====================================================
+               VERIFICAR ERROS
+            ===================================================== */
+
+            if (erros.length > 0) {
+
+                return res.status(400).json({
+
+                    erro:
+                        "Existem problemas nos dados da planilha.",
+
+                    detalhes:
+                        erros.slice(0, 20),
+
+                    total_erros:
+                        erros.length
+
+                });
+
+            }
+
+
+            if (
+                registrosValidos.length === 0
+            ) {
+
+                return res.status(400).json({
+
+                    erro:
+                        "Nenhum registro válido foi encontrado."
+
+                });
+
+            }
+
+
+            /* =====================================================
+               VERIFICAR DUPLICADOS
+            ===================================================== */
+
+            const mapaCodes =
+                new Set();
+
+            const duplicados = [];
+
+
+            for (
+                const registro
+                of registrosValidos
+            ) {
+
+                if (
+                    mapaCodes.has(
+                        registro.map_code
+                    )
+                ) {
+
+                    duplicados.push(
+                        registro.map_code
+                    );
+
+                }
+
+                mapaCodes.add(
+                    registro.map_code
+                );
+
+            }
+
+
+            if (duplicados.length > 0) {
+
+                return res.status(400).json({
+
+                    erro:
+                        "Existem map_codes duplicados na planilha.",
+
+                    duplicados:
+                        [...new Set(duplicados)].slice(
+                            0,
+                            20
+                        ),
+
+                    total_duplicados:
+                        [...new Set(duplicados)].length
+
+                });
+
+            }
+
+
+            /* =====================================================
+               TRANSAÇÃO
+            ===================================================== */
+
+            const client =
+                await db.connect();
+
 
             try {
 
-                await client.query("BEGIN");
+                await client.query(
+                    "BEGIN"
+                );
 
-                // Limpa os metadados atuais
-                // para importar a nova versão completa
+
+                /* =================================================
+                   APAGAR METADADOS ATUAIS
+                ================================================= */
 
                 await client.query(
                     `
-                    DELETE FROM climate_map_metadata
+                    DELETE FROM
+                        climate_map_metadata
                     `
                 );
 
-                // ==========================================
-                // INSERIR LINHAS
-                // ==========================================
 
-                let quantidadeInserida = 0;
+                /* =================================================
+                   INSERIR NOVOS METADADOS
+                ================================================= */
 
-                for (const linha of linhas) {
-
-                    const mapCode =
-                        String(
-                            linha.map_code || ""
-                        ).trim();
-
-                    if (!mapCode) {
-                        continue;
-                    }
+                for (
+                    const registro
+                    of registrosValidos
+                ) {
 
                     await client.query(
                         `
-                        INSERT INTO climate_map_metadata
+                        INSERT INTO
+                            climate_map_metadata
                         (
                             map_code,
                             variable_full,
@@ -2302,38 +2519,43 @@ app.post(
                             uncertainty
                         )
                         VALUES
-                        ($1, $2, $3, $4, $5, $6)
+                        (
+                            $1,
+                            $2,
+                            $3,
+                            $4,
+                            $5,
+                            $6
+                        )
                         `,
                         [
-                            mapCode,
 
-                            String(
-                                linha.variable_full || ""
-                            ).trim(),
+                            registro.map_code,
 
-                            String(
-                                linha.variable_short || ""
-                            ).trim(),
+                            registro.variable_full,
 
-                            String(
-                                linha.period || ""
-                            ).trim(),
+                            registro.variable_short,
 
-                            String(
-                                linha.scenario || ""
-                            ).trim(),
+                            registro.period,
 
-                            String(
-                                linha.uncertainty || ""
-                            ).trim()
+                            registro.scenario,
+
+                            registro.uncertainty
+
                         ]
                     );
 
-                    quantidadeInserida++;
-
                 }
 
-                await client.query("COMMIT");
+
+                /* =================================================
+                   CONFIRMAR
+                ================================================= */
+
+                await client.query(
+                    "COMMIT"
+                );
+
 
                 res.json({
 
@@ -2342,29 +2564,39 @@ app.post(
                     mensagem:
                         "Metadados importados com sucesso.",
 
+                    arquivo:
+                        req.file.originalname,
+
                     registros:
-                        quantidadeInserida
+                        registrosValidos.length
 
                 });
 
-            } catch (erroBanco) {
 
-                await client.query("ROLLBACK");
+            }
+            catch (erroBanco) {
+
+                await client.query(
+                    "ROLLBACK"
+                );
 
                 throw erroBanco;
 
-            } finally {
+            }
+            finally {
 
                 client.release();
 
             }
 
-        } catch (erro) {
+        }
+        catch (erro) {
 
             console.error(
                 "Erro ao importar metadados:",
                 erro
             );
+
 
             res.status(500).json({
 
@@ -2825,12 +3057,58 @@ app.post(
 
 /* =========================
    SUBMISSÕES CLIMÁTICAS
-========================= */
+   ========================= */
+
+const TIPOS_CARD_SUBMISSAO = [
+  "Evento",
+  "Workshop",
+  "Treinamento",
+  "Concurso",
+  "Notícia",
+  "Noticia",
+  "Iniciativa Local",
+  "Iniciativa Nacional",
+  "Projeto Curto"
+];
+
+const TIPOS_BIBLIOTECA_SUBMISSAO = [
+  "Projeto Longo",
+  "Projeto climático",
+  "Projeto Climático",
+  "Projeto Climático (+6 meses)",
+  "Publicação",
+  "Relatório",
+  "Relatorio",
+  "Base de Dados",
+  "Mapa",
+  "Mapa Estático",
+  "Mapa estatico"
+];
+
+function definirDestinosSubmissao(tipo) {
+  const valor = String(tipo || "").trim();
+
+  if (valor === "Outro" || valor.toLowerCase() === "outro") {
+    return ["evento", "card", "biblioteca"];
+  }
+
+  if (TIPOS_CARD_SUBMISSAO.includes(valor)) {
+    return ["evento", "card"];
+  }
+
+  if (TIPOS_BIBLIOTECA_SUBMISSAO.includes(valor)) {
+    return ["biblioteca"];
+  }
+
+  return [];
+}
+
+/* =========================
+   LISTAR SUBMISSÕES
+   ========================= */
 
 app.get("/submissoes", async (req, res) => {
-
   try {
-
     const resultado = await db.query(`
       SELECT *
       FROM submissoes_climaticas
@@ -2838,105 +3116,93 @@ app.get("/submissoes", async (req, res) => {
     `);
 
     res.json(resultado.rows);
-
-  }
-
-  catch (err) {
-
+  } catch (err) {
     console.log(err);
 
     res.status(500).json({
       erro: err.message
     });
-
   }
-
 });
 
+/* =========================
+   BUSCAR UMA SUBMISSÃO
+   ========================= */
+
 app.get("/submissoes/:id", async (req, res) => {
-
   try {
-
     const resultado = await db.query(
       `
       SELECT *
       FROM submissoes_climaticas
-      WHERE id=$1
+      WHERE id = $1
       `,
       [req.params.id]
     );
 
-    res.json(resultado.rows[0]);
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({
+        erro: "Submissão não encontrada."
+      });
+    }
 
-  }
+    const submissao = resultado.rows[0];
 
-  catch (err) {
+    const arquivos = await db.query(
+      `
+      SELECT *
+      FROM submissao_arquivos
+      WHERE submissao_id = $1
+      ORDER BY id
+      `,
+      [req.params.id]
+    );
 
+    res.json({
+      ...submissao,
+      arquivos: arquivos.rows
+    });
+  } catch (err) {
     console.log(err);
 
     res.status(500).json({
       erro: err.message
     });
-
   }
-
 });
 
+/* =========================
+   CRIAR SUBMISSÃO
 
-app.post("/submissoes", async (req, res) => {
+   Recebe:
+   - campos gerais
+   - arquivos gerais
+   - imagens da página do Card
 
-  try {
+   Os arquivos são armazenados em:
+   uploads/submissoes
+   ========================= */
 
-    const {
+app.post(
+  "/submissoes",
+  uploadSubmissao.fields([
+    {
+      name: "arquivos",
+      maxCount: 10
+    },
+    {
+      name: "imagens_pagina",
+      maxCount: 5
+    }
+  ]),
+  async (req, res) => {
+    const client = await db.connect();
 
-      email,
-      tipo_proponente,
-      nome_responsavel,
-      entidade,
-      cargo,
-      website,
-      tipo_submissao,
-      idioma,
-      titulo,
-      titulo_curto,
-      descricao,
-      data_publicacao,
-      data_retirada,
-      data_inicio,
-      hora_inicio,
-      data_fim,
-      hora_fim,
-      evento_online,
-      local1,
-      local2,
-      link,
-      permissao_publicacao,
-      motivo_publicacao,
-      descricao_documento,
-      tags
+    try {
+      const arquivos = req.files?.arquivos || [];
+      const imagensPagina = req.files?.imagens_pagina || [];
 
-    } = req.body;
-
-    // Campos opcionais
-    const websiteFinal = website || null;
-    const dataPublicacao = data_publicacao || null;
-    const dataRetirada = data_retirada || null;
-    const dataInicio = data_inicio || null;
-    const horaInicio = hora_inicio || null;
-    const dataFim = data_fim || null;
-    const horaFim = hora_fim || null;
-    const local1Final = local1 || null;
-    const local2Final = local2 || null;
-    const linkFinal = link || null;
-    const motivoPublicacao = motivo_publicacao || null;
-    const descricaoDocumento = descricao_documento || null;
-    const tagsFinal = tags || null;
-
-    const resultado = await db.query(
-
-      `
-      INSERT INTO submissoes_climaticas
-      (
+      const {
         email,
         tipo_proponente,
         nome_responsavel,
@@ -2944,6 +3210,8 @@ app.post("/submissoes", async (req, res) => {
         cargo,
         website,
         tipo_submissao,
+        pagina,
+        pagina_card,
         idioma,
         titulo,
         titulo_curto,
@@ -2961,171 +3229,880 @@ app.post("/submissoes", async (req, res) => {
         permissao_publicacao,
         motivo_publicacao,
         descricao_documento,
-        tags
-      )
+        tags,
 
-      VALUES
-      (
-        $1,$2,$3,$4,$5,
-        $6,$7,$8,$9,$10,
-        $11,$12,$13,$14,$15,
-        $16,$17,$18,$19,$20,
-        $21,$22,$23,$24,$25
-      )
+        /* CARD */
+        tipo_link,
+        link_externo,
+        titulo_pagina,
+        texto_pagina,
+        data_publicacao_pagina,
+        imagem_card_index,
 
-      RETURNING *
+        /* BIBLIOTECA */
+        biblioteca_link,
+
+      } = req.body;
+
+      if (!email || !tipo_proponente || !nome_responsavel || !tipo_submissao || !titulo || !descricao) {
+        return res.status(400).json({
+          erro: "Preencha os campos obrigatórios da submissão."
+        });
+      }
+
+      const destinos = definirDestinosSubmissao(tipo_submissao);
+
+      if (destinos.length === 0) {
+        return res.status(400).json({
+          erro: `Tipo de submissão não configurado: ${tipo_submissao}`
+        });
+      }
+
+      const paginaCardFinal =
+        pagina_card || pagina || "home";
+
+      const tipoLinkFinal =
+        tipo_link === "externo" ? "externo" : "interno";
+
+      const linkExternoFinal =
+        link_externo || null;
+
+      const bibliotecaLinkFinal =
+        biblioteca_link || null;
+
+      const dataPaginaFinal =
+        data_publicacao_pagina ||
+        data_publicacao ||
+        data_inicio ||
+        null;
+
+      const permissaoFinal =
+        permissao_publicacao === true ||
+        permissao_publicacao === "true";
+
+      const eventoOnlineFinal =
+        evento_online === true ||
+        evento_online === "true";
+
+      /* =====================================================
+         VALIDAÇÕES ESPECÍFICAS DO CARD
+         ===================================================== */
+
+      const precisaCard = destinos.includes("card");
+
+      if (precisaCard) {
+        const paginasPermitidas = [
+          "home",
+          "adaptacao",
+          "mitigacao",
+          "engajamento"
+        ];
+
+        if (!paginasPermitidas.includes(paginaCardFinal)) {
+          return res.status(400).json({
+            erro: "Página do Card inválida."
+          });
+        }
+
+        if (tipoLinkFinal === "externo" && !linkExternoFinal) {
+          return res.status(400).json({
+            erro: "Informe o link externo do Card."
+          });
+        }
+
+        if (
+          tipoLinkFinal === "interno" &&
+          (!titulo_pagina || !texto_pagina)
+        ) {
+          return res.status(400).json({
+            erro: "Para uma página interna, informe o título e o conteúdo da página."
+          });
+        }
+      }
+
+      /* =====================================================
+         TRANSAÇÃO
+         ===================================================== */
+
+      await client.query("BEGIN");
+
+      /* =====================================================
+         SUBMISSÃO
+         ===================================================== */
+
+      const resultado = await client.query(
+        `
+        INSERT INTO submissoes_climaticas
+        (
+          email,
+          tipo_proponente,
+          nome_responsavel,
+          entidade,
+          cargo,
+          website,
+          tipo_submissao,
+          pagina,
+          idioma,
+          titulo,
+          titulo_curto,
+          descricao,
+          data_publicacao,
+          data_retirada,
+          data_inicio,
+          hora_inicio,
+          data_fim,
+          hora_fim,
+          evento_online,
+          local1,
+          local2,
+          link,
+          permissao_publicacao,
+          motivo_publicacao,
+          descricao_documento,
+          tags,
+          pagina_card,
+          tipo_link,
+          link_externo,
+          titulo_pagina,
+          texto_pagina,
+          data_publicacao_pagina,
+          imagem_card_index,
+          biblioteca_link
+        )
+        VALUES
+        (
+          $1,
+          $2,
+          $3,
+          $4,
+          $5,
+          $6,
+          $7,
+          $8,
+          $9,
+          $10,
+          $11,
+          $12,
+          $13,
+          $14,
+          $15,
+          $16,
+          $17,
+          $18,
+          $19,
+          $20,
+          $21,
+          $22,
+          $23,
+          $24,
+          $25,
+          $26,
+          $27,
+          $28,
+          $29,
+          $30,
+          $31,
+          $32,
+          $33,
+          $34
+        )
+        RETURNING *
+        `,
+        [
+          email,
+          tipo_proponente,
+          nome_responsavel,
+          entidade,
+          cargo,
+          website || null,
+          tipo_submissao,
+          paginaCardFinal,
+          idioma || null,
+          titulo,
+          titulo_curto || null,
+          descricao,
+          data_publicacao || null,
+          data_retirada || null,
+          data_inicio || null,
+          hora_inicio || null,
+          data_fim || null,
+          hora_fim || null,
+          eventoOnlineFinal,
+          local1 || null,
+          local2 || null,
+          link || null,
+          permissaoFinal,
+          motivo_publicacao || null,
+          descricao_documento || null,
+          tags || null,
+          paginaCardFinal,
+          tipoLinkFinal,
+          linkExternoFinal,
+          titulo_pagina || null,
+          texto_pagina || null,
+          dataPaginaFinal,
+          imagem_card_index || null,
+          bibliotecaLinkFinal
+        ]
+      );
+
+      const submissaoId = resultado.rows[0].id;
+
+      /* =====================================================
+         ARQUIVOS GERAIS
+         ===================================================== */
+
+      for (const arquivo of arquivos) {
+        await client.query(
+          `
+          INSERT INTO submissao_arquivos
+          (
+            submissao_id,
+            nome_original,
+            nome_arquivo,
+            caminho,
+            tipo_mime,
+            tamanho
+          )
+          VALUES
+          ($1,$2,$3,$4,$5,$6)
+          `,
+          [
+            submissaoId,
+            arquivo.originalname,
+            arquivo.filename,
+            arquivo.path,
+            arquivo.mimetype,
+            arquivo.size
+          ]
+        );
+      }
+
+      /* =====================================================
+         IMAGENS DA PÁGINA DO CARD
+
+         Elas também entram em submissao_arquivos.
+         Na aprovação serão usadas para paginas_imagens.
+         ===================================================== */
+
+      for (const imagem of imagensPagina) {
+        await client.query(
+          `
+          INSERT INTO submissao_arquivos
+          (
+            submissao_id,
+            nome_original,
+            nome_arquivo,
+            caminho,
+            tipo_mime,
+            tamanho
+          )
+          VALUES
+          ($1,$2,$3,$4,$5,$6)
+          `,
+          [
+            submissaoId,
+            imagem.originalname,
+            imagem.filename,
+            imagem.path,
+            imagem.mimetype,
+            imagem.size
+          ]
+        );
+      }
+
+      await client.query("COMMIT");
+
+      res.json({
+        sucesso: true,
+        registro: resultado.rows[0],
+        destinos,
+        arquivos: arquivos.length,
+        imagens_pagina: imagensPagina.length
+      });
+    } catch (err) {
+      try {
+        await client.query("ROLLBACK");
+      } catch (rollbackError) {
+        console.error("Erro no ROLLBACK:", rollbackError);
+      }
+
+      console.log(err);
+
+      res.status(500).json({
+        erro: err.message
+      });
+    } finally {
+      client.release();
+    }
+  }
+);
+
+/* =========================
+   ALTERAR STATUS / OBSERVAÇÃO
+   ========================= */
+
+app.put("/submissoes/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const {
+      status,
+      observacao_admin
+    } = req.body;
+
+    await db.query(
+      `
+      UPDATE submissoes_climaticas
+      SET
+        status = $1,
+        observacao_admin = $2
+      WHERE id = $3
       `,
-
       [
-        email,
-        tipo_proponente,
-        nome_responsavel,
-        entidade,
-        cargo,
-        websiteFinal,
-        tipo_submissao,
-        idioma,
-        titulo,
-        titulo_curto,
-        descricao,
-        dataPublicacao,
-        dataRetirada,
-        dataInicio,
-        horaInicio,
-        dataFim,
-        horaFim,
-        evento_online,
-        local1Final,
-        local2Final,
-        linkFinal,
-        permissao_publicacao,
-        motivoPublicacao,
-        descricaoDocumento,
-        tagsFinal
+        status,
+        observacao_admin || null,
+        id
       ]
-
     );
 
     res.json({
-      sucesso: true,
-      registro: resultado.rows[0]
+      sucesso: true
     });
-
   } catch (err) {
-
     console.log(err);
 
     res.status(500).json({
       erro: err.message
     });
-
   }
-
 });
 
-app.put("/submissoes/:id", async (req,res)=>{
+/* =====================================================
+   APROVAR SUBMISSÃO
 
-   try{
+   GRUPO 1
+   Evento / Workshop / Treinamento / Concurso /
+   Notícia / Iniciativa Local / Iniciativa Nacional /
+   Projeto Curto
 
-      const id=req.params.id;
+   -> EVENTO + CARD
 
-      const {
+   GRUPO 2
+   Projeto Longo / Publicação / Relatório /
+   Base de Dados / Mapa
 
-         status,
-         observacao_admin
+   -> BIBLIOTECA
 
-      }=req.body;
+   OUTRO
 
-      await db.query(
+   -> EVENTO + CARD + BIBLIOTECA
 
+   NADA É PUBLICADO AUTOMATICAMENTE.
+   ===================================================== */
+
+app.post("/submissoes/:id/aprovar", async (req, res) => {
+  const client = await db.connect();
+
+  try {
+    const id = req.params.id;
+
+    const {
+      usuario_aprovador
+    } = req.body;
+
+    const resultado = await client.query(
       `
-
-      UPDATE submissoes_climaticas
-
-      SET
-
-      status=$1,
-
-      observacao_admin=$2
-
-      WHERE id=$3
-
+      SELECT *
+      FROM submissoes_climaticas
+      WHERE id = $1
+      FOR UPDATE
       `,
+      [id]
+    );
 
-      [
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({
+        erro: "Submissão não encontrada."
+      });
+    }
 
-         status,
+    const submissao = resultado.rows[0];
 
-         observacao_admin,
+    const statusAtual =
+      String(submissao.status || "")
+        .trim()
+        .toLowerCase();
 
-         id
+    if (statusAtual === "aprovado") {
+      return res.status(400).json({
+        erro: "Esta submissão já foi aprovada."
+      });
+    }
 
-      ]
+    if (statusAtual === "rejeitado") {
+      return res.status(400).json({
+        erro: "Esta submissão está rejeitada."
+      });
+    }
 
+    const tipoOriginal =
+      String(submissao.tipo_submissao || "")
+        .trim();
+
+    const destinos =
+      definirDestinosSubmissao(tipoOriginal);
+
+    if (destinos.length === 0) {
+      return res.status(400).json({
+        erro:
+          `Tipo de submissão não configurado: ${tipoOriginal}`
+      });
+    }
+
+    await client.query("BEGIN");
+
+    let eventoId = null;
+    let cardId = null;
+    let bibliotecaId = null;
+
+    /* =====================================================
+       ARQUIVOS
+       ===================================================== */
+
+    const arquivosResult = await client.query(
+      `
+      SELECT
+        id,
+        nome_original,
+        nome_arquivo,
+        caminho,
+        tipo_mime,
+        tamanho
+      FROM submissao_arquivos
+      WHERE submissao_id = $1
+      ORDER BY id
+      `,
+      [id]
+    );
+
+    const arquivos = arquivosResult.rows || [];
+
+    /* =====================================================
+       IMAGEM ESCOLHIDA PARA O CARD
+
+       O formulário guarda imagem_card_index como índice
+       dentro do array de arquivos gerais.
+       ===================================================== */
+
+    let primeiraImagem = null;
+
+    const indiceImagemCard =
+      Number.isInteger(Number(submissao.imagem_card_index))
+        ? Number(submissao.imagem_card_index)
+        : -1;
+
+    if (
+      indiceImagemCard >= 0 &&
+      indiceImagemCard < arquivos.length &&
+      String(arquivos[indiceImagemCard].tipo_mime || "")
+        .startsWith("image/")
+    ) {
+      primeiraImagem =
+        arquivos[indiceImagemCard];
+    }
+
+    if (!primeiraImagem) {
+      primeiraImagem = arquivos.find(
+        arquivo =>
+          String(arquivo.tipo_mime || "")
+            .startsWith("image/")
+      );
+    }
+
+    const primeiroDocumento =
+      arquivos.find(
+        arquivo =>
+          !String(arquivo.tipo_mime || "")
+            .startsWith("image/")
+      ) || null;
+
+    const caminhoImagem = primeiraImagem
+      ? `submissoes/${primeiraImagem.nome_arquivo}`
+      : null;
+
+    const caminhoDocumento = primeiroDocumento
+      ? `submissoes/${primeiroDocumento.nome_arquivo}`
+      : null;
+
+    const nomeDocumento = primeiroDocumento
+      ? primeiroDocumento.nome_original
+      : null;
+
+    /* =====================================================
+       CARD - DESTINO
+       ===================================================== */
+
+    if (destinos.includes("card")) {
+      const paginaCard =
+        submissao.pagina_card ||
+        submissao.pagina ||
+        "home";
+
+      const paginasPermitidas = [
+        "home",
+        "adaptacao",
+        "mitigacao",
+        "engajamento"
+      ];
+
+      if (!paginasPermitidas.includes(paginaCard)) {
+        throw new Error(
+          "Página do Card inválida."
+        );
+      }
+
+      const tipoLink =
+        submissao.tipo_link === "externo"
+          ? "externo"
+          : "interno";
+
+      const linkCard =
+        tipoLink === "externo"
+          ? submissao.link_externo
+          : paginaCard;
+
+      if (!linkCard) {
+        throw new Error(
+          "O Card não possui destino configurado."
+        );
+      }
+
+      const ehPaginaInterna =
+        tipoLink === "interno";
+
+      const tituloCard =
+        ehPaginaInterna && submissao.titulo_pagina
+          ? submissao.titulo_pagina
+          : submissao.titulo;
+
+      const conteudoCard =
+        ehPaginaInterna && submissao.texto_pagina
+          ? submissao.texto_pagina
+          : submissao.descricao;
+
+      const card = await client.query(
+        `
+        INSERT INTO cards
+        (
+          pagina,
+          titulo,
+          conteudo,
+          link,
+          tipo_link,
+          ordem,
+          imagem_card,
+          pagina_detalhe,
+          ativo
+        )
+        VALUES
+        (
+          $1,$2,$3,$4,$5,$6,$7,$8,$9
+        )
+        RETURNING id
+        `,
+        [
+          paginaCard,
+          tituloCard,
+          conteudoCard,
+          linkCard,
+          tipoLink,
+          0,
+          caminhoImagem,
+          ehPaginaInterna,
+          false
+        ]
       );
 
-      res.json({
+      cardId = card.rows[0].id;
 
-         sucesso:true
+      /* =================================================
+         PÁGINA INTERNA
+         ================================================= */
 
-      });
+      if (ehPaginaInterna) {
+        const pagina = await client.query(
+          `
+          INSERT INTO paginas
+          (
+            card_id,
+            titulo,
+            texto,
+            data_publicacao
+          )
+          VALUES
+          ($1,$2,$3,$4)
+          RETURNING id
+          `,
+          [
+            cardId,
+            submissao.titulo_pagina || submissao.titulo,
+            submissao.texto_pagina || submissao.descricao,
+            submissao.data_publicacao_pagina ||
+              submissao.data_publicacao ||
+              submissao.data_inicio ||
+              null
+          ]
+        );
 
-   }
+        const paginaId =
+          pagina.rows[0].id;
 
-   catch(err){
+        /* =============================================
+           ATÉ 5 FOTOS
+           ============================================= */
 
-      console.log(err);
+        const imagens = arquivos
+          .filter(arquivo =>
+            String(arquivo.tipo_mime || "")
+              .startsWith("image/")
+          )
+          .slice(0, 5);
 
-      res.status(500).json({
+        for (let i = 0; i < imagens.length; i++) {
+          await client.query(
+            `
+            INSERT INTO paginas_imagens
+            (
+              pagina_id,
+              imagem,
+              ordem
+            )
+            VALUES
+            ($1,$2,$3)
+            `,
+            [
+              paginaId,
+              `submissoes/${imagens[i].nome_arquivo}`,
+              i + 1
+            ]
+          );
+        }
+      }
+    }
 
-         erro:err.message
+    /* =====================================================
+       BIBLIOTECA
+       ===================================================== */
 
-      });
+    if (destinos.includes("biblioteca")) {
+      const tipoBiblioteca =
+        tipoOriginal === "Projeto Longo" ||
+        tipoOriginal === "Projeto climático" ||
+        tipoOriginal === "Projeto Climático" ||
+        tipoOriginal === "Projeto Climático (+6 meses)"
+          ? "Projeto climático"
+          : tipoOriginal === "Mapa" ||
+            tipoOriginal === "Mapa Estático" ||
+            tipoOriginal === "Mapa estatico"
+          ? "Mapa estático"
+          : tipoOriginal === "Relatorio"
+          ? "Relatório"
+          : tipoOriginal;
 
-   }
+      const biblioteca = await client.query(
+        `
+        INSERT INTO biblioteca
+        (
+          titulo,
+          tipo,
+          data,
+          link,
+          pagina,
+          ordem,
+          arquivo,
+          nome_arquivo,
+          ativo
+        )
+        VALUES
+        (
+          $1,$2,$3,$4,$5,$6,$7,$8,$9
+        )
+        RETURNING id
+        `,
+        [
+          submissao.titulo,
+          tipoBiblioteca,
+          submissao.data_publicacao ||
+            submissao.data_inicio ||
+            null,
+          submissao.biblioteca_link || null,
+          null,
+          0,
+          caminhoDocumento,
+          nomeDocumento,
+          false
+        ]
+      );
 
+      bibliotecaId =
+        biblioteca.rows[0].id;
+    }
+
+    /* =====================================================
+       EVENTO / CALENDÁRIO
+       ===================================================== */
+
+    if (destinos.includes("evento")) {
+      const evento = await client.query(
+        `
+        INSERT INTO eventos
+        (
+          titulo,
+          titulo_curto,
+          descricao,
+          tipo,
+          data_inicio,
+          hora_inicio,
+          data_fim,
+          hora_fim,
+          evento_online,
+          local1,
+          local2,
+          link,
+          entidade,
+          nome_responsavel,
+          email_responsavel,
+          ativo
+        )
+        VALUES
+        (
+          $1,$2,$3,$4,$5,$6,$7,$8,
+          $9,$10,$11,$12,$13,$14,$15,$16
+        )
+        RETURNING id
+        `,
+        [
+          submissao.titulo,
+          submissao.titulo_curto || null,
+          submissao.descricao,
+          tipoOriginal,
+          submissao.data_inicio || submissao.data_publicacao || null,
+          submissao.hora_inicio || null,
+          submissao.data_fim || null,
+          submissao.hora_fim || null,
+          submissao.evento_online === true ||
+            submissao.evento_online === "true",
+          submissao.local1 || null,
+          submissao.local2 || null,
+          submissao.link || null,
+          submissao.entidade || null,
+          submissao.nome_responsavel || null,
+          submissao.email || null,
+          false
+        ]
+      );
+
+      eventoId = evento.rows[0].id;
+    }
+
+    /* =====================================================
+       MARCAR SUBMISSÃO COMO APROVADA
+
+       Os campos publicado_cards / publicado_biblioteca
+       significam que o destino foi criado.
+       A publicação real continua dependendo do ativo=false.
+       ===================================================== */
+
+    await client.query(
+      `
+      UPDATE submissoes_climaticas
+      SET
+        status = $1,
+        usuario_aprovador = $2,
+        data_aprovacao = CURRENT_TIMESTAMP,
+        publicado_cards = $3,
+        publicado_biblioteca = $4
+      WHERE id = $5
+      `,
+      [
+        "aprovado",
+        usuario_aprovador || "admin",
+        false,
+        false,
+        id
+      ]
+    );
+
+    await client.query("COMMIT");
+
+    res.json({
+      sucesso: true,
+      mensagem: "Submissão aprovada com sucesso.",
+      submissao_id: Number(id),
+      evento_id: eventoId,
+      card_id: cardId,
+      biblioteca_id: bibliotecaId,
+      destinos,
+      publicado: false
+    });
+  } catch (err) {
+    try {
+      await client.query("ROLLBACK");
+    } catch (rollbackError) {
+      console.error(
+        "Erro no ROLLBACK:",
+        rollbackError
+      );
+    }
+
+    console.error(
+      "Erro ao aprovar submissão:",
+      err
+    );
+
+    res.status(500).json({
+      erro:
+        err.message ||
+        "Erro ao aprovar submissão."
+    });
+  } finally {
+    client.release();
+  }
 });
 
+/* =========================
+   EXCLUIR SUBMISSÃO
+   ========================= */
 
-app.delete("/submissoes/:id", async (req,res)=>{
+app.delete("/submissoes/:id", async (req, res) => {
+  try {
+    await db.query(
+      `
+      DELETE FROM submissao_arquivos
+      WHERE submissao_id = $1
+      `,
+      [req.params.id]
+    );
 
-   try{
-
-      await db.query(
-
+    await db.query(
       `
       DELETE FROM submissoes_climaticas
-      WHERE id=$1
+      WHERE id = $1
       `,
+      [req.params.id]
+    );
 
-      [
+    res.json({
+      sucesso: true
+    });
+  } catch (err) {
+    console.log(err);
 
-         req.params.id
-
-      ]
-
-      );
-
-      res.json({
-
-         sucesso:true
-
-      });
-
-   }
-
-   catch(err){
-
-      console.log(err);
-
-      res.status(500).json({
-
-         erro:err.message
-
-      });
-
-   }
-
+    res.status(500).json({
+      erro: err.message
+    });
+  }
 });
 
 

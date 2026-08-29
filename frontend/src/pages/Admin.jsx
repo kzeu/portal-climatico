@@ -6,6 +6,10 @@ import Admin_usuarios from "./Admin_usuarios";
 import Admin_biblioteca from "./Admin_biblioteca";
 import Admin_mapas from "./Admin_mapas";
 
+import Admin_metadados from "./Admin_metadados";
+
+import Admin_Submissoes from "./Admin_Submissoes";
+
 function Admin({ setPage }) {
 
   const [menu, setMenu] = useState("cards");
@@ -69,6 +73,32 @@ function Admin({ setPage }) {
           }
         >
           Mapas Climáticos
+        </div>
+
+        <div
+            className={`admin-menu-item ${
+                menu === "metadados"
+                    ? "active"
+                    : ""
+            }`}
+            onClick={() =>
+                setMenu("metadados")
+            }
+        >
+            Metadados dos Mapas
+        </div>
+
+        <div
+          className={`admin-menu-item ${
+            menu === "submissoes"
+              ? "active"
+              : ""
+          }`}
+          onClick={() =>
+            setMenu("submissoes")
+          }
+        >
+          Submissões Climáticas
         </div>
 
 
@@ -141,6 +171,14 @@ function Admin({ setPage }) {
         {menu=== "mapas" && (
         <Admin_mapas />
          )}
+
+         {menu === "metadados" && (
+            <Admin_metadados />
+        )}
+
+        {menu === "submissoes" && (
+          <Admin_Submissoes />
+        )}
 
         {menu === "usuarios" && (
 
