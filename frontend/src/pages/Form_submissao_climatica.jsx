@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "../App.css";
-
-const API_URL = "http://localhost:3000";
+import API_URL from "../config";
 
 function Form_submissao_climatica() {
 

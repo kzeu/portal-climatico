@@ -83,14 +83,20 @@ height: 125px;
   font-size: 17px; /* 👈 MAIOR */
 }
 
-.menu-item span:hover {
-  background: rgba(255,255,255,0.4);
+
+
+/* =========================
+   MENU DROPDOWN
+========================= */
+
+.menu-dropdown {
+  position: relative;
 }
 
-/* SUBMENU */
-.submenu {
+/* submenu escondido */
+.menu-dropdown .submenu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: 100%;
   left: 0;
 
   background: #5cab7d;
@@ -100,6 +106,25 @@ height: 125px;
   border-radius: 8px;
 
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+
+  display: none;
+  z-index: 10000;
+}
+
+/* aparece ao passar o mouse */
+.menu-dropdown:hover .submenu {
+  display: block;
+}
+
+/* itens do submenu */
+.menu-dropdown .submenu div {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+/* efeito ao passar nos itens */
+.menu-dropdown .submenu div:hover {
+  background: #2f6f4f;
 }
 
 .submenu div {
@@ -292,7 +317,9 @@ width: 92%;
 }
 
 .footer-left img {
-  height: 100px;
+  height: 90px;
+  width: auto;
+  object-fit: contain;
 }
 
 footer-columns {
@@ -392,7 +419,9 @@ footer-columns {
 
 
 
-.menu-item span:hover {
+
+
+.menu-item > span:hover {
   background: rgba(255,255,255,0.4);
 }
 
@@ -402,7 +431,7 @@ footer-columns {
 
 .submenu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: 100%;
   left: 0;
 
   background: #5cab7d;
@@ -2184,6 +2213,842 @@ grid-column:auto;
 
 }
 
+
+/* =========================================================
+   HOME MODERNA
+========================================================= */
+
+.home-page {
+   width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.home-hero {
+  position: relative;
+
+  width: 100%;
+  min-height: 510px;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border-radius: 0 !important;
+
+  overflow: hidden;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.home-hero-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 45, 62, 0.92) 0%,
+      rgba(0, 45, 62, 0.78) 38%,
+      rgba(0, 45, 62, 0.35) 70%,
+      rgba(0, 20, 25, 0.15) 100%
+    );
+
+  z-index: 1;
+}
+
+
+/* =========================================================
+   CONTEÚDO DO HERO
+========================================================= */
+
+.home-hero-content {
+
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+
+  max-width: 1380px;
+
+  margin: 0 auto;
+
+  padding: 70px 8% 90px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 70px;
+
+}
+
+
+/* =========================================================
+   TEXTO
+========================================================= */
+
+.home-hero-text {
+
+  max-width: 690px;
+
+  color: white;
+
+}
+
+
+.home-hero-small {
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+  color: #9be34d;
+
+  margin-bottom: 18px;
+
+}
+
+
+.home-hero-text h1 {
+
+  margin: 0;
+
+  font-size: clamp(42px, 5vw, 72px);
+
+  line-height: 1.02;
+
+  font-weight: 800;
+
+  letter-spacing: -2px;
+
+}
+
+
+.home-hero-text p {
+
+  margin-top: 25px;
+
+  margin-bottom: 30px;
+
+  max-width: 650px;
+
+  font-size: 18px;
+
+  line-height: 1.7;
+
+  color: rgba(255,255,255,0.92);
+
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.home-hero-buttons {
+
+  display: flex;
+
+  gap: 16px;
+
+  flex-wrap: wrap;
+
+}
+
+
+.home-hero-btn {
+
+  border: none;
+
+  padding: 14px 24px;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+}
+
+
+.home-hero-btn:hover {
+
+  transform: translateY(-2px);
+
+}
+
+
+.home-hero-btn span {
+
+  font-size: 20px;
+
+  line-height: 1;
+
+}
+
+
+.home-hero-btn.primary {
+
+  background: #55c83d;
+
+  color: white;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.20);
+
+}
+
+
+.home-hero-btn.primary:hover {
+
+  background: #69d84f;
+
+}
+
+
+.home-hero-btn.secondary {
+
+  background: rgba(255,255,255,0.08);
+
+  color: white;
+
+  border: 1px solid rgba(255,255,255,0.75);
+
+  backdrop-filter: blur(8px);
+
+}
+
+
+.home-hero-btn.secondary:hover {
+
+  background: rgba(255,255,255,0.18);
+
+}
+
+
+/* =========================================================
+   PAINEL DIREITO
+========================================================= */
+
+.home-hero-panel {
+
+  width: 380px;
+
+  flex-shrink: 0;
+
+  padding: 25px;
+
+  border-radius: 24px;
+
+  background:
+    rgba(10, 35, 28, 0.65);
+
+  border:
+    1px solid rgba(255,255,255,0.18);
+
+  backdrop-filter: blur(15px);
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.20);
+
+}
+
+
+.hero-panel-item {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 16px;
+
+  padding: 12px 0;
+
+}
+
+
+.hero-panel-item + .hero-panel-item {
+
+  border-top:
+    1px solid rgba(255,255,255,0.12);
+
+}
+
+
+.hero-panel-icon {
+
+  width: 52px;
+
+  height: 52px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 25px;
+
+}
+
+
+.hero-panel-item strong {
+
+  display: block;
+
+  color: #a5e65a;
+
+  font-size: 15px;
+
+  margin-bottom: 5px;
+
+}
+
+
+.hero-panel-item p {
+
+  margin: 0;
+
+  color: rgba(255,255,255,0.9);
+
+  font-size: 13px;
+
+  line-height: 1.55;
+
+}
+
+
+/* =========================================================
+   SETAS
+========================================================= */
+
+.hero-arrow {
+
+  position: absolute;
+
+  z-index: 5;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 54px;
+
+  height: 54px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid rgba(255,255,255,0.30);
+
+  background:
+    rgba(0,0,0,0.28);
+
+  color: white;
+
+  font-size: 38px;
+
+  line-height: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+
+}
+
+
+.hero-arrow:hover {
+
+  background:
+    rgba(0,0,0,0.55);
+
+}
+
+
+.hero-arrow-left {
+
+  left: 25px;
+
+}
+
+
+.hero-arrow-right {
+
+  right: 25px;
+
+}
+
+
+/* =========================================================
+   BOLINHAS
+========================================================= */
+
+.hero-dots {
+
+  position: absolute;
+
+  z-index: 5;
+
+  bottom: 22px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  display: flex;
+
+  gap: 9px;
+
+}
+
+
+.hero-dot {
+
+  width: 11px;
+
+  height: 11px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.75);
+
+  cursor: pointer;
+
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
+
+}
+
+
+.hero-dot.active {
+
+  width: 30px;
+
+  border-radius: 20px;
+
+  background: #66d447;
+
+}
+
+
+/* =========================================================
+   SEÇÃO ABAIXO DO HERO
+========================================================= */
+
+.home-areas {
+
+  padding: 50px 3% 70px;
+
+}
+
+.publicacoes-section {
+  padding-top: 0px;
+}
+
+
+.home-section-title {
+
+  max-width: 1380px;
+
+  margin: 0 auto 25px;
+
+}
+
+
+.home-section-kicker {
+
+  color: #57963c;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  margin-bottom: 6px;
+
+}
+
+
+.home-section-title h2 {
+
+  margin: 0;
+
+  font-size: 30px;
+
+  color: #17201b;
+
+}
+
+/* =========================================================
+   AJUSTE FINAL - MENU + HERO
+========================================================= */
+
+.menu {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+
+  width: 100% !important;
+  height: 110px !important;
+
+  z-index: 9999;
+}
+
+.menu-inner {
+  height: 110px !important;
+  min-height: 110px !important;
+
+  width: 100% !important;
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+}
+
+/* O conteúdo começa EXATAMENTE abaixo do menu */
+
+#content {
+  padding-top: 110px !important;
+}
+
+/* HERO começa abaixo do menu */
+
+.home-hero {
+  margin-top: 0 !important;
+  border-radius: 0 !important;
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .home-hero-content {
+
+    padding:
+      60px 8% 80px;
+
+    gap: 30px;
+
+  }
+
+
+  .home-hero-panel {
+
+    width: 320px;
+
+  }
+
+
+  .home-hero-text h1 {
+
+    font-size: 48px;
+
+  }
+
+}
+
+
+@media (max-width: 800px) {
+
+  .home-hero {
+
+    min-height: 650px;
+
+  }
+
+
+  .home-hero-content {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    padding:
+      50px 8% 85px;
+
+  }
+
+
+  .home-hero-text {
+
+    max-width: 100%;
+
+  }
+
+
+  .home-hero-text h1 {
+
+    font-size: 42px;
+
+  }
+
+
+  .home-hero-text p {
+
+    font-size: 16px;
+
+  }
+
+
+  .home-hero-panel {
+
+    width: 100%;
+
+    max-width: 500px;
+
+  }
+
+
+  .hero-arrow {
+
+    width: 44px;
+
+    height: 44px;
+
+    font-size: 30px;
+
+  }
+
+
+  .hero-arrow-left {
+
+    left: 10px;
+
+  }
+
+
+  .hero-arrow-right {
+
+    right: 10px;
+
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .home-hero {
+
+    min-height: 700px;
+
+    border-radius: 0 0 16px 16px;
+
+  }
+
+
+  .home-hero-content {
+
+    padding:
+      40px 7% 80px;
+
+  }
+
+
+  .home-hero-small {
+
+    font-size: 12px;
+
+  }
+
+
+  .home-hero-text h1 {
+
+    font-size: 36px;
+
+    letter-spacing: -1px;
+
+  }
+
+
+  .home-hero-text p {
+
+    font-size: 15px;
+
+    line-height: 1.55;
+
+  }
+
+
+  .home-hero-buttons {
+
+    width: 100%;
+
+    flex-direction: column;
+
+  }
+
+
+  .home-hero-btn {
+
+    justify-content: center;
+
+    width: 100%;
+
+  }
+
+
+  .home-hero-panel {
+
+    padding: 15px;
+
+  }
+
+
+  .hero-panel-icon {
+
+    width: 44px;
+
+    height: 44px;
+
+    font-size: 20px;
+
+  }
+
+
+  .hero-panel-item p {
+
+    font-size: 12px;
+
+  }
+
+ 
+
+/* =========================================
+   REGUA DE PARCEIROS - AJUSTE FINAL
+========================================= */
+
+.parceiros {
+  width: 100% !important;
+  background: #fff !important;
+  padding: 35px 20px !important;
+  box-sizing: border-box !important;
+}
+
+.parceiros-container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+.parceiros-logos {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 25px !important;
+  width: 100% !important;
+}
+
+.parceiro {
+  width: 190px !important;
+  height: 80px !important;
+  flex: 0 0 190px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.parceiro img {
+  width: 170px !important;
+  height: 70px !important;
+
+  max-width: 170px !important;
+  max-height: 70px !important;
+
+  object-fit: contain !important;
+}
+
+.parceiro-separador {
+  width: 1px !important;
+  height: 55px !important;
+  flex: 0 0 1px !important;
+  background: #dfe5e5 !important;
+}
+
+.parceiro-texto {
+  flex-direction: column !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+}
+
+.parceiro-texto strong {
+  font-size: 14px !important;
+}
+
+.parceiro-texto span {
+  font-size: 14px !important;
+}
+
+.parceiro-texto small {
+  font-size: 11px !important;
+}
+
+
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
 
@@ -2239,4 +3104,200 @@ grid-column:auto;
 /* DESKTOP */
 .menu-login.mobile {
   display: none;
+}
+
+
+/* =========================================================
+   MENU DROPDOWN - DEFINITIVO
+   ADAPTAÇÃO + ENGAJAMENTO
+========================================================= */
+
+.menu-dropdown {
+  position: relative;
+}
+
+/* SUBMENU FECHADO */
+.menu-dropdown .submenu {
+  position: absolute;
+
+  top: 100%;
+  left: 0;
+
+  min-width: 230px;
+
+  background: #5cab7d;
+  color: white;
+
+  border-radius: 8px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  display: none;
+
+  z-index: 100000;
+}
+
+/* ABRE QUANDO PASSA O MOUSE */
+.menu-dropdown:hover .submenu {
+  display: block;
+}
+
+/* ITENS DO SUBMENU */
+.menu-dropdown .submenu div {
+  padding: 10px 14px;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+/* HOVER DOS ITENS */
+.menu-dropdown .submenu div:hover {
+  background: #2f6f4f;
+}
+
+/* EVITA QUE O TEXTO DO MENU FIQUE ESTRANHO */
+.menu-dropdown > span {
+  cursor: pointer;
+}
+
+/* SETA */
+.menu-dropdown .arrow {
+  margin-left: 6px;
+  transition: transform 0.2s ease;
+}
+
+/* GIRA A SETA */
+.menu-dropdown:hover .arrow {
+  transform: rotate(90deg);
+}
+
+/* =========================================
+   RÉGUA DE PARCEIROS
+========================================= */
+
+.parceiro img {
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+/* PNUD */
+.parceiro-pnud img {
+  max-width: 110px !important;
+  max-height: 50px !important;
+}
+
+/* GREEN CLIMATE FUND */
+.parceiro-gcf img {
+  max-width: 140px !important;
+  max-height: 60px !important;
+}
+
+
+/* =========================================
+   PARCEIROS - ALINHAMENTO FINAL
+========================================= */
+
+.parceiros {
+  width: 100% !important;
+  background: #fff !important;
+  padding: 30px 20px !important;
+  box-sizing: border-box !important;
+}
+
+.parceiros-container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+.parceiros-titulo {
+  text-align: left !important;
+  margin-bottom: 20px !important;
+}
+
+/* TODOS OS PARCEIROS NA MESMA LINHA */
+.parceiros-logos {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 25px !important;
+  width: 100% !important;
+}
+
+/* CADA PARCEIRO */
+.parceiro {
+  width: 170px !important;
+  height: 70px !important;
+  flex: 0 0 170px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* IMAGENS */
+.parceiro img {
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* PNUD */
+.parceiro:first-child img {
+  max-width: 110px !important;
+  max-height: 55px !important;
+}
+
+/* GCF */
+.parceiro:nth-of-type(3) img {
+  max-width: 120px !important;
+  max-height: 55px !important;
+}
+
+/* SEPARADORES */
+.parceiro-separador {
+  width: 1px !important;
+  height: 50px !important;
+  flex: 0 0 1px !important;
+  background: #dfe5e5 !important;
+}
+
+/* TEXTOS */
+.parceiro-texto {
+  flex-direction: column !important;
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+  line-height: 1.25 !important;
+  color: #45565c !important;
+}
+
+.parceiro-texto strong {
+  font-size: 14px !important;
+}
+
+.parceiro-texto span {
+  font-size: 14px !important;
+}
+
+.parceiro-texto small {
+  font-size: 11px !important;
+  margin-top: 4px !important;
+}
+
+/* AUMENTAR SOMENTE O GREEN CLIMATE FUND */
+.parceiro:nth-child(3) img {
+  max-width: 210px !important;
+  max-height: 110px !important;
+}
+
+.parceiro-ministerio img {
+  max-width: 180px !important;
+  max-height: 80px !important;
+  object-fit: contain !important;
 }

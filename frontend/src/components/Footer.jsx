@@ -1,3 +1,5 @@
+import logo from "../assets/logo2-.png";
+
 function Footer() {
   return (
     <footer className="footer">
@@ -6,7 +8,7 @@ function Footer() {
 
         {/* ESQUERDA - BRASÃO */}
         <div className="footer-left">
-          <img src="/brasao.svg.png" alt="Brasão Guiné-Bissau" />
+          <img src={logo} alt="Portal Climático da Guiné-Bissau" />
         </div>
 
         {/* COLUNAS */}
@@ -23,7 +25,6 @@ function Footer() {
           <div className="footer-col">
             <h4>Redes Sociais</h4>
             <p>Facebook</p>
-            <p>Twitter</p>
              <p>Instagran</p>
             <p>LinkedIn</p>
           </div>

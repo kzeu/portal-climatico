@@ -12,7 +12,10 @@ function MapaItem({
     file,
     campo,
     titulo,
-    classificacoes
+    classificacoes,
+    tipos,
+    tipoSelecionado,
+    setTipoSelecionado
 }) {
 
     const [data, setData] = useState(null);
@@ -113,11 +116,29 @@ function MapaItem({
                 feature.properties
             );
 
-        layer.bindPopup(nome);
+        const valor =
+            Number(
+                feature.properties?.[campo]
+            );
 
-        layer.bindTooltip(nome, {
+        const valorFormatado =
+            Number.isFinite(valor)
+                ? valor.toLocaleString("pt-BR", {
+                    maximumFractionDigits: 2
+                })
+                : "Sem dados";
+
+        const conteudo =
+            `<strong>${nome}</strong><br/>` +
+            `Valor: <strong>${valorFormatado}</strong>`;
+
+        layer.bindPopup(conteudo);
+
+        layer.bindTooltip(conteudo, {
             permanent: false,
-            direction: "center"
+            direction: "top",
+            sticky: true,
+            className: "mapa-tooltip"
         });
 
     };
@@ -125,11 +146,145 @@ function MapaItem({
 
     return (
 
-        <div
-            style={{
-                marginTop: "10px"
-            }}
-        >
+        <>
+            <style>{`
+                .mapa-tipos {
+                    position: absolute;
+                    top: 110px;
+                    left: 20px;
+                    z-index: 1000;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .mapa-filtros {
+                    display: flex;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                    align-items: flex-end;
+                    margin-top: 20px;
+                    margin-bottom: 15px;
+                }
+
+                .mapa-filtro {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                }
+
+                .mapa-filtro label {
+                    font-size: 11px;
+                    font-weight: 800;
+                    color: #0f766e;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    padding-left: 3px;
+                }
+
+                .mapa-filtro select {
+                    min-width: 145px;
+                    padding: 10px 34px 10px 12px;
+                    border: 1px solid #d5dddd;
+                    border-radius: 9px;
+                    background: white;
+                    color: #183b3a;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    outline: none;
+                    box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+                    transition: all 0.2s ease;
+                }
+
+                .mapa-filtro select:hover,
+                .mapa-filtro select:focus {
+                    border-color: #0f766e;
+                    box-shadow: 0 3px 10px rgba(15,118,110,0.16);
+                }
+
+                .mapa-tipo-btn {
+                    min-width: 175px;
+                    padding: 13px 18px;
+                    border: 0;
+                    border-radius: 12px;
+                    background: rgba(255,255,255,0.96);
+                    color: #183b3a;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 15px;
+                    font-weight: 700;
+                    text-align: left;
+                    cursor: pointer;
+                    box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+                    transition: all 0.2s ease;
+                }
+
+                .mapa-tipo-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+                }
+
+                .mapa-tipo-btn.ativo {
+                    background: #0f766e;
+                    color: white;
+                    box-shadow: 0 5px 18px rgba(15,118,110,0.38);
+                }
+
+                .mapa-tipo-icone {
+                    font-size: 22px;
+                    line-height: 1;
+                }
+
+                .mapa-tooltip {
+                    border: 0 !important;
+                    border-radius: 10px !important;
+                    padding: 9px 12px !important;
+                    box-shadow: 0 4px 14px rgba(0,0,0,0.25) !important;
+                    font-size: 13px !important;
+                    line-height: 1.4 !important;
+                }
+
+                @media (max-width: 700px) {
+                    .mapa-tipos {
+                        top: 52px;
+                        left: 12px;
+                        gap: 7px;
+                    }
+
+                    .mapa-tipo-btn {
+                        min-width: 145px;
+                        padding: 10px 13px;
+                        font-size: 13px;
+                        border-radius: 10px;
+                    }
+
+                    .mapa-tipo-icone {
+                        font-size: 19px;
+                    }
+
+                    .mapa-filtros {
+                        gap: 8px;
+                    }
+
+                    .mapa-filtro select {
+                        min-width: 130px;
+                        font-size: 13px;
+                        padding: 9px 30px 9px 10px;
+                    }
+
+                    .mapa-filtro label {
+                        font-size: 10px;
+                    }
+                }
+            `}</style>
+
+            <div
+                style={{
+                    marginTop: "10px"
+                }}
+            >
 
             <h3
                 style={{
@@ -153,6 +308,27 @@ function MapaItem({
                     borderRadius: "10px"
                 }}
             >
+
+                {/* BOTÕES DE TIPO - DENTRO DO MAPA */}
+                <div className="mapa-tipos">
+                    {tipos.map((tipo) => (
+                        <button
+                            key={tipo}
+                            type="button"
+                            className={`mapa-tipo-btn ${
+                                tipoSelecionado === tipo ? "ativo" : ""
+                            }`}
+                            onClick={() => setTipoSelecionado(tipo)}
+                        >
+                            <span className="mapa-tipo-icone">
+                                {String(tipo).toLowerCase().includes("precip")
+                                    ? "🌧️"
+                                    : "🌡️"}
+                            </span>
+                            <span>{tipo}</span>
+                        </button>
+                    ))}
+                </div>
 
                 {data && (
 
@@ -237,6 +413,8 @@ function MapaItem({
             </MapContainer>
 
         </div>
+
+        </>
 
     );
 
@@ -833,9 +1011,8 @@ function Mapas_climatologia() {
                 </h1>
 
                 <p>
-                    Visualização das projeções
-                    climáticas para a
-                    Guiné-Bissau.
+                    Visualização das projeções climáticas para a Guiné-Bissau 
+                    a partir dos dados do Climate Knowledge Portal do Banco Mundial.
                 </p>
 
             </div>
@@ -849,57 +1026,11 @@ function Mapas_climatologia() {
                 }}
             >
 
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "10px",
-                        flexWrap: "wrap",
-                        marginTop: "20px",
-                        marginBottom: "15px"
-                    }}
-                >
+                <div className="mapa-filtros">
 
-                  
-                   
-                   {/* TIPO */}
-
-                    <select
-                        value={tipoSelecionado}
-                        onChange={(e) => {
-
-                            setTipoSelecionado(
-                                e.target.value
-                            );
-
-                            setIndicadorSelecionado("");
-                            setFiltroPeriodo("");
-                            setFiltroSSP("");
-                            setFiltroPercentil("");
-
-                        }}
-                        style={{
-                            padding: "10px",
-                            borderRadius: "8px",
-                            border:
-                                "1px solid #ccc"
-                        }}
-                    >
-
-                        {tipos.map(
-                            (tipo) => (
-
-                                <option
-                                    key={tipo}
-                                    value={tipo}
-                                >
-                                    {tipo}
-                                </option>
-
-                            )
-                        )}
-
-                    </select>
-                    <select
+                    <div className="mapa-filtro">
+                        <label>Indicador</label>
+                        <select
                         value={
                             indicadorSelecionado
                         }
@@ -936,11 +1067,11 @@ function Mapas_climatologia() {
                         )}
 
                     </select>
+                    </div>
 
-
-                    {/* PERÍODO */}
-
-                    <select
+                    <div className="mapa-filtro">
+                        <label>Período</label>
+                        <select
                         value={
                             filtroPeriodo
                         }
@@ -977,11 +1108,11 @@ function Mapas_climatologia() {
                         )}
 
                     </select>
+                    </div>
 
-
-                    {/* SSP */}
-
-                    <select
+                    <div className="mapa-filtro">
+                        <label>Cenário</label>
+                        <select
                         value={
                             filtroSSP
                         }
@@ -1018,11 +1149,11 @@ function Mapas_climatologia() {
                         )}
 
                     </select>
+                    </div>
 
-
-                    {/* PERCENTIL */}
-
-                    <select
+                    <div className="mapa-filtro">
+                        <label>Percentil</label>
+                        <select
                         value={
                             filtroPercentil
                         }
@@ -1061,10 +1192,13 @@ function Mapas_climatologia() {
                         )}
 
                     </select>
+                    </div>
 
                 </div>
 
             </div>
+
+            
 
 
             {/* MAPA */}
@@ -1083,11 +1217,23 @@ function Mapas_climatologia() {
                     }
 
                     titulo={
-                        mapaAtual.campo
+                         mapaAtual.titulo_pt
                     }
 
                     classificacoes={
                         classificacoes
+                    }
+
+                    tipos={
+                        tipos
+                    }
+
+                    tipoSelecionado={
+                        tipoSelecionado
+                    }
+
+                    setTipoSelecionado={
+                        setTipoSelecionado
                     }
                 />
 

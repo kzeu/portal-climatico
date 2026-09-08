@@ -404,6 +404,11 @@ function Admin_cards() {
                   Mitigação
                 </option>
 
+
+                <option value="seguimento_nap">
+                  Seguimento do NAP
+                </option>
+
               </select>
 
             </div>

@@ -4,21 +4,15 @@ import logo from "../assets/logo2-.png";
 function Menu({ setPage }) {
 
   const [menuMobile, setMenuMobile] = useState(false);
-  const [open, setOpen] = useState(null);
-
-  const toggleMenu = (name) => {
-    setOpen(open === name ? null : name);
-  };
+  
 
   const go = (page) => {
 
-    setPage(page);
+  setPage(page);
 
-    setOpen(null);
+  setMenuMobile(false);
 
-    setMenuMobile(false);
-
-  };
+};
 
   const abrirAdmin = () => {
 
@@ -97,47 +91,17 @@ function Menu({ setPage }) {
 
           {/* ADAPTAÇÃO */}
 
-          <div className="menu-item">
+        
 
-            <span
+            <div className="menu-item menu-dropdown">
 
-              onClick={() => {
+              <span onClick={() => go("adaptacao")}>
+                ADAPTAÇÃO
 
-                go("adaptacao");
-
-                setOpen(
-
-                  open === "adaptacao"
-
-                    ? null
-
-                    : "adaptacao"
-
-                );
-
-              }}
-
-            >
-
-              ADAPTAÇÃO
-
-              <span
-
-                className={`arrow ${
-                  open === "adaptacao"
-                    ? "open"
-                    : ""
-                }`}
-
-              >
-
-                ▾
-
+                <span className="arrow">
+                  ▾
+                </span>
               </span>
-
-            </span>
-
-            {open === "adaptacao" && (
 
               <div className="submenu">
 
@@ -146,9 +110,7 @@ function Menu({ setPage }) {
                     go("seguimento_nap")
                   }
                 >
-
                   Seguimento do NAP
-
                 </div>
 
                 <div
@@ -156,9 +118,7 @@ function Menu({ setPage }) {
                     go("mapas_climatologia")
                   }
                 >
-
                   Mapas de Climatologia
-
                 </div>
 
                 <div
@@ -166,16 +126,12 @@ function Menu({ setPage }) {
                     go("mapas_riscos")
                   }
                 >
-
                   Mapas de risco climático
-
                 </div>
 
               </div>
 
-            )}
-
-          </div>
+            </div>
 
           {/* MITIGAÇÃO */}
 
@@ -193,56 +149,33 @@ function Menu({ setPage }) {
 
           </div>
 
-          {/* ENGAJAMENTO */}
+        
+          
+                {/* ENGAJAMENTO */}
 
-          <div className="menu-item">
+                <div className="menu-item menu-dropdown">
 
-            <span
-              onClick={() =>
-                toggleMenu(
-                  "engajamento"
-                )
-              }
-            >
+                  <span>
+                    ENGAJAMENTO
 
-              ENGAJAMENTO
+                    <span className="arrow">
+                      ▾
+                    </span>
+                  </span>
 
-              <span
+                  <div className="submenu">
 
-                className={`arrow ${
-                  open === "engajamento"
-                    ? "open"
-                    : ""
-                }`}
+                    <div
+                      onClick={() =>
+                        go("form_submissao")
+                      }
+                    >
+                      Submissões de Ações Climáticas
+                    </div>
 
-              >
+                  </div>
 
-                ▾
-
-              </span>
-
-            </span>
-
-           {open === "engajamento" && (
-
-              <div className="submenu">
-
-                <div
-                  onClick={() =>
-                    go("form_submissao")
-                  }
-                >
-                  Submissões de Ações Climáticas
                 </div>
-
-
-
-
-              </div>
-
-            )}
-
-          </div>
 
           {/* BIBLIOTECA */}
 

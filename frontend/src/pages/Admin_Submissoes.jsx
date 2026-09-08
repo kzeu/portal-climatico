@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-
-const API_URL = "http://localhost:3000";
+import API_URL from "../config";
 
 export default function Admin_Submissoes() {
 
@@ -204,7 +203,7 @@ async function aprovarSubmissao() {
         ) {
 
             mensagem =
-                "Submissão aprovada. Calendário, Card e Biblioteca criados como não publicados.";
+                "Submissão aprovada. Calendário, Card e Biblioteca criados e publicados.";
 
         }
 
@@ -214,7 +213,7 @@ async function aprovarSubmissao() {
         ) {
 
             mensagem =
-                "Submissão aprovada. Calendário e Card criados como não publicados.";
+                "Submissão aprovada. Calendário e Card criados e publicados.";
 
         }
 
@@ -223,7 +222,7 @@ async function aprovarSubmissao() {
         ) {
 
             mensagem =
-                "Submissão aprovada. Item criado na Biblioteca como não publicado.";
+                "Submissão aprovada. Item criado na Biblioteca e publicado.";
 
         }
 

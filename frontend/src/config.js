@@ -1,6 +1,5 @@
-const API_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "https://SEU-BACKEND.onrender.com";
+const API_URL = import.meta.env.DEV
+  ? "http://localhost:3000"
+  : "";
 
 export default API_URL;

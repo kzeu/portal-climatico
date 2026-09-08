@@ -474,13 +474,15 @@ app.post(
 
           imagem_card,
 
-          pagina_detalhe
+          pagina_detalhe,
+
+          origem
 
         )
 
         VALUES
         (
-          $1,$2,$3,$4,$5,$6,$7,$8
+          $1,$2,$3,$4,$5,$6,$7,$8,$9
         )
 
         RETURNING *
@@ -502,7 +504,9 @@ app.post(
 
           imagem,
 
-          pagina_detalhe === "sim"
+          pagina_detalhe === "sim",
+
+          "admin"
 
         ]
 
@@ -2269,17 +2273,15 @@ app.post(
                COLUNAS OBRIGATÓRIAS
             ===================================================== */
 
-            const colunasObrigatorias = [
-
-                "map_code",
-                "variable_full",
-                "variable_short",
-                "period",
-                "scenario",
-                "uncertainty"
-
-            ];
-
+                  const colunasObrigatorias = [
+                    "map_code",
+                    "variable_full",
+                    "variable_short",
+                    "period",
+                    "scenario",
+                    "uncertainty",
+                    "Titulo_pt"
+                ];
 
             const primeiraLinha =
                 linhas[0];
@@ -2323,39 +2325,28 @@ app.post(
                         index + 2;
 
 
-                    const registro = {
+                                    const registro = {
+                      map_code:
+                          String(linha.map_code || "").trim(),
 
-                        map_code:
-                            String(
-                                linha.map_code || ""
-                            ).trim(),
+                      variable_full:
+                          String(linha.variable_full || "").trim(),
 
-                        variable_full:
-                            String(
-                                linha.variable_full || ""
-                            ).trim(),
+                      variable_short:
+                          String(linha.variable_short || "").trim(),
 
-                        variable_short:
-                            String(
-                                linha.variable_short || ""
-                            ).trim(),
+                      titulo_pt:
+                          String(linha.Titulo_pt || "").trim(),
 
-                        period:
-                            String(
-                                linha.period || ""
-                            ).trim(),
+                      period:
+                          String(linha.period || "").trim(),
 
-                        scenario:
-                            String(
-                                linha.scenario || ""
-                            ).trim(),
+                      scenario:
+                          String(linha.scenario || "").trim(),
 
-                        uncertainty:
-                            String(
-                                linha.uncertainty || ""
-                            ).trim()
-
-                    };
+                      uncertainty:
+                          String(linha.uncertainty || "").trim()
+                  };
 
 
                     /* MAP_CODE É OBRIGATÓRIO */
@@ -2508,38 +2499,36 @@ app.post(
 
                     await client.query(
                         `
-                        INSERT INTO
-                            climate_map_metadata
-                        (
-                            map_code,
-                            variable_full,
-                            variable_short,
-                            period,
-                            scenario,
-                            uncertainty
-                        )
-                        VALUES
-                        (
-                            $1,
-                            $2,
-                            $3,
-                            $4,
-                            $5,
-                            $6
-                        )
+                      INSERT INTO
+                          climate_map_metadata
+                      (
+                          map_code,
+                          variable_full,
+                          variable_short,
+                          titulo_pt,
+                          period,
+                          scenario,
+                          uncertainty
+                      )
+                      VALUES
+                      (
+                          $1,
+                          $2,
+                          $3,
+                          $4,
+                          $5,
+                          $6,
+                          $7
+                      )
                         `,
                         [
 
-                            registro.map_code,
-
+                           registro.map_code,
                             registro.variable_full,
-
                             registro.variable_short,
-
+                            registro.titulo_pt,
                             registro.period,
-
                             registro.scenario,
-
                             registro.uncertainty
 
                         ]
@@ -2649,6 +2638,7 @@ app.get("/clima/mapas-filtros", async (req, res) => {
                 m.period,
                 m.scenario,
                 m.uncertainty,
+                 m.titulo_pt,
 
                 cm.id AS mapa_id,
                 cm.indicador_id,
@@ -3330,6 +3320,34 @@ app.post(
          SUBMISSÃO
          ===================================================== */
 
+      const configCard = {
+        pagina: paginaCardFinal,
+        tipo_link: tipoLinkFinal,
+        link_externo: linkExternoFinal,
+        titulo_pagina: titulo_pagina || null,
+        texto_pagina: texto_pagina || null,
+        data_publicacao_pagina: dataPaginaFinal,
+        imagem_card_index: imagem_card_index || null,
+        area_projeto: req.body.area_projeto || null,
+        parceiros: req.body.parceiros || null,
+        objetivo_projeto: req.body.objetivo_projeto || null,
+        tipo_conteudo_outro: req.body.tipo_conteudo_outro || null,
+        objetivo_outro: req.body.objetivo_outro || null,
+        descricao_outro: req.body.descricao_outro || null,
+        observacoes_outro: req.body.observacoes_outro || null
+      };
+
+      const configBiblioteca = {
+        link: bibliotecaLinkFinal,
+        area_projeto: req.body.area_projeto || null,
+        parceiros: req.body.parceiros || null,
+        objetivo_projeto: req.body.objetivo_projeto || null,
+        tipo_conteudo_outro: req.body.tipo_conteudo_outro || null,
+        objetivo_outro: req.body.objetivo_outro || null,
+        descricao_outro: req.body.descricao_outro || null,
+        observacoes_outro: req.body.observacoes_outro || null
+      };
+
       const resultado = await client.query(
         `
         INSERT INTO submissoes_climaticas
@@ -3360,51 +3378,14 @@ app.post(
           motivo_publicacao,
           descricao_documento,
           tags,
-          pagina_card,
-          tipo_link,
-          link_externo,
-          titulo_pagina,
-          texto_pagina,
-          data_publicacao_pagina,
-          imagem_card_index,
-          biblioteca_link
+          destinos_publicacao,
+          config_card,
+          config_biblioteca
         )
         VALUES
         (
-          $1,
-          $2,
-          $3,
-          $4,
-          $5,
-          $6,
-          $7,
-          $8,
-          $9,
-          $10,
-          $11,
-          $12,
-          $13,
-          $14,
-          $15,
-          $16,
-          $17,
-          $18,
-          $19,
-          $20,
-          $21,
-          $22,
-          $23,
-          $24,
-          $25,
-          $26,
-          $27,
-          $28,
-          $29,
-          $30,
-          $31,
-          $32,
-          $33,
-          $34
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,
+          $16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29
         )
         RETURNING *
         `,
@@ -3412,8 +3393,8 @@ app.post(
           email,
           tipo_proponente,
           nome_responsavel,
-          entidade,
-          cargo,
+          entidade || null,
+          cargo || null,
           website || null,
           tipo_submissao,
           paginaCardFinal,
@@ -3435,14 +3416,9 @@ app.post(
           motivo_publicacao || null,
           descricao_documento || null,
           tags || null,
-          paginaCardFinal,
-          tipoLinkFinal,
-          linkExternoFinal,
-          titulo_pagina || null,
-          texto_pagina || null,
-          dataPaginaFinal,
-          imagem_card_index || null,
-          bibliotecaLinkFinal
+          destinos,
+          JSON.stringify(configCard),
+          JSON.stringify(configBiblioteca)
         ]
       );
 
@@ -3629,6 +3605,32 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 
     const submissao = resultado.rows[0];
 
+    const configCard = submissao.config_card || {};
+    const configBiblioteca = submissao.config_biblioteca || {};
+
+    const paginaCard =
+      configCard.pagina || submissao.pagina || "home";
+
+    const tipoLink =
+      configCard.tipo_link === "externo" ? "externo" : "interno";
+
+    const linkExterno = configCard.link_externo || null;
+
+    const tituloPagina =
+      configCard.titulo_pagina || submissao.titulo;
+
+    const textoPagina =
+      configCard.texto_pagina || submissao.descricao;
+
+    const dataPublicacaoPagina =
+      configCard.data_publicacao_pagina ||
+      submissao.data_publicacao ||
+      submissao.data_inicio ||
+      null;
+
+    const bibliotecaLink =
+      configBiblioteca.link || null;
+
     const statusAtual =
       String(submissao.status || "")
         .trim()
@@ -3698,8 +3700,8 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     let primeiraImagem = null;
 
     const indiceImagemCard =
-      Number.isInteger(Number(submissao.imagem_card_index))
-        ? Number(submissao.imagem_card_index)
+      Number.isInteger(Number(configCard.imagem_card_index))
+        ? Number(configCard.imagem_card_index)
         : -1;
 
     if (
@@ -3744,11 +3746,6 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
        ===================================================== */
 
     if (destinos.includes("card")) {
-      const paginaCard =
-        submissao.pagina_card ||
-        submissao.pagina ||
-        "home";
-
       const paginasPermitidas = [
         "home",
         "adaptacao",
@@ -3762,14 +3759,9 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
         );
       }
 
-      const tipoLink =
-        submissao.tipo_link === "externo"
-          ? "externo"
-          : "interno";
-
       const linkCard =
         tipoLink === "externo"
-          ? submissao.link_externo
+          ? linkExterno
           : paginaCard;
 
       if (!linkCard) {
@@ -3782,14 +3774,10 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
         tipoLink === "interno";
 
       const tituloCard =
-        ehPaginaInterna && submissao.titulo_pagina
-          ? submissao.titulo_pagina
-          : submissao.titulo;
+        ehPaginaInterna ? tituloPagina : submissao.titulo;
 
       const conteudoCard =
-        ehPaginaInterna && submissao.texto_pagina
-          ? submissao.texto_pagina
-          : submissao.descricao;
+        ehPaginaInterna ? textoPagina : submissao.descricao;
 
       const card = await client.query(
         `
@@ -3803,11 +3791,12 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
           ordem,
           imagem_card,
           pagina_detalhe,
-          ativo
+          ativo,
+          origem
         )
         VALUES
         (
-          $1,$2,$3,$4,$5,$6,$7,$8,$9
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10
         )
         RETURNING id
         `,
@@ -3820,7 +3809,8 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
           0,
           caminhoImagem,
           ehPaginaInterna,
-          false
+          true,
+          "submissao"
         ]
       );
 
@@ -3846,12 +3836,9 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
           `,
           [
             cardId,
-            submissao.titulo_pagina || submissao.titulo,
-            submissao.texto_pagina || submissao.descricao,
-            submissao.data_publicacao_pagina ||
-              submissao.data_publicacao ||
-              submissao.data_inicio ||
-              null
+            tituloPagina,
+            textoPagina,
+            dataPublicacaoPagina
           ]
         );
 
@@ -3864,8 +3851,8 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 
         const imagens = arquivos
           .filter(arquivo =>
-            String(arquivo.tipo_mime || "")
-              .startsWith("image/")
+            String(arquivo.tipo_mime || "").startsWith("image/") &&
+            (!primeiraImagem || arquivo.id !== primeiraImagem.id)
           )
           .slice(0, 5);
 
@@ -3936,12 +3923,12 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
           submissao.data_publicacao ||
             submissao.data_inicio ||
             null,
-          submissao.biblioteca_link || null,
+          bibliotecaLink,
           null,
           0,
           caminhoDocumento,
           nomeDocumento,
-          false
+          true
         ]
       );
 
@@ -3999,7 +3986,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
           submissao.entidade || null,
           submissao.nome_responsavel || null,
           submissao.email || null,
-          false
+          true
         ]
       );
 
@@ -4009,9 +3996,8 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     /* =====================================================
        MARCAR SUBMISSÃO COMO APROVADA
 
-       Os campos publicado_cards / publicado_biblioteca
-       significam que o destino foi criado.
-       A publicação real continua dependendo do ativo=false.
+       Como a aprovação já publica o conteúdo, os destinos
+       são criados diretamente com ativo=true.
        ===================================================== */
 
     await client.query(
@@ -4028,8 +4014,8 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
       [
         "aprovado",
         usuario_aprovador || "admin",
-        false,
-        false,
+        destinos.includes("card"),
+        destinos.includes("biblioteca"),
         id
       ]
     );
@@ -4044,7 +4030,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
       card_id: cardId,
       biblioteca_id: bibliotecaId,
       destinos,
-      publicado: false
+      publicado: true
     });
   } catch (err) {
     try {
@@ -4256,6 +4242,43 @@ app.get(
     }
 );
 
+
+/* =========================
+   PUBLICAÇÕES
+   Cards vindos de submissões
+   ========================= */
+
+app.get("/publicacoes/:pagina", async (req, res) => {
+
+  try {
+
+    const pagina = req.params.pagina;
+
+    const resultado = await db.query(
+      `
+      SELECT *
+      FROM cards
+      WHERE pagina = $1
+      AND origem = 'submissao'
+      AND ativo = true
+      ORDER BY id DESC
+      `,
+      [pagina]
+    );
+
+    res.json(resultado.rows);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      erro: "Erro ao carregar publicações."
+    });
+
+  }
+
+});
 
 
 
