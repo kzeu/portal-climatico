@@ -90,6 +90,84 @@ const upload = multer({
   storage
 });
 
+const storageHero = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const pastaHero = path.join(
+      __dirname,
+      "..",
+      "frontend",
+      "public",
+      "images",
+      "hero"
+    );
+
+    fs.mkdirSync(pastaHero, { recursive: true });
+
+    cb(null, pastaHero);
+  },
+
+  filename: function (req, file, cb) {
+    const extensao = path.extname(file.originalname).toLowerCase();
+
+    const nomeArquivo =
+      "hero-" + Date.now() + extensao;
+
+    cb(null, nomeArquivo);
+  }
+});
+
+const uploadHero = multer({
+  storage: storageHero,
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  },
+  fileFilter: function (req, file, cb) {
+    const extensoesPermitidas = [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".webp"
+    ];
+
+    const extensao = path.extname(file.originalname).toLowerCase();
+
+    if (!extensoesPermitidas.includes(extensao)) {
+      return cb(new Error("Envie uma imagem JPG, PNG ou WEBP."));
+    }
+
+    cb(null, true);
+  }
+});
+
+/* =========================
+   UPLOAD DE PDFs DO RODAPÉ
+========================= */
+const pastaRodape = path.join(__dirname, "uploads", "rodape");
+fs.mkdirSync(pastaRodape, { recursive: true });
+
+const storageRodape = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, pastaRodape);
+  },
+  filename: function (req, file, cb) {
+    const campo = file.fieldname === "sobre_pdf" ? "sobre-portal" : "politica-privacidade";
+    cb(null, campo + "-" + Date.now() + ".pdf");
+  }
+});
+
+const uploadRodape = multer({
+  storage: storageRodape,
+  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter: function (req, file, cb) {
+    const extensao = path.extname(file.originalname).toLowerCase();
+    const tipoPdf = file.mimetype === "application/pdf" || extensao === ".pdf";
+    if (!tipoPdf || extensao !== ".pdf") {
+      return cb(new Error("Envie somente arquivos PDF."));
+    }
+    cb(null, true);
+  }
+});
+
 
 
 const storageMapas = multer.diskStorage({
@@ -4280,6 +4358,341 @@ app.get("/publicacoes/:pagina", async (req, res) => {
 
 });
 
+
+app.get("/banners-herois", async (req, res) => {
+  try {
+    const resultado = await db.query(`
+      SELECT *
+      FROM banners_herois
+      ORDER BY pagina, ordem, id
+    `);
+
+    res.json(resultado.rows);
+  } catch (erro) {
+    console.error("Erro ao consultar banners:", erro);
+    res.status(500).json({
+      erro: "Erro ao consultar banners e heróis."
+    });
+  }
+});
+
+
+
+app.post(
+  "/banners-herois",
+  uploadHero.single("imagem"),
+  async (req, res) => {
+    try {
+      const {
+        tipo,
+        pagina,
+        pequeno,
+        titulo,
+        texto,
+        botao_principal,
+        link_principal,
+        tipo_link_principal,
+        botao_secundario,
+        link_secundario,
+        tipo_link_secundario,
+        ordem,
+        ativo
+      } = req.body;
+
+      if (!tipo || !pagina || !titulo) {
+        return res.status(400).json({
+          erro: "Preencha tipo, página e título."
+        });
+      }
+
+      const imagem = req.file
+        ? `/images/hero/${req.file.filename}`
+        : req.body.imagem || null;
+
+      const resultado = await db.query(
+        `INSERT INTO banners_herois (
+          tipo, pagina, pequeno, titulo, texto, imagem,
+          botao_principal, link_principal, tipo_link_principal,
+          botao_secundario, link_secundario, tipo_link_secundario,
+          ordem, ativo
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
+        )
+        RETURNING *`,
+        [
+          tipo,
+          pagina,
+          pequeno || null,
+          titulo,
+          texto || null,
+          imagem,
+          botao_principal || null,
+          link_principal || null,
+          tipo_link_principal || "interno",
+          botao_secundario || null,
+          link_secundario || null,
+          tipo_link_secundario || "interno",
+          ordem ?? 0,
+          ativo === undefined
+            ? true
+            : ativo === true || ativo === "true"
+        ]
+      );
+
+      res.status(201).json(resultado.rows[0]);
+    } catch (erro) {
+      console.error("Erro ao salvar banner:", erro);
+
+      res.status(500).json({
+        erro: "Erro ao salvar banner ou herói."
+      });
+    }
+  }
+);
+
+
+
+
+
+app.put(
+  "/banners-herois/:id",
+  uploadHero.single("imagem"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const {
+        tipo,
+        pagina,
+        pequeno,
+        titulo,
+        texto,
+        botao_principal,
+        link_principal,
+        tipo_link_principal,
+        botao_secundario,
+        link_secundario,
+        tipo_link_secundario,
+        ordem,
+        ativo
+      } = req.body;
+
+      if (!tipo || !pagina || !titulo) {
+        return res.status(400).json({
+          erro: "Preencha tipo, página e título."
+        });
+      }
+
+      // Busca a imagem atual para preservá-la se não houver upload
+      const atual = await db.query(
+        "SELECT imagem FROM banners_herois WHERE id = $1",
+        [id]
+      );
+
+      if (atual.rows.length === 0) {
+        return res.status(404).json({
+          erro: "Banner ou herói não encontrado."
+        });
+      }
+
+      const imagem = req.file
+        ? `/images/hero/${req.file.filename}`
+        : atual.rows[0].imagem;
+
+      const resultado = await db.query(
+        `UPDATE banners_herois
+         SET tipo = $1,
+             pagina = $2,
+             pequeno = $3,
+             titulo = $4,
+             texto = $5,
+             imagem = $6,
+             botao_principal = $7,
+             link_principal = $8,
+             tipo_link_principal = $9,
+             botao_secundario = $10,
+             link_secundario = $11,
+             tipo_link_secundario = $12,
+             ordem = $13,
+             ativo = $14,
+             atualizado_em = NOW()
+         WHERE id = $15
+         RETURNING *`,
+        [
+          tipo,
+          pagina,
+          pequeno || null,
+          titulo,
+          texto || null,
+          imagem,
+          botao_principal || null,
+          link_principal || null,
+          tipo_link_principal || "interno",
+          botao_secundario || null,
+          link_secundario || null,
+          tipo_link_secundario || "interno",
+          ordem ?? 0,
+          ativo === undefined
+            ? true
+            : ativo === true || ativo === "true",
+          id
+        ]
+      );
+
+      res.json(resultado.rows[0]);
+    } catch (erro) {
+      console.error("Erro ao atualizar banner:", erro);
+
+      res.status(500).json({
+        erro: "Erro ao atualizar banner ou herói."
+      });
+    }
+  }
+);
+
+
+
+app.delete("/banners-herois/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const resultado = await db.query(
+      `DELETE FROM banners_herois
+       WHERE id = $1
+       RETURNING id`,
+      [id]
+    );
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({
+        erro: "Banner ou herói não encontrado."
+      });
+    }
+
+    res.json({
+      mensagem: "Banner ou herói excluído com sucesso.",
+      id: resultado.rows[0].id
+    });
+  } catch (erro) {
+    console.error("Erro ao excluir banner:", erro);
+    res.status(500).json({
+      erro: "Erro ao excluir banner ou herói."
+    });
+  }
+});
+
+
+
+
+
+/* =====================================================
+   CONFIGURAÇÕES DO RODAPÉ
+===================================================== */
+
+// Cria a tabela automaticamente caso ainda não exista.
+async function garantirTabelaConfiguracoesRodape() {
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS configuracoes_rodape (
+      id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+      sobre_texto TEXT NOT NULL DEFAULT 'Portal Climático da Guiné-Bissau',
+      sobre_pdf TEXT,
+      sobre_pdf_nome TEXT,
+      politica_pdf TEXT,
+      politica_pdf_nome TEXT,
+      facebook_url TEXT,
+      instagram_url TEXT,
+      linkedin_url TEXT,
+      email TEXT NOT NULL DEFAULT 'info@clima.gb',
+      telefone TEXT NOT NULL DEFAULT '+245 XXX XXX',
+      atualizado_em TIMESTAMP NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await db.query(`
+    INSERT INTO configuracoes_rodape (id)
+    VALUES (1)
+    ON CONFLICT (id) DO NOTHING
+  `);
+}
+
+app.get("/configuracoes/rodape", async (req, res) => {
+  try {
+    await garantirTabelaConfiguracoesRodape();
+    const resultado = await db.query(
+      "SELECT * FROM configuracoes_rodape WHERE id = 1"
+    );
+    res.json(resultado.rows[0] || {});
+  } catch (erro) {
+    console.error("Erro ao carregar configurações do rodapé:", erro);
+    res.status(500).json({ erro: "Não foi possível carregar as configurações do rodapé." });
+  }
+});
+
+app.put(
+  "/configuracoes/rodape",
+  uploadRodape.fields([
+    { name: "sobre_pdf", maxCount: 1 },
+    { name: "politica_pdf", maxCount: 1 }
+  ]),
+  async (req, res) => {
+    try {
+      await garantirTabelaConfiguracoesRodape();
+
+      const atualResult = await db.query(
+        "SELECT * FROM configuracoes_rodape WHERE id = 1"
+      );
+      const atual = atualResult.rows[0] || {};
+      const arquivos = req.files || {};
+
+      const sobrePdf = arquivos.sobre_pdf?.[0]
+        ? "/uploads/rodape/" + arquivos.sobre_pdf[0].filename
+        : (atual.sobre_pdf || null);
+      const sobrePdfNome = arquivos.sobre_pdf?.[0]
+        ? arquivos.sobre_pdf[0].originalname
+        : (atual.sobre_pdf_nome || null);
+      const politicaPdf = arquivos.politica_pdf?.[0]
+        ? "/uploads/rodape/" + arquivos.politica_pdf[0].filename
+        : (atual.politica_pdf || null);
+      const politicaPdfNome = arquivos.politica_pdf?.[0]
+        ? arquivos.politica_pdf[0].originalname
+        : (atual.politica_pdf_nome || null);
+
+      const resultado = await db.query(
+        `UPDATE configuracoes_rodape
+         SET sobre_texto = $1,
+             sobre_pdf = $2,
+             sobre_pdf_nome = $3,
+             politica_pdf = $4,
+             politica_pdf_nome = $5,
+             facebook_url = $6,
+             instagram_url = $7,
+             linkedin_url = $8,
+             email = $9,
+             telefone = $10,
+             atualizado_em = NOW()
+         WHERE id = 1
+         RETURNING *`,
+        [
+          (req.body.sobre_texto || "").trim() || "Portal Climático da Guiné-Bissau",
+          sobrePdf,
+          sobrePdfNome,
+          politicaPdf,
+          politicaPdfNome,
+          (req.body.facebook_url || "").trim() || null,
+          (req.body.instagram_url || "").trim() || null,
+          (req.body.linkedin_url || "").trim() || null,
+          (req.body.email || "").trim() || "info@clima.gb",
+          (req.body.telefone || "").trim() || "+245 XXX XXX"
+        ]
+      );
+
+      res.json({ sucesso: true, configuracoes: resultado.rows[0] });
+    } catch (erro) {
+      console.error("Erro ao salvar configurações do rodapé:", erro);
+      res.status(500).json({ erro: erro.message || "Não foi possível salvar as configurações do rodapé." });
+    }
+  }
+);
 
 
 /* =========================

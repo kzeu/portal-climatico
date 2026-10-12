@@ -1,4 +1,5 @@
 import "../App.css";
+import HeroDinamico from "../components/HeroDinamico";
 import { useEffect, useState } from "react";
 import API_URL from "../config";
 
@@ -41,22 +42,8 @@ function Mitigacao({
 
     <div className="content" id="content">
 
-      {/* HERO */}
-
-      <div className="hero">
-
-        <h1>
-          Portal Climático da Guiné-Bissau
-        </h1>
-
-        <p>
-
-         A mitigação é importante para a Guiné-Bissau ao reduzir emissões e promover um desenvolvimento sustentável. 
-         Mesmo com baixas emissões, ações em florestas, energia e uso da terra são essenciais e abrem acesso a financiamento climático.
-
-        </p>
-
-      </div>
+      {/* HERO — conteúdo carregado do cadastro Banners e Heros */}
+      <HeroDinamico pagina="mitigacao" setPage={setPage} setPaginaAnterior={setPaginaAnterior} />
 
       {/* CARDS */}
 

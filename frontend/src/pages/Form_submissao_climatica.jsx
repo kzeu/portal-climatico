@@ -515,9 +515,114 @@ function Form_submissao_climatica() {
             id="content"
         >
 
+            {/* CAIXA EXPLICATIVA */}
+            <section
+                aria-label="Orientações para submissão climática"
+                style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "16px",
+                    padding: "20px 22px",
+                    marginBottom: "10px",
+                    background: "#ffffff",
+                    border: "1px solid #dce7e8",
+                    borderLeft: "5px solid #0f766e",
+                    borderRadius: "12px",
+                    boxShadow: "0 3px 12px rgba(15, 23, 42, 0.05)"
+                }}
+            >
+                <div
+                    aria-hidden="true"
+                    style={{
+                        flexShrink: 0,
+                        width: "44px",
+                        height: "44px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: "12px",
+                        background: "#e6f4f1",
+                        fontSize: "23px"
+                    }}
+                >
+                    🌍
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <h2
+                        style={{
+                            margin: "0 0 7px",
+                            color: "#164e4a",
+                            fontSize: "19px"
+                        }}
+                    >
+                        Compartilhe iniciativas e conhecimentos climáticos
+                    </h2>
+
+                    <p
+                        style={{
+                            margin: "0 0 12px",
+                            color: "#475569",
+                            lineHeight: 1.6,
+                            fontSize: "14px"
+                        }}
+                    >
+                        Utilize este formulário para enviar eventos, projetos, publicações,
+                        relatórios, mapas, bases de dados e outras informações relacionadas
+                        às mudanças climáticas na Guiné-Bissau.
+                    </p>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "8px",
+                            marginBottom: "10px"
+                        }}
+                    >
+                        {[
+                            ["📋", "Preencha os dados obrigatórios"],
+                            ["📎", "Anexe documentos ou imagens, quando necessário"],
+                            ["🔎", "A submissão será analisada antes da publicação"]
+                        ].map(([icone, texto]) => (
+                            <div
+                                key={texto}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "7px",
+                                    padding: "8px 10px",
+                                    borderRadius: "8px",
+                                    background: "#f3f8f8",
+                                    color: "#334155",
+                                    fontSize: "12px",
+                                    lineHeight: 1.4
+                                }}
+                            >
+                                <span aria-hidden="true">{icone}</span>
+                                <span>{texto}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <p
+                        style={{
+                            margin: 0,
+                            color: "#64748b",
+                            fontSize: "12px",
+                            lineHeight: 1.5
+                        }}
+                    >
+                        Antes de enviar, confira os dados e os links. O envio não significa
+                        publicação automática; o conteúdo depende de análise e aprovação.
+                    </p>
+                </div>
+            </section>
+
             <form
                 className="form-container"
                 onSubmit={salvar}
+                style={{ marginTop: "0" }}
             >
 
 

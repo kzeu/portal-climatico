@@ -4,6 +4,7 @@ import logo from "../assets/logo2-.png";
 function Menu({ setPage }) {
 
   const [menuMobile, setMenuMobile] = useState(false);
+  const [dropdownAberto, setDropdownAberto] = useState(null);
   
 
   const go = (page) => {
@@ -93,9 +94,25 @@ function Menu({ setPage }) {
 
         
 
-            <div className="menu-item menu-dropdown">
+            <div
+              className={`menu-item menu-dropdown ${
+                dropdownAberto === "adaptacao" ? "open" : ""
+              }`}
+            >
 
-              <span onClick={() => go("adaptacao")}>
+              <span
+                onClick={() => {
+                  if (window.innerWidth <= 768) {
+                    setDropdownAberto(
+                      dropdownAberto === "adaptacao"
+                        ? null
+                        : "adaptacao"
+                    );
+                  } else {
+                    go("adaptacao");
+                  }
+                }}
+              >
                 ADAPTAÇÃO
 
                 <span className="arrow">
@@ -105,27 +122,15 @@ function Menu({ setPage }) {
 
               <div className="submenu">
 
-                <div
-                  onClick={() =>
-                    go("seguimento_nap")
-                  }
-                >
+                <div onClick={() => go("seguimento_nap")}>
                   Seguimento do NAP
                 </div>
 
-                <div
-                  onClick={() =>
-                    go("mapas_climatologia")
-                  }
-                >
+                <div onClick={() => go("mapas_climatologia")}>
                   Mapas de Climatologia
                 </div>
 
-                <div
-                  onClick={() =>
-                    go("mapas_riscos")
-                  }
-                >
+                <div onClick={() => go("mapas_riscos")}>
                   Mapas de risco climático
                 </div>
 
@@ -153,9 +158,25 @@ function Menu({ setPage }) {
           
                 {/* ENGAJAMENTO */}
 
-                <div className="menu-item menu-dropdown">
+                <div
+                  className={`menu-item menu-dropdown ${
+                    dropdownAberto === "engajamento" ? "open" : ""
+                  }`}
+                >
 
-                  <span>
+                  <span
+                    onClick={() => {
+                      if (window.innerWidth <= 768) {
+                        setDropdownAberto(
+                          dropdownAberto === "engajamento"
+                            ? null
+                            : "engajamento"
+                        );
+                      } else {
+                        go("engajamento");
+                      }
+                    }}
+                  >
                     ENGAJAMENTO
 
                     <span className="arrow">
@@ -165,11 +186,7 @@ function Menu({ setPage }) {
 
                   <div className="submenu">
 
-                    <div
-                      onClick={() =>
-                        go("form_submissao")
-                      }
-                    >
+                    <div onClick={() => go("form_submissao")}>
                       Submissões de Ações Climáticas
                     </div>
 

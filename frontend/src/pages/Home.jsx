@@ -18,11 +18,10 @@ function Home({
 
   // =========================================================
   // HERO
-  // Por enquanto está fixo.
-  // Depois vamos buscar estes dados do banco pelo Admin.
+  // Conteúdo de reserva caso ainda não existam slides ativos no cadastro.
   // =========================================================
 
-  const heroSlides = [
+  const slidesPadrao = [
 
     {
       id: 1,
@@ -131,6 +130,66 @@ function Home({
 
   ];
 
+
+  const [heroSlides, setHeroSlides] = useState(slidesPadrao);
+
+  // Carrega os slides cadastrados no mesmo painel Banners e Heros.
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarSlidesHome() {
+      try {
+        const response = await fetch(`${API_URL}/banners-herois`);
+        if (!response.ok) {
+          throw new Error("Não foi possível carregar os slides da Home.");
+        }
+
+        const dados = await response.json();
+        const slides = dados
+          .filter((item) =>
+            item.tipo === "slide" &&
+            item.pagina === "home" &&
+            (item.ativo === true || item.ativo === 1 ||
+              item.ativo === "1" || item.ativo === "true")
+          )
+          .sort((a, b) => Number(a.ordem || 0) - Number(b.ordem || 0))
+          .map((item) => ({
+            id: item.id,
+            imagem: item.imagem || "",
+            pequeno: item.pequeno || "",
+            titulo: item.titulo || "",
+            texto: item.texto || "",
+            botaoPrincipal: item.botao_principal || "",
+            linkPrincipal: item.link_principal || "",
+            tipoLinkPrincipal: item.tipo_link_principal || "interno",
+            botaoSecundario: item.botao_secundario || "",
+            linkSecundario: item.link_secundario || "",
+            tipoLinkSecundario: item.tipo_link_secundario || "interno"
+          }));
+
+        if (ativo && slides.length > 0) {
+          setHeroSlides(slides);
+          setSlideAtual(0);
+        }
+      } catch (erro) {
+        console.error("Erro ao carregar slides da Home:", erro);
+        // Mantém os slides padrão para a Home não ficar vazia se a API falhar.
+      }
+    }
+
+    carregarSlidesHome();
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  function obterImagemHero(imagem) {
+    if (!imagem) return "";
+    if (imagem.startsWith("http://") || imagem.startsWith("https://")) {
+      return imagem;
+    }
+    return `${window.location.origin}${imagem.startsWith("/") ? "" : "/"}${imagem}`;
+  }
 
   // =========================================================
   // SLIDE ATUAL
@@ -258,14 +317,16 @@ function Home({
   // IR PARA UMA PÁGINA
   // =========================================================
 
-  function navegarHero(link) {
-
+  function navegarHero(link, tipoLink = "interno") {
     if (!link) return;
 
+    if (tipoLink === "externo" || link.startsWith("http://") || link.startsWith("https://")) {
+      window.open(link, "_blank", "noopener,noreferrer");
+      return;
+    }
+
     setPaginaAnterior("home");
-
     setPage(link);
-
   }
 
 
@@ -288,7 +349,9 @@ function Home({
       <section
         className="home-hero"
         style={{
-          backgroundImage: `url("${slide.imagem}")`
+          backgroundImage: slide.imagem
+            ? `url("${obterImagemHero(slide.imagem)}")`
+            : undefined
         }}
       >
 
@@ -333,7 +396,7 @@ function Home({
 
               <button
                 className="home-hero-btn primary"
-                onClick={() => navegarHero(slide.linkPrincipal)}
+                onClick={() => navegarHero(slide.linkPrincipal, slide.tipoLinkPrincipal)}
               >
 
                 {slide.botaoPrincipal}
@@ -345,7 +408,7 @@ function Home({
 
               <button
                 className="home-hero-btn secondary"
-                onClick={() => navegarHero(slide.linkSecundario)}
+                onClick={() => navegarHero(slide.linkSecundario, slide.tipoLinkSecundario)}
               >
 
                 {slide.botaoSecundario}
@@ -551,110 +614,57 @@ function Home({
         </div>
 
 
-        <div className="cards">
-
-
-          {cards.map((card) => (
-
-            <div
-              className="card"
-              key={card.id}
-            >
-
-
-              {/* IMAGEM */}
-
-              {card.imagem_card && (
-
-                <img
-                  src={`${API_URL}/uploads/${card.imagem_card}`}
-                  alt={card.titulo}
-                  className="card-image"
-                />
-
-              )}
-
-
-              {/* TITULO */}
-
-              <div className="card-header">
-
-                {card.titulo}
-
-              </div>
-
-
-              {/* TEXTO */}
-
-              <div className="card-body">
-
-                {card.conteudo?.length > 150
-
-                  ? card.conteudo.substring(0, 150) + "..."
-
-                  : card.conteudo}
-
-              </div>
-
-
-              {/* BOTÃO */}
-
-              {card.pagina_detalhe && (
-
-                <div className="card-footer">
-
-
-                  <button
-                    className="btn-card"
-                    onClick={() => {
-
-
-                      if (card.pagina_detalhe) {
-
-                        setCardSelecionado(card.id);
-
-                        setPaginaAnterior("home");
-
-                        setPage("pagina_detalhe");
-
-                      }
-
-
-                      else if (card.tipo_link === "externo") {
-
-                        window.open(
-                          card.link,
-                          "_blank"
-                        );
-
-                      }
-
-
-                      else {
-
-                        setPage(card.link);
-
-                      }
-
-
-                    }}
-                  >
-
-                    Saiba Mais
-
-                  </button>
-
-
+                <div className="cards home-cards-grid">
+          {cards.map((card) => {
+            const temImagem = Boolean(card.imagem_card);
+            const detalhe = card.pagina_detalhe === true || card.pagina_detalhe === 1 || card.pagina_detalhe === "1" || card.pagina_detalhe === "sim" || card.tipo_link === "publicacao";
+            const externo = !detalhe && card.tipo_link === "externo";
+            const informativo = !detalhe && card.tipo_link === "nenhum";
+            const icone = informativo ? "i" : detalhe || externo ? "↗" : "→";
+            const rotulo = detalhe ? "Publicação / conteúdo completo" : externo ? "Link externo" : informativo ? "Conteúdo informativo" : "Página interna";
+            return (
+              <article className={`card portal-card ${temImagem ? "portal-card-image" : "portal-card-soft"}`} key={card.id}>
+                {temImagem && <>
+                  <img src={`${API_URL}/uploads/${card.imagem_card}`} alt="" className="portal-card-background" loading="lazy" />
+                  <div className="portal-card-overlay" />
+                </>}
+                <div className="portal-card-content">
+                  <div className="portal-card-topline">
+                    <span className="portal-card-kind">{detalhe ? "PUBLICAÇÃO" : externo ? "LINK EXTERNO" : informativo ? "INFORMATIVO" : "PORTAL"}</span>
+                    <span className="portal-card-destination" title={rotulo} aria-label={rotulo}>{icone}</span>
+                  </div>
+                  <h3 className="portal-card-title">{card.titulo}</h3>
+                  {card.conteudo && <p className="portal-card-description">
+                    {card.conteudo.length > 200 ? `${card.conteudo.substring(0, 200).trimEnd()}…` : card.conteudo}
+                  </p>}
+                  <div className="portal-card-bottom">
+                    {informativo ? (
+                      <span className="portal-card-action portal-card-action-static" aria-label="Card apenas informativo">
+                        Apenas informativo <span aria-hidden="true">ⓘ</span>
+                      </span>
+                    ) : (
+                      <button type="button" className="portal-card-action" disabled={!detalhe && !card.link}
+                        onClick={() => {
+                          if (detalhe) {
+                            setCardSelecionado(card.id);
+                            setPaginaAnterior("home");
+                            setPage("pagina_detalhe");
+                          } else if (externo && card.link) {
+                            window.open(card.link, "_blank", "noopener,noreferrer");
+                          } else if (card.link) {
+                            setPaginaAnterior("home");
+                            setPage(card.link);
+                          }
+                        }}>
+                        {externo ? "Abrir link" : detalhe ? "Ler" : "Abrir"}
+                        <span aria-hidden="true">{icone}</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
-
-              )}
-
-
-            </div>
-
-          ))}
-
-
+              </article>
+            );
+          })}
         </div>
 
 
@@ -681,90 +691,59 @@ function Home({
           </div>
 
 
-          <div className="cards">
-
-            {publicacoes.map((card) => (
-
-              <div
-                className="card"
-                key={card.id}
-              >
-
-                {/* IMAGEM */}
-
-                {card.imagem_card && (
-
-                  <img
-                    src={`${API_URL}/uploads/${card.imagem_card}`}
-                    alt={card.titulo}
-                    className="card-image"
-                  />
-
-                )}
-
-
-                {/* TITULO */}
-
-                <div className="card-header">
-                  {card.titulo}
-                </div>
-
-
-                {/* TEXTO */}
-
-                <div className="card-body">
-
-                  {card.conteudo?.length > 150
-                    ? card.conteudo.substring(0, 150) + "..."
-                    : card.conteudo}
-
-                </div>
-
-
-                {/* BOTÃO */}
-
-                <div className="card-footer">
-
-                  <button
-                    className="btn-card"
-                    onClick={() => {
-
-                      if (card.pagina_detalhe) {
-
-                        setCardSelecionado(card.id);
-                        setPaginaAnterior("home");
-                        setPage("pagina_detalhe");
-
-                      }
-
-                      else if (card.tipo_link === "externo") {
-
-                        window.open(
-                          card.link,
-                          "_blank"
-                        );
-
-                      }
-
-                      else if (card.link) {
-
-                        setPage(card.link);
-
-                      }
-
-                    }}
-                  >
-
-                    Saiba Mais
-
-                  </button>
-
-                </div>
-
-              </div>
-
-            ))}
-
+                    <div className="cards home-cards-grid publication-cards-grid">
+            {publicacoes.map((card) => {
+              const temImagem = Boolean(card.imagem_card);
+              const detalhe = card.pagina_detalhe === true || card.pagina_detalhe === 1 || card.pagina_detalhe === "1" || card.pagina_detalhe === "sim" || card.tipo_link === "publicacao";
+              const externo = !detalhe && card.tipo_link === "externo";
+              const informativo = !detalhe && card.tipo_link === "nenhum";
+              const data = card.data_publicacao
+                ? new Date(`${String(card.data_publicacao).slice(0, 10)}T00:00:00`).toLocaleDateString("pt-BR")
+                : "";
+              return (
+                <article className={`card portal-card publication-card ${temImagem ? "portal-card-image" : "portal-card-soft"}`} key={card.id}>
+                  {temImagem && <>
+                    <img src={`${API_URL}/uploads/${card.imagem_card}`} alt="" className="portal-card-background" loading="lazy" />
+                    <div className="portal-card-overlay" />
+                  </>}
+                  <div className="portal-card-content">
+                    <div className="portal-card-topline">
+                      <span className="portal-card-kind">PUBLICAÇÃO</span>
+                      <span className="portal-card-destination" title={detalhe ? "Página de publicação" : externo ? "Link externo" : informativo ? "Apenas informativo" : "Página interna"}>
+                        {informativo ? "i" : detalhe || externo ? "↗" : "→"}
+                      </span>
+                    </div>
+                    <h3 className="portal-card-title">{card.titulo}</h3>
+                    {card.conteudo && <p className="portal-card-description">
+                      {card.conteudo.length > 200 ? `${card.conteudo.substring(0, 200).trimEnd()}…` : card.conteudo}
+                    </p>}
+                    {data && <div className="publication-card-meta"><span aria-hidden="true">▦</span> <time dateTime={String(card.data_publicacao).slice(0, 10)}>{data}</time></div>}
+                    <div className="portal-card-bottom">
+                      {informativo ? (
+                        <span className="portal-card-action portal-card-action-static">Apenas informativo <span aria-hidden="true">ⓘ</span></span>
+                      ) : (
+                        <button type="button" className="portal-card-action" disabled={!detalhe && !card.link}
+                          onClick={() => {
+                            if (detalhe) {
+                              setCardSelecionado(card.id);
+                              setPaginaAnterior("home");
+                              setPage("pagina_detalhe");
+                            } else if (externo && card.link) {
+                              window.open(card.link, "_blank", "noopener,noreferrer");
+                            } else if (card.link) {
+                              setPaginaAnterior("home");
+                              setPage(card.link);
+                            }
+                          }}>
+                          {externo ? "Acessar link" : detalhe ? "Ler publicação" : "Explorar página"}
+                          <span aria-hidden="true">{detalhe || externo ? "↗" : "→"}</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
         </section>

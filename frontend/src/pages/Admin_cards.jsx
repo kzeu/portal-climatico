@@ -96,14 +96,23 @@ function Admin_cards() {
 
     } = e.target;
 
-    setForm({
+    setForm((anterior) => {
+      const proximo = {
+        ...anterior,
+        [name]: files ? files[0] : value
+      };
 
-      ...form,
+      // A opção Publicação usa a página de conteúdo já existente no backend.
+      if (name === "tipo_link") {
+        proximo.pagina_detalhe = value === "publicacao" ? "sim" : "nao";
+        if (value === "nenhum") proximo.link = "";
+      }
 
-      [name]: files
-        ? files[0]
-        : value
+      if (name === "pagina_detalhe") {
+        proximo.tipo_link = value === "sim" ? "publicacao" : (anterior.tipo_link === "publicacao" ? "interno" : anterior.tipo_link);
+      }
 
+      return proximo;
     });
 
   }
@@ -119,18 +128,26 @@ function Admin_cards() {
 
     e.preventDefault();
 
+    if (["interno", "externo"].includes(form.tipo_link) && !String(form.link || "").trim()) {
+      alert(form.tipo_link === "externo"
+        ? "Informe o endereço do link externo."
+        : "Selecione a página interna de destino.");
+      return;
+    }
+
+    if (form.tipo_link === "externo" && !/^https?:\/\//i.test(String(form.link || "").trim())) {
+      alert("Informe um endereço externo válido começando com http:// ou https://.");
+      return;
+    }
+
+    const dadosForm = {
+      ...form,
+      pagina_detalhe: form.tipo_link === "publicacao" ? "sim" : "nao"
+    };
     const formData = new FormData();
 
-    Object.keys(form).forEach((key) => {
-
-      formData.append(
-
-        key,
-
-        form[key]
-
-      );
-
+    Object.keys(dadosForm).forEach((key) => {
+      formData.append(key, dadosForm[key] ?? "");
     });
 
     imagens.forEach((img) => {
@@ -392,22 +409,11 @@ function Admin_cards() {
                 onChange={handleChange}
               >
 
-                <option value="home">
-                  Home
-                </option>
-
-                <option value="adaptacao">
-                  Adaptação
-                </option>
-
-                <option value="mitigacao">
-                  Mitigação
-                </option>
-
-
-                <option value="seguimento_nap">
-                  Seguimento do NAP
-                </option>
+                {paginasInternas.map((pagina) => (
+                  <option key={pagina.value} value={pagina.value}>
+                    {pagina.label}
+                  </option>
+                ))}
 
               </select>
 
@@ -439,6 +445,9 @@ function Admin_cards() {
                 name="titulo"
                 value={form.titulo}
                 onChange={handleChange}
+                maxLength={120}
+                required
+                placeholder="Ex.: Mapas de risco climático"
               />
 
             </div>
@@ -450,90 +459,63 @@ function Admin_cards() {
               <label>Conteúdo</label>
 
               <textarea
-                rows="5"
+                rows="4"
                 name="conteudo"
-                value={form.conteudo}
+                value={form.conteudo || ""}
                 onChange={handleChange}
+                maxLength={200}
+                placeholder="Escreva uma descrição curta e objetiva para o card."
               />
+              <small className="card-char-counter">
+                {(form.conteudo || "").length}/200 caracteres.
+                {(form.conteudo || "").length >= 180
+                  ? " Prefira uma frase curta; textos maiores podem ficar na página de conteúdo."
+                  : " Se precisar explicar mais, use a página de conteúdo vinculada."}
+              </small>
 
             </div>
 
-            {/* LINK */}
+            {/* DESTINO E COMPORTAMENTO */}
+            <div className="form-group">
+              <label>Destino / comportamento do card</label>
+              <select
+                name="tipo_link"
+                value={form.tipo_link || (form.pagina_detalhe === "sim" ? "publicacao" : "interno")}
+                onChange={handleChange}
+              >
+                <option value="interno">Página interna do portal</option>
+                <option value="externo">Página externa (abre em nova aba)</option>
+                <option value="publicacao">Página de publicação / conteúdo completo</option>
+                <option value="nenhum">Nenhum — apenas informativo</option>
+              </select>
+            </div>
 
+            {(form.tipo_link === "interno" || form.tipo_link === "externo") && (
               <div className="form-group">
-
-                <label>Tipo Link</label>
-
-                <select
-                  name="tipo_link"
-                  value={form.tipo_link}
-                  onChange={handleChange}
-                >
-
-                  <option value="interno">
-                    Interno
-                  </option>
-
-                  <option value="externo">
-                    Externo
-                  </option>
-
-                </select>
-
-              </div>
-
-        
-
-            {/* TIPO LINK */}
-
-           <div className="form-group">
-
-              <label>
-                  {form.tipo_link === "interno"
-                      ? "Página"
-                      : "Link"}
-              </label>
-
-              {form.tipo_link === "interno" ? (
-
-                  <select
-                      name="link"
-                      value={form.link}
-                      onChange={handleChange}
-                  >
-
-                      <option value="">
-                          Selecione...
-                      </option>
-
-                      {paginasInternas.map((pagina) => (
-
-                          <option
-                              key={pagina.value}
-                              value={pagina.value}
-                          >
-                              {pagina.label}
-                          </option>
-
-                      ))}
-
+                <label>{form.tipo_link === "interno" ? "Página interna de destino" : "Endereço externo"}</label>
+                {form.tipo_link === "interno" ? (
+                  <select name="link" value={form.link || ""} onChange={handleChange} required>
+                    <option value="">Selecione uma página...</option>
+                    {paginasInternas.map((pagina) => (
+                      <option key={pagina.value} value={pagina.value}>{pagina.label}</option>
+                    ))}
                   </select>
-
-              ) : (
-
+                ) : (
                   <input
-                      type="text"
-                      name="link"
-                      value={form.link}
-                      onChange={handleChange}
-                      placeholder="https://..."
+                    type="url"
+                    name="link"
+                    value={form.link || ""}
+                    onChange={handleChange}
+                    placeholder="https://exemplo.org"
+                    required
                   />
+                )}
+              </div>
+            )}
 
-              )}
-
-          </div>
-
-          
+            <p className="card-admin-help full-width">
+              <strong>Como o card vai funcionar?</strong> Página interna navega no portal; página externa abre um site em nova aba; publicação abre uma página própria com texto completo, data e fotos; “Nenhum” exibe o card apenas como informação, sem ação de clique.
+            </p>
 
             {/* IMAGEM */}
 
@@ -571,41 +553,22 @@ function Admin_cards() {
 
                     )}
 
+              <label>Imagem de capa (opcional)</label>
               <input
                 type="file"
                 name="imagem_card"
+                accept="image/*"
                 onChange={handleChange}
               />
-
-            </div>
-
-            {/* PAGINA DETALHE */}
-
-            <div className="form-group">
-
-              <label>Publicar Página?</label>
-
-              <select
-                name="pagina_detalhe"
-                value={form.pagina_detalhe}
-                onChange={handleChange}
-              >
-
-                <option value="nao">
-                  Não
-                </option>
-
-                <option value="sim">
-                  Sim
-                </option>
-
-              </select>
+              <small className="card-admin-help">
+                Se houver imagem, ela será usada como fundo do card com uma camada verde-escura para manter o texto legível.
+              </small>
 
             </div>
 
             {/* SE TIVER PAGINA */}
 
-            {form.pagina_detalhe === "sim" && (
+            {form.tipo_link === "publicacao" && (
 
                 <div className="secao-admin">
 
@@ -615,7 +578,7 @@ function Admin_cards() {
 
               )}
 
-            {form.pagina_detalhe === "sim" && (
+            {form.tipo_link === "publicacao" && (
 
               <>
 
@@ -638,7 +601,7 @@ function Admin_cards() {
 
                 <div className="form-group">
 
-                  <label>Data Publicação</label>
+                  <label>Data da publicação</label>
 
                   <input
                     type="date"
@@ -853,7 +816,7 @@ function Admin_cards() {
 
                 <th>Imagem</th>
 
-                <th>Notícia</th>
+                <th>Destino</th>
 
 
                 <th>Ações</th>
@@ -883,11 +846,13 @@ function Admin_cards() {
                   </td>
 
                   <td>
-
                     {card.pagina_detalhe
-                      ? "Sim"
-                      : "Não"}
-
+                      ? "Publicação"
+                      : card.tipo_link === "externo"
+                        ? "Link externo"
+                        : card.tipo_link === "nenhum"
+                          ? "Informativo"
+                          : "Página interna"}
                   </td>
 
                 <td>
@@ -923,8 +888,12 @@ function Admin_cards() {
 
                             ...card,
 
+                            tipo_link: (card.pagina_detalhe === true || card.pagina_detalhe === 1 || card.pagina_detalhe === "1" || card.pagina_detalhe === "sim")
+                              ? "publicacao"
+                              : (card.tipo_link || "interno"),
+
                             pagina_detalhe:
-                              card.pagina_detalhe
+                              (card.pagina_detalhe === true || card.pagina_detalhe === 1 || card.pagina_detalhe === "1" || card.pagina_detalhe === "sim")
                                 ? "sim"
                                 : "nao",
 

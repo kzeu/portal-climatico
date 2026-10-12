@@ -1,18 +1,10 @@
+import HeroDinamico from "../components/HeroDinamico";
 function Engajamento({setPage}) {
   return (
     <div className="content" id="content">
 
-      {/* HERO */}
-
-      <div className="hero">
-        <h1>Portal Climático da Guiné-Bissau</h1>
-
-        <p>
-         A ação climática cabe a todos nós. Refere-se aos esforços do país para reduzir os riscos climáticos e as emissões de gases de efeito estufa, ao mesmo tempo em que fortalece a resiliência em setores-chave como agricultura, zonas costeiras, água e ecossistemas. 
-
-        </p>
-      </div>
-
+      {/* HERO cadastrado no painel Banners e Heros */}
+      <HeroDinamico pagina="engajamento" setPage={setPage} />
 
       {/* CARDS PRINCIPAIS */}
 

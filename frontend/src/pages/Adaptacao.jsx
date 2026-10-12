@@ -1,4 +1,5 @@
 import "../App.css";
+import HeroDinamico from "../components/HeroDinamico";
 import { useEffect, useState } from "react";
 import API_URL from "../config";
 
@@ -38,23 +39,8 @@ function Adaptacao({
 
     <div className="content" id="content">
 
-      {/* HERO */}
-
-      <div className="hero">
-
-        <h1>
-          Portal Climático da Guiné-Bissau
-        </h1>
-
-        <p>
-
-         A adaptação é essencial para a Guiné-Bissau devido à sua elevada vulnerabilidade a impactos como a subida do nível do mar, inundações e variabilidade das chuvas. 
-         Riscos climáticos afetam setores vitais como agricultura, água e zonas costeiras. 
-         Fortalecer a adaptação permite reduzir perdas, proteger populações vulneráveis e promover um desenvolvimento mais resiliente, sensível ao género.
-
-        </p>
-
-      </div>
+      {/* HERO — conteúdo carregado do cadastro Banners e Heros */}
+      <HeroDinamico pagina="adaptacao" setPage={setPage} setPaginaAnterior={setPaginaAnterior} />
 
       {/* CARDS */}
 

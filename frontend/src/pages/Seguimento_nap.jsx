@@ -1,4 +1,5 @@
 import "../App.css";
+import HeroDinamico from "../components/HeroDinamico";
 import { useEffect, useState } from "react";
 import API_URL from "../config";
 
@@ -43,19 +44,8 @@ function Seguimento_nap({
 
     <div className="content" id="content">
 
-      {/* HERO */}
-
-      <div className="hero">
-
-        <h1>
-          Portal Climático da Guiné-Bissau
-        </h1>
-
-        <p>
-          Plano Nacional de Adaptação às Mudanças Climáticas
-        </p>
-
-      </div>
+      {/* HERO — conteúdo carregado do cadastro Banners e Heros */}
+      <HeroDinamico pagina="nap" setPage={setPage} setPaginaAnterior={setPaginaAnterior} />
 
 
       {/* =========================

@@ -1,3 +1,4 @@
+import HeroDinamico from "../components/HeroDinamico";
 import { useEffect, useState } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -156,6 +157,45 @@ function MapaItem({
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
+                }
+
+                .mapa-info-filtros {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 16px;
+                    flex-wrap: wrap;
+                    margin: 18px 0 14px;
+                    padding: 16px 18px;
+                    border: 1px solid #dbe5ef;
+                    border-radius: 12px;
+                    background: #ffffff;
+                    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+                }
+
+                .mapa-info-texto {
+                    color: #334155;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    margin: 0;
+                }
+
+                .mapa-contador {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    flex-shrink: 0;
+                    padding: 9px 13px;
+                    border-radius: 999px;
+                    background: #e6f4f1;
+                    color: #0f766e;
+                    font-size: 13px;
+                    font-weight: 700;
+                }
+
+                .mapa-contador-numero {
+                    font-size: 18px;
+                    line-height: 1;
                 }
 
                 .mapa-filtros {
@@ -366,9 +406,9 @@ function MapaItem({
                                 marginBottom: "8px"
                             }}
                         >
-                            Legenda
+                            Ensemble anomaly<br />
+                            compared to historical baseline
                         </strong>
-
 
                         {classificacoes.map(
                             (item) => (
@@ -406,11 +446,24 @@ function MapaItem({
                             )
                         )}
 
+                      
+
                     </div>
+
+                      
 
                 )}
 
             </MapContainer>
+
+            <div>
+            Fonte: World Bank Group. (n.d.). <i>Climate Change Knowledge Portal (CCKP): Guinea-Bissau – Climate Data Projections.</i>
+            Retrieved from:
+    <a href="https://climateknowledgeportal.worldbank.org/country/guinea-bissau/climate-data-projections" target="_blank">
+        https://climateknowledgeportal.worldbank.org/country/guinea-bissau/climate-data-projections
+    </a>
+        (Accessed on 25 Jul 2026).
+    </div>
 
         </div>
 
@@ -435,6 +488,9 @@ function Mapas_climatologia() {
         dadosFiltros,
         setDadosFiltros
     ] = useState([]);
+
+    // Quantidade total de combinações de mapas disponíveis.
+    const quantidadeMapas = dadosFiltros.length;
 
 
     // ==========================================
@@ -1002,20 +1058,8 @@ function Mapas_climatologia() {
             id="content"
         >
 
-            {/* HERO */}
-
-            <div className="hero">
-
-                <h1>
-                    Mapas de Climatologia
-                </h1>
-
-                <p>
-                    Visualização das projeções climáticas para a Guiné-Bissau 
-                    a partir dos dados do Climate Knowledge Portal do Banco Mundial.
-                </p>
-
-            </div>
+            {/* HERO — conteúdo carregado do cadastro Banners e Heros */}
+            <HeroDinamico pagina="mapas_climatologia" />
 
 
             {/* FILTROS */}
@@ -1026,7 +1070,65 @@ function Mapas_climatologia() {
                 }}
             >
 
-                <div className="mapa-filtros">
+                <section
+                    className="mapa-painel-filtros"
+                    aria-label="Informações e filtros dos mapas de climatologia"
+                    style={{
+                        background: "#ffffff",
+                        border: "1px solid #dce7e8",
+                        borderRadius: "12px",
+                        padding: "16px 18px",
+                        marginBottom: "18px",
+                        boxShadow: "0 3px 12px rgba(15, 23, 42, 0.05)"
+                    }}
+                >
+                    <div
+                        className="mapa-info-filtros"
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            gap: "16px",
+                            flexWrap: "wrap",
+                            marginBottom: "12px"
+                        }}
+                    >
+                        <p
+                            className="mapa-info-texto"
+                            style={{
+                                margin: 0,
+                                flex: "1 1 320px",
+                                color: "#475569",
+                                lineHeight: 1.5,
+                                fontSize: "14px"
+                            }}
+                        >
+                            Explore os mapas climáticos. Escolha o indicador, o período,
+                            o cenário e o percentil para consultar a projeção desejada.
+                        </p>
+                        <div
+                            className="mapa-contador"
+                            aria-live="polite"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                padding: "8px 12px",
+                                borderRadius: "999px",
+                                background: "#e6f4f1",
+                                color: "#0f766e",
+                                fontSize: "13px",
+                                fontWeight: 600,
+                                whiteSpace: "nowrap"
+                            }}
+                        >
+                            <span aria-hidden="true">🗺️</span>
+                            <span className="mapa-contador-numero">{quantidadeMapas}</span>
+                            <span>{quantidadeMapas === 1 ? "mapa disponível" : "mapas disponíveis"}</span>
+                        </div>
+                    </div>
+
+                    <div className="mapa-filtros">
 
                     <div className="mapa-filtro">
                         <label>Indicador</label>
@@ -1194,7 +1296,8 @@ function Mapas_climatologia() {
                     </select>
                     </div>
 
-                </div>
+                    </div>
+                </section>
 
             </div>
 
@@ -1202,6 +1305,23 @@ function Mapas_climatologia() {
 
 
             {/* MAPA */}
+
+            {dadosFiltros.length === 0 && (
+                <div style={{
+                    padding: "24px",
+                    marginTop: "12px",
+                    borderRadius: "12px",
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    color: "#475569",
+                    textAlign: "center"
+                }}>
+                    <strong>Nenhum mapa disponível para esta seleção.</strong>
+                    <p style={{ marginBottom: 0 }}>
+                        Experimente selecionar outro indicador, período, cenário ou percentil.
+                    </p>
+                </div>
+            )}
 
             {mapaAtual && classificacoes.length > 0 && (
 

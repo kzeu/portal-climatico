@@ -1,18 +1,13 @@
 import "../App.css";
+import HeroDinamico from "../components/HeroDinamico";
 import mapa from "../assets/Map1.jpg";
 
 function Mapas_riscos() {
   return (
     <div className="content full-page" id="content">
 
-      {/* HERO */}
-      <div className="hero">
-        <h1>Mapas de Risco Climático</h1>
-
-        <p>
-          [Em desenvolvimento] - Resultados de consultorias apoiadas pelo projeto PNUD GCF para a formulação do NAP da Guiné-Bissau
-        </p>
-      </div>
+      {/* HERO — conteúdo carregado do cadastro Banners e Heros */}
+      <HeroDinamico pagina="mapas_riscos" />
 
       {/* IMAGEM FULL */}
       <div className="mapa-full">

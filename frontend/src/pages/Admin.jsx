@@ -10,6 +10,9 @@ import Admin_metadados from "./Admin_metadados";
 
 import Admin_Submissoes from "./Admin_Submissoes";
 
+import Admin_banners from "./Admin_banners";
+import Admin_configuracoes from "./Admin_configuracoes";
+
 function Admin({ setPage }) {
 
   const [menu, setMenu] = useState("cards");
@@ -48,6 +51,18 @@ function Admin({ setPage }) {
         >
           Cards
         </div>
+
+
+        
+        <div
+          className={`admin-menu-item ${
+            menu === "banners" ? "active" : ""
+          }`}
+          onClick={() => setMenu("banners")}
+        >
+          Banners e Heros
+        </div>
+
 
         <div
           className={`admin-menu-item ${
@@ -162,6 +177,12 @@ function Admin({ setPage }) {
 
         )}
 
+        
+        {menu === "banners" && (
+          <Admin_banners />
+        )}
+
+
         {menu === "biblioteca" && (
 
           <Admin_biblioteca />
@@ -186,21 +207,7 @@ function Admin({ setPage }) {
 
         )}
 
-        {menu === "configuracoes" && (
-
-          <div>
-
-            <h2>
-              Configurações
-            </h2>
-
-            <p>
-              Em desenvolvimento...
-            </p>
-
-          </div>
-
-        )}
+        {menu === "configuracoes" && <Admin_configuracoes />}
 
       </div>
 
