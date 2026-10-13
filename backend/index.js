@@ -94,10 +94,21 @@ const upload = multer({
 const pastaHero = path.join(__dirname, "uploads", "hero");
 
 const storageHero = multer.diskStorage({
-  destination: function (req, file, cb) {
-    fs.mkdirSync(pastaHero, { recursive: true });
-    cb(null, pastaHero);
-  },
+  
+destination: function (req, file, cb) {
+  const pastaHero = path.join(
+    __dirname,
+    "..",
+    "frontend",
+    "public",
+    "images",
+    "hero"
+  );
+
+  fs.mkdirSync(pastaHero, { recursive: true });
+  cb(null, pastaHero);
+},
+
 
   filename: function (req, file, cb) {
     const extensao = path.extname(file.originalname).toLowerCase();
