@@ -119,8 +119,9 @@ const storageHero = multer.diskStorage({
 const uploadHero = multer({
   storage: storageHero,
   limits: {
-    fileSize: 5 * 1024 * 1024
+    fileSize: 20 * 1024 * 1024
   },
+  
   fileFilter: function (req, file, cb) {
     const extensoesPermitidas = [
       ".jpg",
