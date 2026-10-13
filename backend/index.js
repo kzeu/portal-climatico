@@ -4496,9 +4496,12 @@ app.put(
       }
 
       
-   const imagem = req.file
+     const removerImagem =
+    String(req.body.remover_imagem).toLowerCase() === "true";
+
+    const imagem = req.file
   ? `/images/hero/${req.file.filename}`
-  : req.body.remover_imagem === "true"
+  : removerImagem
     ? null
     : atual.rows[0].imagem;
 
