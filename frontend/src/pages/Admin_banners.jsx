@@ -30,8 +30,9 @@ function Admin_banners() {
   const [carregando, setCarregando] = useState(true);
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState("");
-  const [arquivoImagem, setArquivoImagem] = useState(null);
-const [previewImagem, setPreviewImagem] = useState("");
+    const [arquivoImagem, setArquivoImagem] = useState(null);
+  const [previewImagem, setPreviewImagem] = useState("");
+  const [removerImagem, setRemoverImagem] = useState(false);
 
 
 
@@ -130,6 +131,7 @@ function selecionarImagem(e) {
 
   setArquivoImagem(arquivo);
   setPreviewImagem(URL.createObjectURL(arquivo));
+  setRemoverImagem(false);
   setErro("");
 }
 
@@ -144,6 +146,7 @@ function selecionarImagem(e) {
     setErro("");
     setArquivoImagem(null);
     setPreviewImagem("");
+    setRemoverImagem(false);
   }
 
   function editarBanner(banner) {
@@ -157,6 +160,7 @@ function selecionarImagem(e) {
     setErro("");
     setArquivoImagem(null);
     setPreviewImagem("");
+    setRemoverImagem(false);
 
     window.scrollTo({
       top: 0,
@@ -185,6 +189,8 @@ function selecionarImagem(e) {
           formData.set("imagem", arquivoImagem);
         }
 
+        formData.set("remover_imagem", String(removerImagem));
+
         const response = await fetch(url, {
           method: editando ? "PUT" : "POST",
           body: formData
@@ -209,6 +215,7 @@ function selecionarImagem(e) {
       setEditando(null);
       setArquivoImagem(null);
       setPreviewImagem("");
+      setRemoverImagem(false);
       await carregarBanners();
     } catch (e) {
       console.error(e);
@@ -241,6 +248,9 @@ function selecionarImagem(e) {
       if (editando === id) {
         setForm(FORM_INICIAL);
         setEditando(null);
+        setArquivoImagem(null);
+        setPreviewImagem("");
+        setRemoverImagem(false);
       }
 
       setMensagem("Banner excluído com sucesso!");
@@ -356,7 +366,39 @@ function selecionarImagem(e) {
           <small>JPG, PNG ou WEBP. Máximo de 5 MB.</small>
         </div>
 
-        {(previewImagem || form.imagem) && (
+        {editando && (
+          <div style={{ margin: "10px 0 16px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              disabled={(!form.imagem && !previewImagem && !arquivoImagem) || removerImagem}
+              onClick={() => {
+                setForm((anterior) => ({ ...anterior, imagem: "" }));
+                setArquivoImagem(null);
+                setPreviewImagem("");
+                setRemoverImagem(true);
+                setErro("");
+              }}
+              style={{
+                backgroundColor: "#b42318",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                padding: "10px 14px",
+                cursor: ((!form.imagem && !previewImagem && !arquivoImagem) || removerImagem) ? "not-allowed" : "pointer",
+                opacity: ((!form.imagem && !previewImagem && !arquivoImagem) || removerImagem) ? 0.55 : 1
+              }}
+            >
+              {removerImagem ? "Imagem marcada para remoção" : "Remover imagem"}
+            </button>
+            {removerImagem && (
+              <span style={{ color: "#b42318", fontSize: "14px" }}>
+                A remoção será aplicada ao clicar em Salvar alterações.
+              </span>
+            )}
+          </div>
+        )}
+
+        {(previewImagem || form.imagem) && !removerImagem && (
           <div style={{ margin: "12px 0" }}>
             <p>
               {previewImagem
@@ -366,9 +408,9 @@ function selecionarImagem(e) {
             <img
               src={
                 previewImagem ||
-                (form.imagem.startsWith("http")
+                ((form.imagem || "").startsWith("http")
                   ? form.imagem
-                  : `${window.location.origin}${form.imagem.startsWith("/") ? "" : "/"}${form.imagem}`)
+                  : `${window.location.origin}${(form.imagem || "").startsWith("/") ? "" : "/"}${form.imagem || ""}`)
               }
               alt="Pré-visualização do banner"
               style={{
@@ -376,10 +418,18 @@ function selecionarImagem(e) {
                 maxWidth: "500px",
                 maxHeight: "220px",
                 objectFit: "cover",
-                borderRadius: "8px"
+                borderRadius: "8px",
+                display: "block",
+                marginBottom: "10px"
               }}
             />
           </div>
+        )}
+
+        {removerImagem && (
+          <p style={{ color: "#b42318", margin: "12px 0" }}>
+            A imagem será removida ao salvar. Se mudar de ideia, selecione uma nova imagem.
+          </p>
         )}
 
         {form.tipo === "slide" && (

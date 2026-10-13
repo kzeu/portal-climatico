@@ -4495,9 +4495,13 @@ app.put(
         });
       }
 
-      const imagem = req.file
-        ? `/images/hero/${req.file.filename}`
-        : atual.rows[0].imagem;
+      
+   const imagem = req.file
+  ? `/images/hero/${req.file.filename}`
+  : req.body.remover_imagem === "true"
+    ? null
+    : atual.rows[0].imagem;
+
 
       const resultado = await db.query(
         `UPDATE banners_herois
