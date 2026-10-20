@@ -8,270 +8,154 @@ function Mitigacao({
   setCardSelecionado,
   setPaginaAnterior
 }) {
-
   const [cards, setCards] = useState([]);
-
   const [publicacoes, setPublicacoes] = useState([]);
 
   useEffect(() => {
-
-    fetch(
-      `${API_URL}/cards/mitigacao`
-    )
-      .then(res => res.json())
-      .then(data => setCards(data))
-      .catch(err => console.log(err));
-
+    fetch(`${API_URL}/cards/mitigacao`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Não foi possível carregar os cards.");
+        return res.json();
+      })
+      .then((data) => setCards(Array.isArray(data) ? data : []))
+      .catch((err) => console.error("Erro ao carregar cards:", err));
   }, []);
 
   useEffect(() => {
+    fetch(`${API_URL}/publicacoes/mitigacao`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Não foi possível carregar publicações.");
+        return res.json();
+      })
+      .then((data) => setPublicacoes(Array.isArray(data) ? data : []))
+      .catch((err) => console.error("Erro ao carregar publicações:", err));
+  }, []);
 
-  fetch(`${API_URL}/publicacoes/mitigacao`)
+  function isDetalhe(card) {
+    return card.pagina_detalhe === true ||
+      card.pagina_detalhe === 1 ||
+      card.pagina_detalhe === "1" ||
+      card.pagina_detalhe === "sim" ||
+      card.tipo_link === "publicacao";
+  }
 
-    .then(res => res.json())
+  function abrirCard(card, paginaAnterior = "mitigacao") {
+    const detalhe = isDetalhe(card);
+    const externo = !detalhe && card.tipo_link === "externo";
 
-    .then(data => setPublicacoes(data))
+    if (detalhe) {
+      setCardSelecionado(card.id);
+      setPaginaAnterior(paginaAnterior);
+      setPage("pagina_detalhe");
+    } else if (externo && card.link) {
+      const url = /^https?:\/\//i.test(card.link) ? card.link : `https://${card.link}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    } else if (card.link) {
+      setPaginaAnterior(paginaAnterior);
+      setPage(card.link);
+    }
+  }
 
-    .catch(err =>
-      console.log("Erro ao carregar publicações:", err)
+  function renderCard(card, isPublication = false) {
+    const temImagem = Boolean(card.imagem_card);
+    const detalhe = isDetalhe(card);
+    const externo = !detalhe && card.tipo_link === "externo";
+    const informativo = !detalhe && card.tipo_link === "nenhum";
+    const icone = informativo ? "i" : detalhe || externo ? "↗" : "→";
+    const rotulo = detalhe ? "Publicação / conteúdo completo" : externo ? "Link externo" : informativo ? "Conteúdo informativo" : "Página interna";
+
+    return (
+      <article
+        className={`card portal-card ${temImagem ? "portal-card-image" : "portal-card-soft"} ${isPublication ? "publication-card" : ""}`}
+        key={`${isPublication ? "pub" : "card"}-${card.id}`}
+      >
+        {temImagem && <>
+          <img
+            src={`${API_URL}/uploads/${card.imagem_card}`}
+            alt={card.titulo || ""}
+            className="portal-card-background"
+            loading="lazy"
+          />
+          <div className="portal-card-overlay" />
+        </>}
+        <div className="portal-card-content">
+          <div className="portal-card-topline">
+            <span className="portal-card-kind">{isPublication ? "PUBLICAÇÃO" : detalhe ? "PUBLICAÇÃO" : externo ? "LINK EXTERNO" : informativo ? "INFORMATIVO" : "PORTAL"}</span>
+            <span className="portal-card-destination" title={rotulo} aria-label={rotulo}>{icone}</span>
+          </div>
+          {isPublication && card.data_publicacao && (
+            <div className="publication-card-meta">
+              <span aria-hidden="true">▦</span>
+              <span>Publicado em</span>
+              <time dateTime={String(card.data_publicacao).slice(0, 10)}>
+                {new Date(`${String(card.data_publicacao).slice(0, 10)}T00:00:00`).toLocaleDateString("pt-BR")}
+              </time>
+            </div>
+          )}
+          <h3 className="portal-card-title">{card.titulo}</h3>
+          {card.conteudo && (
+            <p className="portal-card-description">
+              {card.conteudo.length > 200 ? `${card.conteudo.substring(0, 200).trimEnd()}…` : card.conteudo}
+            </p>
+          )}
+          <div className="portal-card-bottom">
+            {informativo ? (
+              <span className="portal-card-action portal-card-action-static" aria-label="Card apenas informativo">
+                Apenas informativo <span aria-hidden="true">ⓘ</span>
+              </span>
+            ) : (
+              <button
+                type="button"
+                className="portal-card-action"
+                disabled={!detalhe && !card.link}
+                onClick={() => abrirCard(card, "mitigacao")}
+              >
+                {isPublication ? (externo ? "Acessar link" : detalhe ? "Ler publicação" : "Explorar página") : externo ? "Abrir link" : detalhe ? "Ler" : "Abrir"}
+                <span aria-hidden="true">{icone}</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </article>
     );
+  }
 
-}, []);
+  // Exclui publicações da grade fixa; a seção abaixo continua separada.
+  const cardsFixos = cards.filter((card) => !isDetalhe(card));
 
   return (
-
-    <div className="content" id="content">
-
-      {/* HERO — conteúdo carregado do cadastro Banners e Heros */}
+    <div className="content portal-modern-page" id="content">
       <HeroDinamico pagina="mitigacao" setPage={setPage} setPaginaAnterior={setPaginaAnterior} />
 
-      {/* CARDS */}
-
-      <div className="cards">
-
-        {cards.map((card) => (
-
-          <div
-            className="card"
-            key={card.id}
-          >
-
-            {/* IMAGEM */}
-
-            {card.imagem_card && (
-
-              <img
-                src={`${API_URL}/uploads/${card.imagem_card}`}
-                alt={card.titulo}
-                className="card-image"
-              />
-
-            )}
-
-            {/* TITULO */}
-
-            <div className="card-header">
-
-              {card.titulo}
-
-            </div>
-
-            {/* TEXTO */}
-
-            <div className="card-body">
-
-              {card.conteudo?.length > 150
-                ? card.conteudo.substring(0, 150) + "..."
-                : card.conteudo}
-
-            </div>
-
-            {/* BOTÃO */}
-
-            {(card.pagina_detalhe || card.link) && (
-
-              <div className="card-footer">
-
-                <button
-
-                  className="btn-card"
-
-                  onClick={() => {
-
-                    /* Página detalhe */
-
-                    if (card.pagina_detalhe) {
-
-                      setCardSelecionado(
-                        card.id
-                      );
-
-                      setPaginaAnterior(
-                        "mitigacao"
-                      );
-
-                      setPage(
-                        "pagina_detalhe"
-                      );
-
-                    }
-
-                    /* Link externo */
-
-                    else if (
-                      card.tipo_link ===
-                      "externo"
-                    ) {
-
-                      window.open(
-                        card.link,
-                        "_blank"
-                      );
-
-                    }
-
-                    /* Página interna */
-
-                    else if (
-                      card.link
-                    ) {
-
-                      setPage(
-                        card.link
-                      );
-
-                    }
-
-                  }}
-
-                >
-
-                  Saiba Mais
-
-                </button>
-
-              </div>
-
-            )}
-
-          </div>
-
-        ))}
-
-      </div>
-
-
-            {/* =====================================================
-          PUBLICAÇÕES
-      ====================================================== */}
+      <section className="home-areas">
+        <div className="home-section-title">
+          <div className="home-section-kicker">🌿 EXPLORAR CONTEÚDOS</div>
+          <h2>Mitigação</h2>
+        </div>
+        <div className="cards home-cards-grid">
+          {cardsFixos.map((card) => renderCard(card))}
+        </div>
+      </section>
 
       {publicacoes.length > 0 && (
-
         <section className="home-areas publicacoes-section">
-
           <div className="home-section-title">
-
-            <div className="home-section-kicker">
-              📚 Submissões de Ações Climáticas
-            </div>
-
-            <h2>
-              Publicações
-            </h2>
-
+            <div className="home-section-kicker">📚 SUBMISSÕES DE AÇÕES CLIMÁTICAS</div>
+            <h2>Publicações</h2>
           </div>
-
-
-          <div className="cards">
-
-            {publicacoes.map((card) => (
-
-              <div
-                className="card"
-                key={card.id}
-              >
-
-                {card.imagem_card && (
-
-                  <img
-                    src={`${API_URL}/uploads/${card.imagem_card}`}
-                    alt={card.titulo}
-                    className="card-image"
-                  />
-
-                )}
-
-
-                <div className="card-header">
-                  {card.titulo}
-                </div>
-
-
-                <div className="card-body">
-
-                  {card.conteudo?.length > 150
-                    ? card.conteudo.substring(0, 150) + "..."
-                    : card.conteudo}
-
-                </div>
-
-
-                {(card.pagina_detalhe || card.link) && (
-
-                  <div className="card-footer">
-
-                    <button
-                      className="btn-card"
-                      onClick={() => {
-
-                        if (card.pagina_detalhe) {
-
-                          setCardSelecionado(card.id);
-                          setPaginaAnterior("mitigacao");
-                          setPage("pagina_detalhe");
-
-                        }
-
-                        else if (card.tipo_link === "externo") {
-
-                          window.open(
-                            card.link,
-                            "_blank"
-                          );
-
-                        }
-
-                        else if (card.link) {
-
-                          setPage(card.link);
-
-                        }
-
-                      }}
-                    >
-
-                      Saiba Mais
-
-                    </button>
-
-                  </div>
-
-                )}
-
-              </div>
-
-            ))}
-
+          <div className="cards home-cards-grid publication-cards-grid">
+            {[...publicacoes]
+              .sort((a, b) => {
+                const dataA = a.data_publicacao ? new Date(String(a.data_publicacao).slice(0, 10) + "T00:00:00").getTime() : 0;
+                const dataB = b.data_publicacao ? new Date(String(b.data_publicacao).slice(0, 10) + "T00:00:00").getTime() : 0;
+                return dataB - dataA;
+              })
+              .map((card) => renderCard(card, true))}
           </div>
-
         </section>
-
       )}
-
     </div>
-
   );
-
 }
 
 export default Mitigacao;

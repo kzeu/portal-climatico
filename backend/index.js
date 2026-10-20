@@ -4335,14 +4335,18 @@ app.get("/publicacoes/:pagina", async (req, res) => {
 
     const pagina = req.params.pagina;
 
-    const resultado = await db.query(
+   const resultado = await db.query(
       `
-      SELECT *
-      FROM cards
-      WHERE pagina = $1
-      AND origem = 'submissao'
-      AND ativo = true
-      ORDER BY id DESC
+      SELECT
+        c.*,
+        p.data_publicacao AS data_publicacao
+      FROM cards c
+      LEFT JOIN paginas p
+        ON p.card_id = c.id
+      WHERE c.pagina = $1
+        AND c.origem = 'submissao'
+        AND c.ativo = true
+      ORDER BY c.id DESC
       `,
       [pagina]
     );

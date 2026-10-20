@@ -605,17 +605,31 @@ function Home({
 
 
           <h2>
-
             Explore nossas áreas de atuação
-
           </h2>
+          <p className="home-section-description">
+            Acesse as áreas permanentes do portal, com mapas, informações e conteúdos sobre o clima na Guiné-Bissau.
+          </p>
 
 
         </div>
 
 
                 <div className="cards home-cards-grid">
-          {cards.map((card) => {
+                        
+                {cards
+                  .filter((card) => {
+                    const detalhe =
+                      card.pagina_detalhe === true ||
+                      card.pagina_detalhe === 1 ||
+                      card.pagina_detalhe === "1" ||
+                      card.pagina_detalhe === "sim" ||
+                      card.tipo_link === "publicacao";
+
+                    return !detalhe;
+                  })
+                  .map((card) => {
+
             const temImagem = Boolean(card.imagem_card);
             const detalhe = card.pagina_detalhe === true || card.pagina_detalhe === 1 || card.pagina_detalhe === "1" || card.pagina_detalhe === "sim" || card.tipo_link === "publicacao";
             const externo = !detalhe && card.tipo_link === "externo";
@@ -679,20 +693,24 @@ function Home({
         <section className="home-areas publicacoes-section">
 
           <div className="home-section-title">
-
             <div className="home-section-kicker">
-              📚 Submissões de Ações Climáticas
+              📚 CONHECIMENTO E AÇÃO CLIMÁTICA
             </div>
-
-            <h2>
-              Publicações
-            </h2>
-
+            <h2>Publicações e iniciativas</h2>
+            <p className="home-section-description">
+              Acompanhe conteúdos enviados e disponibilizados no portal, como notícias, eventos, projetos, relatórios e outras iniciativas.
+            </p>
           </div>
 
 
                     <div className="cards home-cards-grid publication-cards-grid">
-            {publicacoes.map((card) => {
+            {[...publicacoes]
+              .sort((a, b) => {
+                const dataA = a.data_publicacao ? new Date(String(a.data_publicacao).slice(0, 10) + "T00:00:00").getTime() : 0;
+                const dataB = b.data_publicacao ? new Date(String(b.data_publicacao).slice(0, 10) + "T00:00:00").getTime() : 0;
+                return dataB - dataA;
+              })
+              .map((card) => {
               const temImagem = Boolean(card.imagem_card);
               const detalhe = card.pagina_detalhe === true || card.pagina_detalhe === 1 || card.pagina_detalhe === "1" || card.pagina_detalhe === "sim" || card.tipo_link === "publicacao";
               const externo = !detalhe && card.tipo_link === "externo";
@@ -713,11 +731,11 @@ function Home({
                         {informativo ? "i" : detalhe || externo ? "↗" : "→"}
                       </span>
                     </div>
+                    {data && <div className="publication-card-meta"><span aria-hidden="true">▦</span><span>Publicado em</span> <time dateTime={String(card.data_publicacao).slice(0, 10)}>{data}</time></div>}
                     <h3 className="portal-card-title">{card.titulo}</h3>
                     {card.conteudo && <p className="portal-card-description">
                       {card.conteudo.length > 200 ? `${card.conteudo.substring(0, 200).trimEnd()}…` : card.conteudo}
                     </p>}
-                    {data && <div className="publication-card-meta"><span aria-hidden="true">▦</span> <time dateTime={String(card.data_publicacao).slice(0, 10)}>{data}</time></div>}
                     <div className="portal-card-bottom">
                       {informativo ? (
                         <span className="portal-card-action portal-card-action-static">Apenas informativo <span aria-hidden="true">ⓘ</span></span>

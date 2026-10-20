@@ -929,6 +929,69 @@ function Form_submissao_climatica() {
 
                         </div>
 
+                        {/* PAINEL EXPLICATIVO DO DESTINO — apenas orientação visual; não altera as regras de envio */}
+                        {form.tipo_submissao && (
+                            <div
+                                className="campo campo-2"
+                                role="status"
+                                aria-live="polite"
+                                style={{
+                                    padding: "18px",
+                                    border: "1px solid #cfe3df",
+                                    borderRadius: "14px",
+                                    background: "linear-gradient(135deg, #f3fbf8 0%, #ffffff 100%)",
+                                    marginTop: "4px"
+                                }}
+                            >
+                                {(() => {
+                                    const vaiCalendario = tiposCard.includes(form.tipo_submissao) || form.tipo_submissao === "Outro";
+                                    const vaiBiblioteca = tiposBiblioteca.includes(form.tipo_submissao) || form.tipo_submissao === "Outro";
+                                    return (
+                                        <>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+                                                <span aria-hidden="true" style={{ fontSize: "25px" }}>🧭</span>
+                                                <div>
+                                                    <strong style={{ display: "block", color: "#164e4a", fontSize: "16px" }}>Onde esta submissão vai aparecer?</strong>
+                                                    <span style={{ color: "#52616b", fontSize: "13px" }}>Destino previsto para “{form.tipo_submissao}”</span>
+                                                </div>
+                                            </div>
+                                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "12px" }}>
+                                                {vaiCalendario && (
+                                                    <div style={{ background: "#fff", border: "1px solid #d8e9e5", borderRadius: "11px", padding: "13px" }}>
+                                                        <div style={{ fontSize: "23px", marginBottom: "5px" }} aria-hidden="true">📅</div>
+                                                        <strong style={{ color: "#155e55" }}>Calendário de eventos e iniciativas</strong>
+                                                        <p style={{ margin: "6px 0 0", fontSize: "13px", lineHeight: 1.5, color: "#475569" }}>O conteúdo será encaminhado para o calendário e terá um Card preparado para publicação após análise e aprovação.</p>
+                                                        <p style={{ margin: "7px 0 0", fontSize: "12px", color: "#64748b" }}>Para eventos: datas, horários e local ajudam a contextualizar a atividade.</p>
+                                                    </div>
+                                                )}
+                                                {vaiBiblioteca && (
+                                                    <div style={{ background: "#fff", border: "1px solid #d8e9e5", borderRadius: "11px", padding: "13px" }}>
+                                                        <div style={{ fontSize: "23px", marginBottom: "5px" }} aria-hidden="true">📚</div>
+                                                        <strong style={{ color: "#155e55" }}>Biblioteca climática</strong>
+                                                        <p style={{ margin: "6px 0 0", fontSize: "13px", lineHeight: 1.5, color: "#475569" }}>O item será encaminhado à Biblioteca e ficará pendente de análise antes de ser publicado.</p>
+                                                        <p style={{ margin: "7px 0 0", fontSize: "12px", color: "#64748b" }}>Inclua o link e/ou o arquivo do material, quando disponíveis.</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div style={{ marginTop: "12px", padding: "12px", borderRadius: "10px", background: "#eef5ff", color: "#334155", fontSize: "13px", lineHeight: 1.55 }}>
+                                                <strong>Como ficará o Card e a página de detalhes?</strong>
+                                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: "10px", marginTop: "9px" }}>
+                                                    <div><span aria-hidden="true">🖼️ </span><strong>Imagem do Card:</strong> capa/miniatura que identifica o conteúdo nas páginas do portal.</div>
+                                                    <div><span aria-hidden="true">📷 </span><strong>Fotos da página:</strong> imagens adicionais para a galeria da página de detalhes.</div>
+                                                    <div><span aria-hidden="true">📎 </span><strong>Documentos e links:</strong> materiais de apoio associados à submissão; a exibição depende dos campos e recursos disponíveis na página.</div>
+                                                </div>
+                                            </div>
+                                            {form.tipo_submissao === "Outro" && (
+                                                <p style={{ margin: "10px 0 0", fontSize: "13px", color: "#7c4a03" }}>
+                                                    <strong>Este tipo segue os dois destinos:</strong> Calendário de eventos e iniciativas e Biblioteca, ambos pendentes de análise e aprovação.
+                                                </p>
+                                            )}
+                                        </>
+                                    );
+                                })()}
+                            </div>
+                        )}
+
 
                         {/* IDIOMA */}
 

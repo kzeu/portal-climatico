@@ -1,114 +1,112 @@
+import "../App.css";
 import HeroDinamico from "../components/HeroDinamico";
-function Engajamento({setPage}) {
+
+function Engajamento({ setPage, setPaginaAnterior }) {
+  const cards = [
+    {
+      titulo: "Seguimento do NAP",
+      conteudo: "Plano Nacional de Adaptação às Mudanças Climáticas",
+      link: "seguimento_nap"
+    },
+    {
+      titulo: "Mitigação",
+      conteudo: "Inventário de Gases de Efeito Estufa",
+      link: "mitigacao"
+    },
+    {
+      titulo: "Formulário de submissão de Ação Climática",
+      conteudo: "A ação climática cabe a todos nós. Refere-se aos esforços do país para reduzir os riscos climáticos e as emissões de gases de efeito estufa, ao mesmo tempo em que fortalece a resiliência em setores-chave como agricultura, zonas costeiras, água e ecossistemas."
+    },
+    {
+      titulo: "Relatórios Nacionais",
+      conteudo: "Veja os relatórios nacionais da Guiné-Bissau para a UNFCCC"
+    },
+    {
+      titulo: "Treinamento em Transparência Climática",
+      conteudo: "[Em desenvolvimento] Oportunidade de treinamento online para stakeholders da Guiné-Bissau sobre a preparação de inventários de Gases de Efeito Estufa (GEE)."
+    },
+    {
+      titulo: "Chamada para propostas",
+      conteudo: "[Em desenvolvimento]"
+    },
+    {
+      titulo: "Eventos",
+      conteudo: "[Em desenvolvimento]"
+    },
+    {
+      titulo: "Projeto COASTAL",
+      conteudo: "PNUD GEF: Reforço de Capacidades de Adaptação e de Resiliência...",
+      externo: "https://coastal.gw/"
+    },
+    {
+      titulo: "Novo Projeto GEF em preparação",
+      conteudo: "[Em desenvolvimento]"
+    },
+    {
+      titulo: "Preparação nacional para a COP",
+      conteudo: "[Em desenvolvimento]"
+    },
+    {
+      titulo: "Novidades do INA",
+      conteudo: "[Em desenvolvimento]"
+    }
+  ];
+
+  function abrir(card) {
+    if (card.externo) {
+      window.open(card.externo, "_blank", "noopener,noreferrer");
+    } else if (card.link) {
+      setPaginaAnterior?.("engajamento");
+      setPage(card.link);
+    }
+  }
+
   return (
-    <div className="content" id="content">
+    <div className="content portal-modern-page" id="content">
+      <HeroDinamico pagina="engajamento" setPage={setPage} setPaginaAnterior={setPaginaAnterior} />
 
-      {/* HERO cadastrado no painel Banners e Heros */}
-      <HeroDinamico pagina="engajamento" setPage={setPage} />
-
-      {/* CARDS PRINCIPAIS */}
-
-      <div className="cards">
-
-        <div className="card" onClick={() => setPage("seguimento_nap")}>
-        
-          <div className="card-header">Seguimento do NAP</div>
-          <div className="card-body">
-            Plano Nacional de Adaptação às Mudanças Climáticas
-          </div>
+      <section className="home-areas">
+        <div className="home-section-title">
+          <div className="home-section-kicker">🌿 PARTICIPAÇÃO E AÇÃO CLIMÁTICA</div>
+          <h2>Engajamento</h2>
+          <p className="home-section-description">
+            Conheça iniciativas, projetos e oportunidades de participação na ação climática.
+          </p>
         </div>
 
-
-        <div className="card">
-        
-          <div className="card-header">Mitigação</div>
-          <div className="card-body">
-            Inventário de Gases de Efeito Estufa
-          </div>
+        <div className="cards home-cards-grid">
+          {cards.map((card, index) => {
+            const clicavel = Boolean(card.link || card.externo);
+            const externo = Boolean(card.externo);
+            return (
+              <article
+                className="card portal-card portal-card-soft"
+                key={card.titulo}
+                role={clicavel ? "link" : undefined}
+              >
+                <div className="portal-card-content">
+                  <div className="portal-card-topline">
+                    <span className="portal-card-kind">{externo ? "LINK EXTERNO" : card.link ? "PORTAL" : "INFORMATIVO"}</span>
+                    <span className="portal-card-destination" aria-hidden="true">{externo ? "↗" : card.link ? "→" : "i"}</span>
+                  </div>
+                  <h3 className="portal-card-title">{card.titulo}</h3>
+                  <p className="portal-card-description">{card.conteudo}</p>
+                  <div className="portal-card-bottom">
+                    {clicavel ? (
+                      <button className="portal-card-action" type="button" onClick={() => abrir(card)}>
+                        {externo ? "Abrir link" : "Explorar"}
+                        <span aria-hidden="true">{externo ? "↗" : "→"}</span>
+                      </button>
+                    ) : (
+                      <span className="portal-card-action portal-card-action-static">Conteúdo informativo <span aria-hidden="true">ⓘ</span></span>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
-
-
-         <div className="card">
-          <div className="card-header">Formulário de submissão de Ação Climática</div>
-          <div className="card-body">
-            A ação climática cabe a todos nós. Refere-se aos esforços do país para reduzir os riscos climáticos e as emissões de gases de efeito estufa, ao mesmo tempo em que fortalece a resiliência em setores-chave como agricultura, zonas costeiras, água e ecossistemas. 
-          </div>
-        </div>
-
-         <div className="card">
-          <div className="card-header">Relatórios Nacionais</div>
-          <div className="card-body">
-            Veja os relatórios nacionais da Guiné-Bissau para a UNFCCC
-          </div>
-        </div>
-
-        
-
-        <div className="card">
-          <div className="card-header">Treinamento em Transparência Climática</div>
-
-          <div className="card-body">
-           [Em desenvolvimento] - Oportunidade treinamento online para stakeholders da Guiné-Bissau sobre a preparação de inventários de Gases de Efeito Estufa (GEE) 
-.
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card-header">Chamada para propostas</div>
-          <div className="card-body">
-            [Em desenvolvimento] .
-          </div>
-        </div>
-
-
-
-
-        <div className="card">
-          <div className="card-header">Eventos</div>
-          <div className="card-body">
-            [Em desenvolvimento] .
-          </div>
-        </div>
-
-     
-
-        <div className="card" onClick={() => window.open("https://coastal.gw/", "_blank")}>
-          <div className="card-header">Projeto COASTAL</div>
-
-          <div className="card-body">
-            PNUD GEF: Reforço de Capacidades de Adaptação e de Resiliência ...
-
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card-header">Novo Projeto GEF em preparação</div>
-
-          <div className="card-body">
-            ....
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="card-header">Preparação nacional para a COP</div>
-
-          <div className="card-body">
-          ....
-          </div>
-        </div>
-
-
-        <div className="card">
-          <div className="card-header">Novidades do INA</div>
-          <div className="card-body">
-            ....
-          </div>
-        </div>
-
-      </div>
-
-
-
+      </section>
     </div>
   );
 }
