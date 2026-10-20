@@ -618,16 +618,9 @@ function Home({
                 <div className="cards home-cards-grid">
                         
                 {cards
-                  .filter((card) => {
-                    const detalhe =
-                      card.pagina_detalhe === true ||
-                      card.pagina_detalhe === 1 ||
-                      card.pagina_detalhe === "1" ||
-                      card.pagina_detalhe === "sim" ||
-                      card.tipo_link === "publicacao";
-
-                    return !detalhe;
-                  })
+                  // Cards enviados pelo Formulário de Submissão Climática
+                  // aparecem na seção de publicações, não nos cards fixos.
+                  .filter((card) => String(card.origem || "").toLowerCase() !== "submissao")
                   .map((card) => {
 
             const temImagem = Boolean(card.imagem_card);
