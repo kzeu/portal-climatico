@@ -1,0 +1,23 @@
+﻿# Dependências
+node_modules/
+
+# Builds
+dist/
+
+# Credenciais
+.env
+.env.*
+!.env.example
+
+# Logs e backups
+*.log
+*.dump
+*.zip
+*.sql.gz
+
+# Dados e uploads de produção
+backend/data/
+
+# Arquivos temporários
+.DS_Store
+Thumbs.db
