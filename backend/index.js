@@ -28,7 +28,10 @@ const uploadSubmissao = multer({
 const path = require("path");
 
 const db = require("./db");
+<<<<<<< HEAD
 const mapasFicheiros = require("./mapas-ficheiros");
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 const fs =require("fs");
 
@@ -1657,10 +1660,13 @@ app.get("/clima/classificacoes/:codigo", async (req, res) => {
 
     catch (err) {
 
+<<<<<<< HEAD
         if (mapasFicheiros.semBase(err)) {
             return res.json(mapasFicheiros.classificacoesDe(req.params.codigo));
         }
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
         console.log(err);
 
         res.status(500).json({
@@ -2757,10 +2763,13 @@ app.get("/clima/mapas-filtros", async (req, res) => {
 
     } catch (erro) {
 
+<<<<<<< HEAD
         if (mapasFicheiros.semBase(erro)) {
             return res.json(mapasFicheiros.linhas());
         }
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
         console.error(
             "Erro ao carregar mapas para filtros:",
             erro
@@ -4624,14 +4633,20 @@ async function garantirTabelaConfiguracoesRodape() {
       politica_pdf_nome TEXT,
       facebook_url TEXT,
       instagram_url TEXT,
+<<<<<<< HEAD
       twitter_url TEXT,
       linkedin_url TEXT,
       email TEXT NOT NULL DEFAULT 'info@portaldoclima.gw',
+=======
+      linkedin_url TEXT,
+      email TEXT NOT NULL DEFAULT 'info@clima.gb',
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
       telefone TEXT NOT NULL DEFAULT '+245 XXX XXX',
       atualizado_em TIMESTAMP NOT NULL DEFAULT NOW()
     )
   `);
 
+<<<<<<< HEAD
   await db.query(`ALTER TABLE configuracoes_rodape ADD COLUMN IF NOT EXISTS twitter_url TEXT`);
   await db.query(`ALTER TABLE configuracoes_rodape ALTER COLUMN email SET DEFAULT 'info@portaldoclima.gw'`);
 
@@ -4652,6 +4667,12 @@ async function garantirTabelaConfiguracoesRodape() {
         WHEN configuracoes_rodape.email IN ('info@clima.gb', '') THEN EXCLUDED.email
         ELSE configuracoes_rodape.email
       END
+=======
+  await db.query(`
+    INSERT INTO configuracoes_rodape (id)
+    VALUES (1)
+    ON CONFLICT (id) DO NOTHING
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
   `);
 }
 
@@ -4706,10 +4727,16 @@ app.put(
              politica_pdf_nome = $5,
              facebook_url = $6,
              instagram_url = $7,
+<<<<<<< HEAD
              twitter_url = $8,
              linkedin_url = $9,
              email = $10,
              telefone = $11,
+=======
+             linkedin_url = $8,
+             email = $9,
+             telefone = $10,
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
              atualizado_em = NOW()
          WHERE id = 1
          RETURNING *`,
@@ -4721,9 +4748,14 @@ app.put(
           politicaPdfNome,
           (req.body.facebook_url || "").trim() || null,
           (req.body.instagram_url || "").trim() || null,
+<<<<<<< HEAD
           (req.body.twitter_url || "").trim() || null,
           (req.body.linkedin_url || "").trim() || null,
           (req.body.email || "").trim() || "info@portaldoclima.gw",
+=======
+          (req.body.linkedin_url || "").trim() || null,
+          (req.body.email || "").trim() || "info@clima.gb",
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
           (req.body.telefone || "").trim() || "+245 XXX XXX"
         ]
       );
@@ -4737,6 +4769,7 @@ app.put(
 );
 
 
+<<<<<<< HEAD
 /* =====================================================
    MENSAGENS DE CONTATO
 ===================================================== */
@@ -4794,10 +4827,13 @@ app.get("/contato", async (req, res) => {
 });
 
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 /* =========================
    SERVIDOR
 ========================= */
 
+<<<<<<< HEAD
 const { garantirBanco } = require("./banco");
 
 const PORT = process.env.PORT || 3000;
@@ -4812,3 +4848,14 @@ garantirBanco()
     console.error("Não foi possível preparar a base de dados:", erro);
     process.exit(1);
   });
+=======
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+
+  console.log(
+    `Servidor rodando porta ${PORT}`
+  );
+
+});
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3

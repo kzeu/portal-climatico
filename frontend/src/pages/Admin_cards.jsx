@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 import "../App.css";
 import { useState, useEffect } from "react";
 import API_URL from "../config";
 import CardPortal from "../components/CardPortal";
 import { avisoTamanhoImagem } from "../media";
+=======
+/* eslint-disable react-hooks/exhaustive-deps */
+
+import "../App.css";
+import { useState, useEffect } from "react";
+import API_URL from "../config";
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 
 
@@ -15,8 +23,11 @@ function Admin_cards() {
   const [imagens, setImagens] = useState([]);
 
   const [imagensExistentes, setImagensExistentes] = useState([]);
+<<<<<<< HEAD
   const [avisoImagem, setAvisoImagem] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
   const [form, setForm] = useState({
 
@@ -82,6 +93,7 @@ function Admin_cards() {
 
   }, []);
 
+<<<<<<< HEAD
   useEffect(() => {
     if (form.imagem_card instanceof File) {
       const url = URL.createObjectURL(form.imagem_card);
@@ -92,6 +104,8 @@ function Admin_cards() {
     return undefined;
   }, [form.imagem_card]);
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
   /* =========================
      HANDLE CHANGE
   ========================= */
@@ -108,10 +122,13 @@ function Admin_cards() {
 
     } = e.target;
 
+<<<<<<< HEAD
     if (files?.[0]) {
       setAvisoImagem(avisoTamanhoImagem(files[0]));
     }
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
     setForm((anterior) => {
       const proximo = {
         ...anterior,
@@ -577,6 +594,7 @@ function Admin_cards() {
                 onChange={handleChange}
               />
               <small className="card-admin-help">
+<<<<<<< HEAD
                 Se houver imagem, ela aparece no topo do card, recortada na proporção 16:9. Prefira ficheiros até 300 KB.
               </small>
               {avisoImagem ? <p className="aviso-tamanho">{avisoImagem}</p> : null}
@@ -597,6 +615,13 @@ function Admin_cards() {
               </div>
             </div>
 
+=======
+                Se houver imagem, ela será usada como fundo do card com uma camada verde-escura para manter o texto legível.
+              </small>
+
+            </div>
+
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
             {/* SE TIVER PAGINA */}
 
             {form.tipo_link === "publicacao" && (

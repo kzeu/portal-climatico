@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
 import PageShell from "../components/PageShell";
 import HeroPage from "../components/HeroPage";
@@ -117,3 +118,46 @@ export default function Contato() {
     </PageShell>
   );
 }
+=======
+import "../App.css";
+
+function Contato() {
+  return (
+    <div className="content" id="content">
+
+      <div className="form-container">
+
+        <h1>Formulário de Contato</h1>
+
+        <p className="form-subtitle">
+          Envie suas dúvidas ou sugestões através do formulário abaixo.
+        </p>
+
+        <form className="form">
+
+          <label>Nome completo *</label>
+          <input type="text" placeholder="Digite seu nome completo" />
+
+          <label>E-mail *</label>
+          <input type="email" placeholder="Digite seu e-mail" />
+
+          <label>Assunto *</label>
+          <input type="text" placeholder="Digite o assunto" />
+
+          <label>Mensagem *</label>
+          <textarea placeholder="Digite sua mensagem..." rows="5"></textarea>
+
+          <button type="submit" className="btn-enviar">
+            Enviar mensagem
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+  );
+}
+
+export default Contato;
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
 import PageShell from "../components/PageShell";
 import HeroPage from "../components/HeroPage";
@@ -29,3 +30,28 @@ export default function Mapas_riscos() {
     </PageShell>
   );
 }
+=======
+import "../App.css";
+import HeroDinamico from "../components/HeroDinamico";
+import mapa from "../assets/Map1.jpg";
+
+function Mapas_riscos() {
+  return (
+    <div className="content full-page" id="content">
+
+      {/* HERO — conteúdo carregado do cadastro Banners e Heros */}
+      <HeroDinamico pagina="mapas_riscos" />
+
+      {/* IMAGEM FULL */}
+      <div className="mapa-full">
+
+        <img src={mapa} alt="Mapa de risco climático" />
+
+      </div>
+
+    </div>
+  );
+}
+
+export default Mapas_riscos;
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3

@@ -1,4 +1,5 @@
 import { useState } from "react";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import PageShell from "../components/PageShell";
 import API_URL from "../config";
@@ -71,3 +72,83 @@ export default function Login() {
     </PageShell>
   );
 }
+=======
+import "../App.css";
+import API_URL from "../config";
+
+function Login({ setPage }) {
+
+  const [usuario, setUsuario] = useState("");
+  const [senha, setSenha] = useState("");
+
+  async function entrar() {
+
+    const resposta = await fetch(
+      `${API_URL}/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          usuario,
+          senha
+        })
+      }
+    );
+
+    const dados = await resposta.json();
+
+        if (dados.sucesso) {
+
+        localStorage.setItem(
+          "logado",
+          "sim"
+        );
+
+        setPage("admin");
+
+      }
+
+  }
+
+  return (
+
+    <div className="login-page">
+
+      <div className="login-box">
+
+        <h2>Entrar</h2>
+
+        <input
+          type="text"
+          placeholder="Usuário"
+          value={usuario}
+          onChange={(e) =>
+            setUsuario(e.target.value)
+          }
+        />
+
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) =>
+            setSenha(e.target.value)
+          }
+        />
+
+        <button onClick={entrar}>
+          Entrar
+        </button>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+export default Login;
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3

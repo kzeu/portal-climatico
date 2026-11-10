@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
 import "../App.css";
 import PageShell from "../components/PageShell";
@@ -7,6 +8,11 @@ import API_URL from "../config";
 import { useRodape } from "../hooks/useRodape";
 import { enviarPedido, semApi } from "../rede";
 import { AvisoSemEnvio } from "../components/StatusStates";
+=======
+import { useState } from "react";
+import "../App.css";
+import API_URL from "../config";
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 function Form_submissao_climatica() {
 
@@ -166,6 +172,7 @@ function Form_submissao_climatica() {
     // =====================================================
 
     const [imagensPagina, setImagensPagina] = useState([]);
+<<<<<<< HEAD
     const [passo, setPasso] = useState(1);
     const [feedback, setFeedback] = useState(null);
     const [erros, setErros] = useState({});
@@ -174,6 +181,8 @@ function Form_submissao_climatica() {
     const rodape = useRodape();
     const sucessoRef = useRef(null);
     const focoPendente = useRef(null);
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 
     // =====================================================
@@ -207,6 +216,7 @@ function Form_submissao_climatica() {
 
         });
 
+<<<<<<< HEAD
         setErros((atual) => {
             if (!atual[name]) return atual;
             const proximo = { ...atual };
@@ -214,6 +224,8 @@ function Form_submissao_climatica() {
             return proximo;
         });
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
     }
 
 
@@ -404,6 +416,7 @@ function Form_submissao_climatica() {
     // SALVAR
     // =====================================================
 
+<<<<<<< HEAD
     function limparFormulario() {
         setForm((atual) => {
             const proximo = {};
@@ -519,10 +532,13 @@ function Form_submissao_climatica() {
         return () => window.removeEventListener("beforeunload", avisar);
     }, [concluida, form, arquivos.length, imagensPagina.length]);
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
     async function salvar(e) {
 
         e.preventDefault();
 
+<<<<<<< HEAD
         const novos = {
             ...validarPasso(1),
             ...validarPasso(2),
@@ -535,6 +551,8 @@ function Form_submissao_climatica() {
         }
 
         setEnviando(true);
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
         try {
 
@@ -601,8 +619,13 @@ function Form_submissao_climatica() {
             // ENVIO
             // =================================================
 
+<<<<<<< HEAD
             const { resposta, dados } =
                 await enviarPedido(
+=======
+            const response =
+                await fetch(
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                     `${API_URL}/submissoes`,
                     {
                         method: "POST",
@@ -611,6 +634,7 @@ function Form_submissao_climatica() {
                 );
 
 
+<<<<<<< HEAD
             if (!resposta.ok) {
                 setFeedback({
                     tipo: "erro",
@@ -621,12 +645,41 @@ function Form_submissao_climatica() {
 
             limparFormulario();
             setConcluida({ id: dados.registro?.id });
+=======
+            const resultado =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                alert(
+                    resultado.erro ||
+                    "Erro ao enviar submissão."
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Submissão enviada com sucesso!"
+            );
+
+
+            console.log(
+                "SUBMISSÃO:",
+                resultado
+            );
+
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
         }
         catch (err) {
 
             console.log(err);
 
+<<<<<<< HEAD
             setFeedback({
                 tipo: "erro",
                 texto: semApi(err)
@@ -638,10 +691,18 @@ function Form_submissao_climatica() {
         finally {
             setEnviando(false);
         }
+=======
+            alert(
+                "Erro ao enviar a submissão."
+            );
+
+        }
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
     }
 
 
+<<<<<<< HEAD
     function avancarPasso() {
         const novos = validarPasso(passo);
         if (Object.keys(novos).length) {
@@ -660,12 +721,15 @@ function Form_submissao_climatica() {
         "Confirmar"
     ];
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
     // =====================================================
     // RETURN
     // =====================================================
 
     return (
 
+<<<<<<< HEAD
         <PageShell>
 
             <HeroPage pagina="submissao_climatica" />
@@ -720,6 +784,121 @@ function Form_submissao_climatica() {
                 className="form-container submissao-form"
                 onSubmit={salvar}
                 noValidate
+=======
+        <div
+            className="content"
+            id="content"
+        >
+
+            {/* CAIXA EXPLICATIVA */}
+            <section
+                aria-label="Orientações para submissão climática"
+                style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "16px",
+                    padding: "20px 22px",
+                    marginBottom: "10px",
+                    background: "#ffffff",
+                    border: "1px solid #dce7e8",
+                    borderLeft: "5px solid #0f766e",
+                    borderRadius: "12px",
+                    boxShadow: "0 3px 12px rgba(15, 23, 42, 0.05)"
+                }}
+            >
+                <div
+                    aria-hidden="true"
+                    style={{
+                        flexShrink: 0,
+                        width: "44px",
+                        height: "44px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: "12px",
+                        background: "#e6f4f1",
+                        fontSize: "23px"
+                    }}
+                >
+                    🌍
+                </div>
+
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <h2
+                        style={{
+                            margin: "0 0 7px",
+                            color: "#164e4a",
+                            fontSize: "19px"
+                        }}
+                    >
+                        Compartilhe iniciativas e conhecimentos climáticos
+                    </h2>
+
+                    <p
+                        style={{
+                            margin: "0 0 12px",
+                            color: "#475569",
+                            lineHeight: 1.6,
+                            fontSize: "14px"
+                        }}
+                    >
+                        Utilize este formulário para enviar eventos, projetos, publicações,
+                        relatórios, mapas, bases de dados e outras informações relacionadas
+                        às mudanças climáticas na Guiné-Bissau.
+                    </p>
+
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "8px",
+                            marginBottom: "10px"
+                        }}
+                    >
+                        {[
+                            ["📋", "Preencha os dados obrigatórios"],
+                            ["📎", "Anexe documentos ou imagens, quando necessário"],
+                            ["🔎", "A submissão será analisada antes da publicação"]
+                        ].map(([icone, texto]) => (
+                            <div
+                                key={texto}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "7px",
+                                    padding: "8px 10px",
+                                    borderRadius: "8px",
+                                    background: "#f3f8f8",
+                                    color: "#334155",
+                                    fontSize: "12px",
+                                    lineHeight: 1.4
+                                }}
+                            >
+                                <span aria-hidden="true">{icone}</span>
+                                <span>{texto}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <p
+                        style={{
+                            margin: 0,
+                            color: "#64748b",
+                            fontSize: "12px",
+                            lineHeight: 1.5
+                        }}
+                    >
+                        Antes de enviar, confira os dados e os links. O envio não significa
+                        publicação automática; o conteúdo depende de análise e aprovação.
+                    </p>
+                </div>
+            </section>
+
+            <form
+                className="form-container"
+                onSubmit={salvar}
+                style={{ marginTop: "0" }}
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
             >
 
 
@@ -727,6 +906,7 @@ function Form_submissao_climatica() {
                     TÍTULO
                 ===================================================== */}
 
+<<<<<<< HEAD
                 <h2>
                     Enviar uma ação climática
                 </h2>
@@ -751,16 +931,29 @@ function Form_submissao_climatica() {
                         ) : feedback.texto}
                     </div>
                 ) : null}
+=======
+                <h1>
+                    Submissão Climática
+                </h1>
+
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                 {/* =====================================================
                     IDENTIFICAÇÃO
                 ===================================================== */}
 
+<<<<<<< HEAD
                 <div hidden={passo !== 1}>
                 <div className="form-box">
 
                     <h2>
                         Quem envia
+=======
+                <div className="form-box">
+
+                    <h2>
+                        Identificação
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                     </h2>
 
 
@@ -771,15 +964,23 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-tipo_proponente">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Organismo *
                             </label>
 
                             <select
+<<<<<<< HEAD
                                 id="sub-tipo_proponente"
                                 name="tipo_proponente"
                                 aria-invalid={Boolean(erros.tipo_proponente)}
                                 aria-describedby={erros.tipo_proponente ? "erro-tipo_proponente" : undefined}
+=======
+                                name="tipo_proponente"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 value={
                                     form.tipo_proponente
                                 }
@@ -794,7 +995,11 @@ function Form_submissao_climatica() {
                                 </option>
 
                                 <option value="Individuo">
+<<<<<<< HEAD
                                     Indivíduo
+=======
+                                    Individuo
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 </option>
 
                                 <option value="Instituição">
@@ -806,7 +1011,10 @@ function Form_submissao_climatica() {
                                 </option>
 
                             </select>
+<<<<<<< HEAD
                             {erros.tipo_proponente ? <p className="campo-erro" id="erro-tipo_proponente">{erros.tipo_proponente}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
@@ -815,12 +1023,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-data_submissao">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Data da Submissão
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-data_submissao"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 type="date"
                                 name="data_submissao"
                                 value={
@@ -836,11 +1051,16 @@ function Form_submissao_climatica() {
 
                         <div className="campo campo-2">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-email">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 E-mail *
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-email"
                                 type="email"
                                 name="email"
@@ -848,16 +1068,26 @@ function Form_submissao_climatica() {
                                 spellCheck={false}
                                 aria-invalid={Boolean(erros.email)}
                                 aria-describedby={erros.email ? "erro-email" : undefined}
+=======
+                                type="email"
+                                name="email"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 value={
                                     form.email
                                 }
                                 onChange={
                                     alterarCampo
                                 }
+<<<<<<< HEAD
                                 placeholder="nome@exemplo.gw"
                                 required
                             />
                             {erros.email ? <p className="campo-erro" id="erro-email">{erros.email}</p> : null}
+=======
+                                placeholder="Digite seu e-mail"
+                                required
+                            />
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
@@ -866,16 +1096,25 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-entidade">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Nome da Entidade *
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-entidade"
                                 type="text"
                                 name="entidade"
                                 aria-invalid={Boolean(erros.entidade)}
                                 aria-describedby={erros.entidade ? "erro-entidade" : undefined}
+=======
+                                type="text"
+                                name="entidade"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 value={
                                     form.entidade
                                 }
@@ -885,7 +1124,10 @@ function Form_submissao_climatica() {
                                 placeholder="Digite o nome da entidade"
                                 required
                             />
+<<<<<<< HEAD
                             {erros.entidade ? <p className="campo-erro" id="erro-entidade">{erros.entidade}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
@@ -894,17 +1136,26 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-nome_responsavel">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Nome do Responsável *
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-nome_responsavel"
                                 type="text"
                                 name="nome_responsavel"
                                 autoComplete="name"
                                 aria-invalid={Boolean(erros.nome_responsavel)}
                                 aria-describedby={erros.nome_responsavel ? "erro-nome_responsavel" : undefined}
+=======
+                                type="text"
+                                name="nome_responsavel"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 value={
                                     form.nome_responsavel
                                 }
@@ -914,7 +1165,10 @@ function Form_submissao_climatica() {
                                 placeholder="Digite o nome completo"
                                 required
                             />
+<<<<<<< HEAD
                             {erros.nome_responsavel ? <p className="campo-erro" id="erro-nome_responsavel">{erros.nome_responsavel}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
@@ -923,12 +1177,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-cargo">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Cargo / Papel na Instituição
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-cargo"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 type="text"
                                 name="cargo"
                                 value={
@@ -947,12 +1208,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-website">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Website
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-website"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 type="url"
                                 name="website"
                                 value={
@@ -961,7 +1229,11 @@ function Form_submissao_climatica() {
                                 onChange={
                                     alterarCampo
                                 }
+<<<<<<< HEAD
                                 placeholder="https://…"
+=======
+                                placeholder="https://..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                             />
 
                         </div>
@@ -970,18 +1242,28 @@ function Form_submissao_climatica() {
                     </div>
 
                 </div>
+<<<<<<< HEAD
                 </div>
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 
                 {/* =====================================================
                     INFORMAÇÃO SOBRE A SUBMISSÃO
                 ===================================================== */}
 
+<<<<<<< HEAD
                 <div hidden={passo !== 2}>
                 <div className="form-box">
 
                     <h2>
                         O que está a enviar
+=======
+                <div className="form-box">
+
+                    <h2>
+                        Informação sobre a Submissão
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                     </h2>
 
 
@@ -992,15 +1274,23 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-tipo_submissao">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Tipo de Submissão *
                             </label>
 
                             <select
+<<<<<<< HEAD
                                 id="sub-tipo_submissao"
                                 name="tipo_submissao"
                                 aria-invalid={Boolean(erros.tipo_submissao)}
                                 aria-describedby={erros.tipo_submissao ? "erro-tipo_submissao" : undefined}
+=======
+                                name="tipo_submissao"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 value={
                                     form.tipo_submissao
                                 }
@@ -1071,7 +1361,10 @@ function Form_submissao_climatica() {
                                 </option>
 
                             </select>
+<<<<<<< HEAD
                             {erros.tipo_submissao ? <p className="campo-erro" id="erro-tipo_submissao">{erros.tipo_submissao}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
@@ -1143,12 +1436,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-idioma">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Idioma *
                             </label>
 
                             <select
+<<<<<<< HEAD
                                 id="sub-idioma"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 name="idioma"
                                 value={
                                     form.idioma
@@ -1196,16 +1496,25 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-titulo">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Título *
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-titulo"
                                 type="text"
                                 name="titulo"
                                 aria-invalid={Boolean(erros.titulo)}
                                 aria-describedby={erros.titulo ? "erro-titulo" : undefined}
+=======
+                                type="text"
+                                name="titulo"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 value={
                                     form.titulo
                                 }
@@ -1215,7 +1524,10 @@ function Form_submissao_climatica() {
                                 placeholder="Título da submissão"
                                 required
                             />
+<<<<<<< HEAD
                             {erros.titulo ? <p className="campo-erro" id="erro-titulo">{erros.titulo}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
@@ -1224,12 +1536,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-titulo_curto">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Título Curto
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-titulo_curto"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 type="text"
                                 name="titulo_curto"
                                 value={
@@ -1248,12 +1567,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo campo-2">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-descricao">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Descrição *
                             </label>
 
                             <textarea
+<<<<<<< HEAD
                                 id="sub-descricao"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 name="descricao"
                                 value={
                                     form.descricao
@@ -1262,7 +1588,11 @@ function Form_submissao_climatica() {
                                     alterarCampo
                                 }
                                 rows={6}
+<<<<<<< HEAD
                                 placeholder="Descreva a submissão…"
+=======
+                                placeholder="Descreva a submissão..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 required
                             />
 
@@ -1273,12 +1603,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-data_publicacao">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Data de Publicação
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-data_publicacao"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 type="date"
                                 name="data_publicacao"
                                 value={
@@ -1296,12 +1633,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-data_retirada">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Data de Retirada
                             </label>
 
                             <input
+<<<<<<< HEAD
                                 id="sub-data_retirada"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 type="date"
                                 name="data_retirada"
                                 value={
@@ -1329,13 +1673,22 @@ function Form_submissao_climatica() {
                     <div className="form-box">
 
                         <h2>
+<<<<<<< HEAD
                             Onde deve aparecer
+=======
+                            Publicação no Portal
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                         </h2>
 
 
                         <p>
+<<<<<<< HEAD
                             Depois da análise, este conteúdo pode aparecer numa página do portal.
                             Estes campos dizem à equipa onde o mostrar.
+=======
+                            Esta submissão será transformada
+                            em um Card após aprovação.
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                         </p>
 
 
@@ -1346,6 +1699,7 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-pagina_card">
                                     Secção do portal *
                                 </label>
@@ -1355,6 +1709,14 @@ function Form_submissao_climatica() {
                                     name="pagina_card"
                                     aria-invalid={Boolean(erros.pagina_card)}
                                     aria-describedby={erros.pagina_card ? "erro-pagina_card" : undefined}
+=======
+                                <label>
+                                    Página onde o Card será publicado *
+                                </label>
+
+                                <select
+                                    name="pagina_card"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     value={
                                         form.pagina_card
                                     }
@@ -1369,7 +1731,11 @@ function Form_submissao_climatica() {
                                     </option>
 
                                     <option value="home">
+<<<<<<< HEAD
                                         Início
+=======
+                                        Home
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     </option>
 
                                     <option value="adaptacao">
@@ -1385,7 +1751,10 @@ function Form_submissao_climatica() {
                                     </option>
 
                                 </select>
+<<<<<<< HEAD
                                 {erros.pagina_card ? <p className="campo-erro" id="erro-pagina_card">{erros.pagina_card}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                             </div>
 
@@ -1394,12 +1763,20 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-tipo_link">
                                     Como abrir o conteúdo *
                                 </label>
 
                                 <select
                                 id="sub-tipo_link"
+=======
+                                <label>
+                                    Destino do Card *
+                                </label>
+
+                                <select
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     name="tipo_link"
                                     value={
                                         form.tipo_link
@@ -1411,7 +1788,11 @@ function Form_submissao_climatica() {
                                 >
 
                                     <option value="interno">
+<<<<<<< HEAD
                                         Página neste portal
+=======
+                                        Página interna
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     </option>
 
                                     <option value="externo">
@@ -1429,26 +1810,41 @@ function Form_submissao_climatica() {
 
                                 <div className="campo campo-2">
 
+<<<<<<< HEAD
                                     <label htmlFor="sub-link_externo">
+=======
+                                    <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                         Link externo *
                                     </label>
 
                                     <input
+<<<<<<< HEAD
                                 id="sub-link_externo"
                                         type="url"
                                         name="link_externo"
                                         aria-invalid={Boolean(erros.link_externo)}
                                         aria-describedby={erros.link_externo ? "erro-link_externo" : undefined}
+=======
+                                        type="url"
+                                        name="link_externo"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                         value={
                                             form.link_externo
                                         }
                                         onChange={
                                             alterarCampo
                                         }
+<<<<<<< HEAD
                                         placeholder="https://…"
                                         required
                                     />
                                     {erros.link_externo ? <p className="campo-erro" id="erro-link_externo">{erros.link_externo}</p> : null}
+=======
+                                        placeholder="https://..."
+                                        required
+                                    />
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                                 </div>
 
@@ -1459,12 +1855,20 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-imagem-card">
                                     Imagem de capa
                                 </label>
 
                                 <input
                                     id="sub-imagem-card"
+=======
+                                <label>
+                                    Imagem do Card
+                                </label>
+
+                                <input
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="file"
                                     accept="image/png,image/jpeg,image/jpg"
                                     onChange={
@@ -1473,7 +1877,12 @@ function Form_submissao_climatica() {
                                 />
 
                                 <small>
+<<<<<<< HEAD
                                     Opcional. Aparece na entrada do conteúdo, depois da aprovação.
+=======
+                                    Opcional. Será usada como
+                                    imagem de entrada do Card.
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 </small>
 
                             </div>
@@ -1491,7 +1900,11 @@ function Form_submissao_climatica() {
                             <div className="secao-admin">
 
                                 <h2>
+<<<<<<< HEAD
                                     Texto da página
+=======
+                                    Conteúdo da Página
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 </h2>
 
 
@@ -1502,6 +1915,7 @@ function Form_submissao_climatica() {
 
                                     <div className="campo">
 
+<<<<<<< HEAD
                                         <label htmlFor="sub-titulo_pagina">
                                             Título *
                                         </label>
@@ -1512,6 +1926,15 @@ function Form_submissao_climatica() {
                                             name="titulo_pagina"
                                             aria-invalid={Boolean(erros.titulo_pagina)}
                                             aria-describedby={erros.titulo_pagina ? "erro-titulo_pagina" : undefined}
+=======
+                                        <label>
+                                            Título da Página *
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="titulo_pagina"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                             value={
                                                 form.titulo_pagina
                                             }
@@ -1521,7 +1944,10 @@ function Form_submissao_climatica() {
                                             placeholder="Título da página"
                                             required
                                         />
+<<<<<<< HEAD
                                         {erros.titulo_pagina ? <p className="campo-erro" id="erro-titulo_pagina">{erros.titulo_pagina}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                                     </div>
 
@@ -1530,12 +1956,19 @@ function Form_submissao_climatica() {
 
                                     <div className="campo">
 
+<<<<<<< HEAD
                                         <label htmlFor="sub-data_publicacao_pagina">
+=======
+                                        <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                             Data de Publicação
                                         </label>
 
                                         <input
+<<<<<<< HEAD
                                 id="sub-data_publicacao_pagina"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                             type="date"
                                             name="data_publicacao_pagina"
                                             value={
@@ -1553,15 +1986,23 @@ function Form_submissao_climatica() {
 
                                     <div className="campo campo-2">
 
+<<<<<<< HEAD
                                         <label htmlFor="sub-texto_pagina">
+=======
+                                        <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                             Texto Completo *
                                         </label>
 
                                         <textarea
+<<<<<<< HEAD
                                 id="sub-texto_pagina"
                                             name="texto_pagina"
                                             aria-invalid={Boolean(erros.texto_pagina)}
                                             aria-describedby={erros.texto_pagina ? "erro-texto_pagina" : undefined}
+=======
+                                            name="texto_pagina"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                             value={
                                                 form.texto_pagina
                                             }
@@ -1569,10 +2010,16 @@ function Form_submissao_climatica() {
                                                 alterarCampo
                                             }
                                             rows={10}
+<<<<<<< HEAD
                                             placeholder="Escreva o conteúdo completo da página…"
                                             required
                                         />
                                         {erros.texto_pagina ? <p className="campo-erro" id="erro-texto_pagina">{erros.texto_pagina}</p> : null}
+=======
+                                            placeholder="Escreva o conteúdo completo da página..."
+                                            required
+                                        />
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                                     </div>
 
@@ -1581,7 +2028,11 @@ function Form_submissao_climatica() {
 
                                     <div className="campo campo-2">
 
+<<<<<<< HEAD
                                         <label htmlFor="sub-fotos-pagina">
+=======
+                                        <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                             Fotos da Página
                                             {" "}
                                             <span>
@@ -1590,7 +2041,10 @@ function Form_submissao_climatica() {
                                         </label>
 
                                         <input
+<<<<<<< HEAD
                                     id="sub-fotos-pagina"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                             type="file"
                                             multiple
                                             accept="image/png,image/jpeg,image/jpg"
@@ -1672,12 +2126,21 @@ function Form_submissao_climatica() {
                     <div className="form-box">
 
                         <h2>
+<<<<<<< HEAD
                             Documento na biblioteca
+=======
+                            Publicação na Biblioteca
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                         </h2>
 
 
                         <p>
+<<<<<<< HEAD
                             Depois da análise, este material pode ficar disponível na biblioteca.
+=======
+                            Esta submissão será disponibilizada
+                            na Biblioteca após aprovação.
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                         </p>
 
 
@@ -1688,12 +2151,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-biblioteca_link">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Link externo
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-biblioteca_link"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="url"
                                     name="biblioteca_link"
                                     value={
@@ -1702,7 +2172,11 @@ function Form_submissao_climatica() {
                                     onChange={
                                         alterarCampo
                                     }
+<<<<<<< HEAD
                                     placeholder="https://…"
+=======
+                                    placeholder="https://..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                                 <small>
@@ -1717,12 +2191,20 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-arquivo-biblioteca">
                                     Ficheiro
                                 </label>
 
                                 <input
                                     id="sub-arquivo-biblioteca"
+=======
+                                <label>
+                                    Arquivo da Biblioteca
+                                </label>
+
+                                <input
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="file"
                                     accept="
                                         .pdf,
@@ -1774,16 +2256,25 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-data_inicio">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Data de Início *
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-data_inicio"
                                     type="date"
                                     name="data_inicio"
                                     aria-invalid={Boolean(erros.data_inicio)}
                                     aria-describedby={erros.data_inicio ? "erro-data_inicio" : undefined}
+=======
+                                    type="date"
+                                    name="data_inicio"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     value={
                                         form.data_inicio
                                     }
@@ -1792,7 +2283,10 @@ function Form_submissao_climatica() {
                                     }
                                     required
                                 />
+<<<<<<< HEAD
                                 {erros.data_inicio ? <p className="campo-erro" id="erro-data_inicio">{erros.data_inicio}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                             </div>
 
@@ -1801,12 +2295,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-hora_inicio">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Hora de Início
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-hora_inicio"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="time"
                                     name="hora_inicio"
                                     value={
@@ -1824,12 +2325,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-data_fim">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Data de Término
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-data_fim"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="date"
                                     name="data_fim"
                                     value={
@@ -1847,12 +2355,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-hora_fim">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Hora de Término
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-hora_fim"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="time"
                                     name="hora_fim"
                                     value={
@@ -1870,12 +2385,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-local1">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Local Principal
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-local1"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="text"
                                     name="local1"
                                     value={
@@ -1894,12 +2416,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-local2">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Local Complementar
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-local2"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="text"
                                     name="local2"
                                     value={
@@ -1908,7 +2437,11 @@ function Form_submissao_climatica() {
                                     onChange={
                                         alterarCampo
                                     }
+<<<<<<< HEAD
                                     placeholder="Endereço, Auditório, Sala…"
+=======
+                                    placeholder="Endereço, Auditório, Sala..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                             </div>
@@ -1951,12 +2484,19 @@ function Form_submissao_climatica() {
 
                                 <div className="campo campo-2">
 
+<<<<<<< HEAD
                                     <label htmlFor="sub-link">
+=======
+                                    <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                         Link do Evento
                                     </label>
 
                                     <input
+<<<<<<< HEAD
                                 id="sub-link"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                         type="url"
                                         name="link"
                                         value={
@@ -1965,7 +2505,11 @@ function Form_submissao_climatica() {
                                         onChange={
                                             alterarCampo
                                         }
+<<<<<<< HEAD
                                         placeholder="https://…"
+=======
+                                        placeholder="https://..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     />
 
                                 </div>
@@ -2000,12 +2544,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-data_inicio-2">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Data de Início *
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-data_inicio-2"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="date"
                                     name="data_inicio"
                                     value={
@@ -2024,12 +2575,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-data_fim-2">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Data Prevista de Término
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-data_fim-2"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="date"
                                     name="data_fim"
                                     value={
@@ -2047,12 +2605,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-area_projeto">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Área de Atuação
                                 </label>
 
                                 <select
+<<<<<<< HEAD
                                 id="sub-area_projeto"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     name="area_projeto"
                                     value={
                                         form.area_projeto
@@ -2115,12 +2680,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-link-2">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Link do Projeto
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-link-2"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="url"
                                     name="link"
                                     value={
@@ -2129,7 +2701,11 @@ function Form_submissao_climatica() {
                                     onChange={
                                         alterarCampo
                                     }
+<<<<<<< HEAD
                                     placeholder="https://…"
+=======
+                                    placeholder="https://..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                             </div>
@@ -2139,12 +2715,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-parceiros">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Instituições Parceiras
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-parceiros"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="text"
                                     name="parceiros"
                                     value={
@@ -2153,7 +2736,11 @@ function Form_submissao_climatica() {
                                     onChange={
                                         alterarCampo
                                     }
+<<<<<<< HEAD
                                     placeholder="Ex.: Ministério do Ambiente, PNUD, FAO…"
+=======
+                                    placeholder="Ex.: Ministério do Ambiente, PNUD, FAO..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                             </div>
@@ -2163,12 +2750,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-objetivo_projeto">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Objetivo do Projeto *
                                 </label>
 
                                 <textarea
+<<<<<<< HEAD
                                 id="sub-objetivo_projeto"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     name="objetivo_projeto"
                                     value={
                                         form.objetivo_projeto
@@ -2177,7 +2771,11 @@ function Form_submissao_climatica() {
                                         alterarCampo
                                     }
                                     rows={5}
+<<<<<<< HEAD
                                     placeholder="Descreva os objetivos do projeto…"
+=======
+                                    placeholder="Descreva os objetivos do projeto..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                             </div>
@@ -2187,12 +2785,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-descricao_documento">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Observações
                                 </label>
 
                                 <textarea
+<<<<<<< HEAD
                                 id="sub-descricao_documento"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     name="descricao_documento"
                                     value={
                                         form.descricao_documento
@@ -2201,7 +2806,11 @@ function Form_submissao_climatica() {
                                         alterarCampo
                                     }
                                     rows={4}
+<<<<<<< HEAD
                                     placeholder="Informações complementares…"
+=======
+                                    placeholder="Informações complementares..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                             </div>
@@ -2240,12 +2849,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-tipo_conteudo_outro">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Tipo de Conteúdo *
                                 </label>
 
                                 <input
+<<<<<<< HEAD
                                 id="sub-tipo_conteudo_outro"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="text"
                                     name="tipo_conteudo_outro"
                                     value={
@@ -2254,7 +2870,11 @@ function Form_submissao_climatica() {
                                     onChange={
                                         alterarCampo
                                     }
+<<<<<<< HEAD
                                     placeholder="Ex.: Podcast, Vídeo, Curso…"
+=======
+                                    placeholder="Ex.: Podcast, Vídeo, Curso..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     required
                                 />
 
@@ -2265,12 +2885,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-objetivo_outro">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Objetivo *
                                 </label>
 
                                 <textarea
+<<<<<<< HEAD
                                 id="sub-objetivo_outro"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     name="objetivo_outro"
                                     value={
                                         form.objetivo_outro
@@ -2290,12 +2917,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-descricao_outro">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Descrição
                                 </label>
 
                                 <textarea
+<<<<<<< HEAD
                                 id="sub-descricao_outro"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     name="descricao_outro"
                                     value={
                                         form.descricao_outro
@@ -2304,7 +2938,11 @@ function Form_submissao_climatica() {
                                         alterarCampo
                                     }
                                     rows={5}
+<<<<<<< HEAD
                                     placeholder="Descreva o conteúdo…"
+=======
+                                    placeholder="Descreva o conteúdo..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                             </div>
@@ -2314,12 +2952,19 @@ function Form_submissao_climatica() {
 
                             <div className="campo campo-2">
 
+<<<<<<< HEAD
                                 <label htmlFor="sub-observacoes_outro">
+=======
+                                <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     Observações
                                 </label>
 
                                 <textarea
+<<<<<<< HEAD
                                 id="sub-observacoes_outro"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     name="observacoes_outro"
                                     value={
                                         form.observacoes_outro
@@ -2328,7 +2973,11 @@ function Form_submissao_climatica() {
                                         alterarCampo
                                     }
                                     rows={4}
+<<<<<<< HEAD
                                     placeholder="Informações adicionais…"
+=======
+                                    placeholder="Informações adicionais..."
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 />
 
                             </div>
@@ -2341,17 +2990,27 @@ function Form_submissao_climatica() {
                 )}
 
 
+<<<<<<< HEAD
                 </div>
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                 {/* =====================================================
                     ARQUIVOS GERAIS
                 ===================================================== */}
 
+<<<<<<< HEAD
                 <div hidden={passo !== 3}>
                 <div className="form-box">
 
                     <h2>
                         Anexos
+=======
+                <div className="form-box">
+
+                    <h2>
+                        Arquivos
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                     </h2>
 
 
@@ -2359,12 +3018,19 @@ function Form_submissao_climatica() {
 
                         <div className="campo campo-2">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-documentos">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Documentos e arquivos
                             </label>
 
                             <input
+<<<<<<< HEAD
                                     id="sub-documentos"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 type="file"
                                 multiple
                                 accept="
@@ -2412,9 +3078,15 @@ function Form_submissao_climatica() {
                                                 ) ===
                                                 String(index) && (
 
+<<<<<<< HEAD
                                                         <strong>
                                                         {" "}
                                                         Imagem de capa
+=======
+                                                    <strong>
+                                                        {" "}
+                                                        ⭐ Imagem do Card
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                                     </strong>
 
                                                 )}
@@ -2450,15 +3122,23 @@ function Form_submissao_climatica() {
 
                         <div className="campo campo-2">
 
+<<<<<<< HEAD
                             <label htmlFor="sub-tags">
+=======
+                            <label>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 Tags
                             </label>
 
                             <select
+<<<<<<< HEAD
                                 id="sub-tags"
                                 name="tags"
                                 aria-invalid={Boolean(erros.tags)}
                                 aria-describedby={erros.tags ? "erro-tags" : undefined}
+=======
+                                name="tags"
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 value={
                                     form.tags
                                 }
@@ -2469,7 +3149,11 @@ function Form_submissao_climatica() {
                             >
 
                                 <option value="">
+<<<<<<< HEAD
                                     Selecione…
+=======
+                                    Selecione...
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                 </option>
 
                                 <option value="Adaptação">
@@ -2481,25 +3165,38 @@ function Form_submissao_climatica() {
                                 </option>
 
                             </select>
+<<<<<<< HEAD
                             {erros.tags ? <p className="campo-erro" id="erro-tags">{erros.tags}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
                     </div>
 
                 </div>
+<<<<<<< HEAD
                 </div>
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 
                 {/* =====================================================
                     CONFIRMAÇÃO
                 ===================================================== */}
 
+<<<<<<< HEAD
                 <div hidden={passo !== 4}>
                 <div className="form-box">
 
                     <h2>
                         Confirmar
+=======
+                <div className="form-box">
+
+                    <h2>
+                        Confirmação
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                     </h2>
 
 
@@ -2518,7 +3215,10 @@ function Form_submissao_climatica() {
                             >
 
                                 <input
+<<<<<<< HEAD
                                     id="sub-permissao"
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     type="checkbox"
                                     name="permissao_publicacao"
                                     checked={
@@ -2527,8 +3227,11 @@ function Form_submissao_climatica() {
                                     onChange={
                                         alterarCampo
                                     }
+<<<<<<< HEAD
                                     aria-invalid={Boolean(erros.permissao_publicacao)}
                                     aria-describedby={erros.permissao_publicacao ? "erro-permissao" : undefined}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                                     required
                                 />
 
@@ -2539,7 +3242,10 @@ function Form_submissao_climatica() {
                                 Guiné-Bissau.
 
                             </label>
+<<<<<<< HEAD
                             {erros.permissao_publicacao ? <p className="campo-erro" id="erro-permissao">{erros.permissao_publicacao}</p> : null}
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
                         </div>
 
@@ -2558,9 +3264,14 @@ function Form_submissao_climatica() {
                             <button
                                 type="submit"
                                 className="btn-primary"
+<<<<<<< HEAD
                                 disabled={enviando}
                             >
                                 {enviando ? "A enviar…" : "Enviar submissão"}
+=======
+                            >
+                                Enviar Submissão
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
                             </button>
 
                         </div>
@@ -2569,6 +3280,7 @@ function Form_submissao_climatica() {
                     </div>
 
                 </div>
+<<<<<<< HEAD
                 </div>
 
                 <div className="wizard-nav">
@@ -2583,14 +3295,20 @@ function Form_submissao_climatica() {
                         </button>
                     ) : null}
                 </div>
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 
             </form>
 
+<<<<<<< HEAD
             </div>
             )}
 
         </PageShell>
+=======
+        </div>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
     );
 

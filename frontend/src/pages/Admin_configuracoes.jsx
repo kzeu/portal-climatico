@@ -20,11 +20,18 @@ const estiloInput = {
 function Admin_configuracoes() {
   const [form, setForm] = useState({
     sobre_texto: "Portal Climático da Guiné-Bissau",
+<<<<<<< HEAD
     facebook_url: "https://www.facebook.com/portaldoclima.gw",
     instagram_url: "https://www.instagram.com/portaldoclima.gw",
     twitter_url: "https://x.com/portaldoclima_gw",
     linkedin_url: "",
     email: "info@portaldoclima.gw",
+=======
+    facebook_url: "",
+    instagram_url: "",
+    linkedin_url: "",
+    email: "info@clima.gb",
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
     telefone: "+245 XXX XXX",
     sobre_pdf: "",
     sobre_pdf_nome: "",
@@ -68,7 +75,11 @@ function Admin_configuracoes() {
 
     try {
       const dados = new FormData();
+<<<<<<< HEAD
       ["sobre_texto", "facebook_url", "instagram_url", "twitter_url", "linkedin_url", "email", "telefone"]
+=======
+      ["sobre_texto", "facebook_url", "instagram_url", "linkedin_url", "email", "telefone"]
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
         .forEach(campo => dados.append(campo, form[campo] || ""));
       if (arquivoSobre) dados.append("sobre_pdf", arquivoSobre);
       if (arquivoPolitica) dados.append("politica_pdf", arquivoPolitica);
@@ -138,10 +149,13 @@ function Admin_configuracoes() {
           <input style={estiloInput} type="url" placeholder="https://instagram.com/..." value={form.instagram_url || ""} onChange={e => alterar("instagram_url", e.target.value)} />
         </label>
         <label style={estiloCampo}>
+<<<<<<< HEAD
           <span>Link do X</span>
           <input style={estiloInput} type="url" placeholder="https://x.com/..." value={form.twitter_url || ""} onChange={e => alterar("twitter_url", e.target.value)} />
         </label>
         <label style={estiloCampo}>
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
           <span>Link do LinkedIn</span>
           <input style={estiloInput} type="url" placeholder="https://linkedin.com/..." value={form.linkedin_url || ""} onChange={e => alterar("linkedin_url", e.target.value)} />
         </label>

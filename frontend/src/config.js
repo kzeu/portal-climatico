@@ -2,6 +2,7 @@ const API_URL = import.meta.env.DEV
   ? `http://${window.location.hostname}:3000`
   : "";
 
+<<<<<<< HEAD
 const FICHEIROS = {
   "/clima/mapas-filtros": "/dados/mapas-filtros.json",
   "/biblioteca": "/dados/biblioteca.json",
@@ -24,4 +25,6 @@ export function urlApi(caminho) {
   return caminho;
 }
 
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 export default API_URL;

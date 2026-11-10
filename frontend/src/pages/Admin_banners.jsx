@@ -2,7 +2,10 @@
 import { useEffect, useState } from "react";
 import API_URL from "../config";
 import "../App.css";
+<<<<<<< HEAD
 import { avisoTamanhoImagem } from "../media";
+=======
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 
 
 
@@ -133,7 +136,11 @@ function selecionarImagem(e) {
   setArquivoImagem(arquivo);
   setPreviewImagem(URL.createObjectURL(arquivo));
   setRemoverImagem(false);
+<<<<<<< HEAD
   setErro(avisoTamanhoImagem(arquivo));
+=======
+  setErro("");
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 }
 
 
@@ -364,7 +371,11 @@ function selecionarImagem(e) {
             accept="image/jpeg,image/png,image/webp"
             onChange={selecionarImagem}
           />
+<<<<<<< HEAD
           <small>JPG, PNG ou WEBP. Máximo de 5 MB. Prefira até 300 KB para ligações lentas.</small>
+=======
+          <small>JPG, PNG ou WEBP. Máximo de 5 MB.</small>
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
         </div>
 
         {editando && (

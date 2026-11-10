@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../assets/logo.webp";
@@ -203,3 +204,284 @@ function Menu() {
 }
 
 export default Menu;
+=======
+import { useState } from "react";
+import logo from "../assets/logo2-.png";
+
+function Menu({ setPage }) {
+
+  const [menuMobile, setMenuMobile] = useState(false);
+  const [dropdownAberto, setDropdownAberto] = useState(null);
+  
+
+  const go = (page) => {
+
+  setPage(page);
+
+  setMenuMobile(false);
+
+};
+
+  const abrirAdmin = () => {
+
+    const logado =
+      localStorage.getItem("logado");
+
+    if (logado === "sim") {
+
+      go("admin");
+
+    } else {
+
+      go("login");
+
+    }
+
+  };
+
+  return (
+
+    <div className="menu" id="menu">
+
+      <div className="menu-inner">
+
+        {/* LOGO */}
+
+        <div
+          className="menu-logo"
+          onClick={() => go("home")}
+        >
+
+          <img src={logo} alt="logo" />
+
+         
+
+        </div>
+
+        {/* BOTÃO MOBILE */}
+
+        <div
+          className="menu-toggle"
+          onClick={() =>
+            setMenuMobile(!menuMobile)
+          }
+        >
+
+          ☰
+
+        </div>
+
+        {/* MENU */}
+
+        <div
+          className={`menu-items ${
+            menuMobile
+              ? "active"
+              : ""
+          }`}
+        >
+
+          {/* HOME */}
+
+          <div className="menu-item">
+
+            <span
+              onClick={() =>
+                go("home")
+              }
+            >
+
+              HOME
+
+            </span>
+
+          </div>
+
+          {/* ADAPTAÇÃO */}
+
+        
+
+            <div
+              className={`menu-item menu-dropdown ${
+                dropdownAberto === "adaptacao" ? "open" : ""
+              }`}
+            >
+
+              <span
+                onClick={() => {
+                  if (window.innerWidth <= 768) {
+                    setDropdownAberto(
+                      dropdownAberto === "adaptacao"
+                        ? null
+                        : "adaptacao"
+                    );
+                  } else {
+                    go("adaptacao");
+                  }
+                }}
+              >
+                ADAPTAÇÃO
+
+                <span className="arrow">
+                  ▾
+                </span>
+              </span>
+
+              <div className="submenu">
+
+                <div onClick={() => go("seguimento_nap")}>
+                  Seguimento do NAP
+                </div>
+
+                <div onClick={() => go("mapas_climatologia")}>
+                  Mapas de Climatologia
+                </div>
+
+                <div onClick={() => go("mapas_riscos")}>
+                  Mapas de risco climático
+                </div>
+
+              </div>
+
+            </div>
+
+          {/* MITIGAÇÃO */}
+
+          <div className="menu-item">
+
+            <span
+              onClick={() =>
+                go("mitigacao")
+              }
+            >
+
+              MITIGAÇÃO
+
+            </span>
+
+          </div>
+
+        
+          
+                {/* ENGAJAMENTO */}
+
+                <div
+                  className={`menu-item menu-dropdown ${
+                    dropdownAberto === "engajamento" ? "open" : ""
+                  }`}
+                >
+
+                  <span
+                    onClick={() => {
+                      if (window.innerWidth <= 768) {
+                        setDropdownAberto(
+                          dropdownAberto === "engajamento"
+                            ? null
+                            : "engajamento"
+                        );
+                      } else {
+                        go("engajamento");
+                      }
+                    }}
+                  >
+                    ENGAJAMENTO
+
+                    <span className="arrow">
+                      ▾
+                    </span>
+                  </span>
+
+                  <div className="submenu">
+
+                    <div onClick={() => go("form_submissao")}>
+                      Submissões de Ações Climáticas
+                    </div>
+
+                  </div>
+
+                </div>
+
+          {/* BIBLIOTECA */}
+
+          <div className="menu-item">
+
+            <span
+              onClick={() =>
+                go("biblioteca")
+              }
+            >
+
+              BIBLIOTECA
+
+            </span>
+
+          </div>
+
+          {/* CONTATO */}
+
+          <div className="menu-item">
+
+            <span
+              onClick={() =>
+                go("contato")
+              }
+            >
+
+              CONTATO
+
+            </span>
+
+          </div>
+
+          {/* LOGIN MOBILE */}
+
+          <div className="menu-login mobile">
+
+            <button
+              onClick={abrirAdmin}
+            >
+
+              {localStorage.getItem(
+                "logado"
+              ) === "sim"
+
+                ? "🔒 ADMIN"
+
+                : "🔒 ENTRAR"}
+
+            </button>
+
+          </div>
+
+        </div>
+
+        {/* LOGIN DESKTOP */}
+
+        <div className="menu-login desktop">
+
+          <button
+            onClick={abrirAdmin}
+          >
+
+            {localStorage.getItem(
+              "logado"
+            ) === "sim"
+
+              ? "🔒 ADMIN"
+
+              : "🔒 ENTRAR"}
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+export default Menu;
+>>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
