@@ -28,10 +28,9 @@ const uploadSubmissao = multer({
 const path = require("path");
 
 const db = require("./db");
-<<<<<<< HEAD
+
 const mapasFicheiros = require("./mapas-ficheiros");
-=======
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
+
 
 const fs =require("fs");
 
@@ -147,7 +146,7 @@ const uploadHero = multer({
 });
 
 /* =========================
-   UPLOAD DE PDFs DO RODAPÉ
+   UPLOAD DE PDFs DO RODAPÃ‰
 ========================= */
 const pastaRodape = path.join(__dirname, "uploads", "rodape");
 fs.mkdirSync(pastaRodape, { recursive: true });
@@ -598,7 +597,7 @@ app.post(
       );
 
       /* =========================
-         SE TIVER PÁGINA
+         SE TIVER PÃGINA
       ========================= */
 
       if (pagina_detalhe === "sim") {
@@ -754,7 +753,7 @@ app.delete("/cards/:id", async (req, res) => {
 
     const cardId = req.params.id;
 
-    /* procura página vinculada */
+    /* procura pÃ¡gina vinculada */
 
     const pagina = await db.query(
 
@@ -786,7 +785,7 @@ app.delete("/cards/:id", async (req, res) => {
 
       );
 
-      /* exclui página */
+      /* exclui pÃ¡gina */
 
       await db.query(
 
@@ -1092,7 +1091,7 @@ app.put(
             if (paginaAtual.rows.length === 0) {
 
               return res.status(400).json({
-                erro: "Página não encontrada"
+                erro: "PÃ¡gina nÃ£o encontrada"
               });
 
             }
@@ -1427,7 +1426,7 @@ app.get("/clima/indicadores", async (req, res) => {
 
 
 /* =========================
-   CADASTRAR INDICADOR CLIMÁTICO
+   CADASTRAR INDICADOR CLIMÃTICO
 ========================= */
 
 app.post(
@@ -1500,7 +1499,7 @@ app.post(
 
 
 /* =========================
-   EDITAR INDICADOR CLIMÁTICO
+   EDITAR INDICADOR CLIMÃTICO
 ========================= */
 
 app.put(
@@ -1592,7 +1591,7 @@ app.put(
 );
 
 /* =========================
-   EXCLUIR INDICADOR CLIMÁTICO
+   EXCLUIR INDICADOR CLIMÃTICO
 ========================= */
 
 app.delete(
@@ -1634,7 +1633,7 @@ app.delete(
 );
 
 /* =========================
-   CLIMA - CLASSIFICAÇÕES
+   CLIMA - CLASSIFICAÃ‡Ã•ES
 ========================= */
 
 app.get("/clima/classificacoes/:codigo", async (req, res) => {
@@ -1660,13 +1659,10 @@ app.get("/clima/classificacoes/:codigo", async (req, res) => {
 
     catch (err) {
 
-<<<<<<< HEAD
         if (mapasFicheiros.semBase(err)) {
             return res.json(mapasFicheiros.classificacoesDe(req.params.codigo));
         }
 
-=======
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
         console.log(err);
 
         res.status(500).json({
@@ -1741,7 +1737,7 @@ app.post("/clima/map-metadata", async (req, res) => {
 });
 
 /* =========================
-   CADASTRAR CLASSIFICAÇÃO
+   CADASTRAR CLASSIFICAÃ‡ÃƒO
 ========================= */
 
 app.post("/clima/classificacoes", async (req, res) => {
@@ -1806,7 +1802,7 @@ app.post("/clima/classificacoes", async (req, res) => {
 });
 
 /* =========================
-   CADASTRAR CLASSIFICAÇÕES EM LOTE
+   CADASTRAR CLASSIFICAÃ‡Ã•ES EM LOTE
 ========================= */
 
 app.post("/clima/classificacoes/lote", async (req, res) => {
@@ -1826,7 +1822,7 @@ app.post("/clima/classificacoes/lote", async (req, res) => {
         if (!codigo) {
 
             return res.status(400).json({
-                erro: "Código do indicador não informado."
+                erro: "CÃ³digo do indicador nÃ£o informado."
             });
 
         }
@@ -1838,14 +1834,14 @@ app.post("/clima/classificacoes/lote", async (req, res) => {
         ) {
 
             return res.status(400).json({
-                erro: "Nenhuma classificação informada."
+                erro: "Nenhuma classificaÃ§Ã£o informada."
             });
 
         }
 
 
         /* =========================
-           APAGAR CLASSIFICAÇÕES
+           APAGAR CLASSIFICAÃ‡Ã•ES
            ANTIGAS
         ========================= */
 
@@ -1904,7 +1900,7 @@ app.post("/clima/classificacoes/lote", async (req, res) => {
             sucesso: true,
 
             mensagem:
-                "Classificações salvas com sucesso.",
+                "ClassificaÃ§Ãµes salvas com sucesso.",
 
             quantidade:
                 classificacoes.length
@@ -1928,7 +1924,7 @@ app.post("/clima/classificacoes/lote", async (req, res) => {
 });
 
 /* =========================
-   EDITAR CLASSIFICAÇÃO
+   EDITAR CLASSIFICAÃ‡ÃƒO
 ========================= */
 
 app.put("/clima/classificacoes/:id", async (req,res)=>{
@@ -1996,7 +1992,7 @@ app.put("/clima/classificacoes/:id", async (req,res)=>{
 });
 
 /* =========================
-   EXCLUIR CLASSIFICAÇÃO
+   EXCLUIR CLASSIFICAÃ‡ÃƒO
 ========================= */
 
 app.delete("/clima/classificacoes/:id", async (req,res)=>{
@@ -2065,7 +2061,7 @@ app.post(
             if (!codigo) {
 
                 return res.status(400).json({
-                    erro: "Código do indicador não informado."
+                    erro: "CÃ³digo do indicador nÃ£o informado."
                 });
 
             }
@@ -2073,7 +2069,7 @@ app.post(
             if (!arquivo) {
 
                 return res.status(400).json({
-                    erro: "Arquivo GeoJSON não informado."
+                    erro: "Arquivo GeoJSON nÃ£o informado."
                 });
 
             }
@@ -2102,7 +2098,7 @@ app.post(
             if (!fs.existsSync(caminhoArquivo)) {
 
                 return res.status(404).json({
-                    erro: "Arquivo GeoJSON não encontrado."
+                    erro: "Arquivo GeoJSON nÃ£o encontrado."
                 });
 
             }
@@ -2128,7 +2124,7 @@ app.post(
             ) {
 
                 return res.status(400).json({
-                    erro: "GeoJSON inválido."
+                    erro: "GeoJSON invÃ¡lido."
                 });
 
             }
@@ -2166,7 +2162,7 @@ app.post(
 
 
             /* =========================
-               TRANSAÇÃO
+               TRANSAÃ‡ÃƒO
             ========================= */
 
             await db.query("BEGIN");
@@ -2323,7 +2319,7 @@ app.post(
             ) {
 
                 return res.status(400).json({
-                    erro: "O arquivo Excel não possui nenhuma aba."
+                    erro: "O arquivo Excel nÃ£o possui nenhuma aba."
                 });
 
             }
@@ -2355,14 +2351,14 @@ app.post(
             if (linhas.length === 0) {
 
                 return res.status(400).json({
-                    erro: "A planilha está vazia."
+                    erro: "A planilha estÃ¡ vazia."
                 });
 
             }
 
 
             /* =====================================================
-               COLUNAS OBRIGATÓRIAS
+               COLUNAS OBRIGATÃ“RIAS
             ===================================================== */
 
                   const colunasObrigatorias = [
@@ -2391,7 +2387,7 @@ app.post(
                 return res.status(400).json({
 
                     erro:
-                        "Colunas obrigatórias não encontradas.",
+                        "Colunas obrigatÃ³rias nÃ£o encontradas.",
 
                     colunas_faltando:
                         colunasFaltando
@@ -2441,7 +2437,7 @@ app.post(
                   };
 
 
-                    /* MAP_CODE É OBRIGATÓRIO */
+                    /* MAP_CODE Ã‰ OBRIGATÃ“RIO */
 
                     if (!registro.map_code) {
 
@@ -2491,7 +2487,7 @@ app.post(
                 return res.status(400).json({
 
                     erro:
-                        "Nenhum registro válido foi encontrado."
+                        "Nenhum registro vÃ¡lido foi encontrado."
 
                 });
 
@@ -2554,7 +2550,7 @@ app.post(
 
 
             /* =====================================================
-               TRANSAÇÃO
+               TRANSAÃ‡ÃƒO
             ===================================================== */
 
             const client =
@@ -2763,13 +2759,10 @@ app.get("/clima/mapas-filtros", async (req, res) => {
 
     } catch (erro) {
 
-<<<<<<< HEAD
         if (mapasFicheiros.semBase(erro)) {
             return res.json(mapasFicheiros.linhas());
         }
 
-=======
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
         console.error(
             "Erro ao carregar mapas para filtros:",
             erro
@@ -2800,7 +2793,7 @@ app.post(
       if (!arquivo) {
 
         return res.status(400).json({
-          erro: "Arquivo não informado."
+          erro: "Arquivo nÃ£o informado."
         });
 
       }
@@ -2815,7 +2808,7 @@ app.post(
       if (!fs.existsSync(caminhoArquivo)) {
 
         return res.status(404).json({
-          erro: "Arquivo GeoJSON não encontrado."
+          erro: "Arquivo GeoJSON nÃ£o encontrado."
         });
 
       }
@@ -2837,7 +2830,7 @@ app.post(
       ) {
 
         return res.status(400).json({
-          erro: "GeoJSON inválido."
+          erro: "GeoJSON invÃ¡lido."
         });
 
       }
@@ -2854,7 +2847,7 @@ app.post(
 
 
       /* =========================
-         CAMPOS QUE NÃO SÃO MAPAS
+         CAMPOS QUE NÃƒO SÃƒO MAPAS
       ========================= */
 
       const camposIgnorar = [
@@ -3145,7 +3138,7 @@ app.post(
 });
 
 /* =========================
-   SUBMISSÕES CLIMÁTICAS
+   SUBMISSÃ•ES CLIMÃTICAS
    ========================= */
 
 const TIPOS_CARD_SUBMISSAO = [
@@ -3153,7 +3146,7 @@ const TIPOS_CARD_SUBMISSAO = [
   "Workshop",
   "Treinamento",
   "Concurso",
-  "Notícia",
+  "NotÃ­cia",
   "Noticia",
   "Iniciativa Local",
   "Iniciativa Nacional",
@@ -3162,15 +3155,15 @@ const TIPOS_CARD_SUBMISSAO = [
 
 const TIPOS_BIBLIOTECA_SUBMISSAO = [
   "Projeto Longo",
-  "Projeto climático",
-  "Projeto Climático",
-  "Projeto Climático (+6 meses)",
-  "Publicação",
-  "Relatório",
+  "Projeto climÃ¡tico",
+  "Projeto ClimÃ¡tico",
+  "Projeto ClimÃ¡tico (+6 meses)",
+  "PublicaÃ§Ã£o",
+  "RelatÃ³rio",
   "Relatorio",
   "Base de Dados",
   "Mapa",
-  "Mapa Estático",
+  "Mapa EstÃ¡tico",
   "Mapa estatico"
 ];
 
@@ -3193,7 +3186,7 @@ function definirDestinosSubmissao(tipo) {
 }
 
 /* =========================
-   LISTAR SUBMISSÕES
+   LISTAR SUBMISSÃ•ES
    ========================= */
 
 app.get("/submissoes", async (req, res) => {
@@ -3215,7 +3208,7 @@ app.get("/submissoes", async (req, res) => {
 });
 
 /* =========================
-   BUSCAR UMA SUBMISSÃO
+   BUSCAR UMA SUBMISSÃƒO
    ========================= */
 
 app.get("/submissoes/:id", async (req, res) => {
@@ -3231,7 +3224,7 @@ app.get("/submissoes/:id", async (req, res) => {
 
     if (resultado.rows.length === 0) {
       return res.status(404).json({
-        erro: "Submissão não encontrada."
+        erro: "SubmissÃ£o nÃ£o encontrada."
       });
     }
 
@@ -3261,14 +3254,14 @@ app.get("/submissoes/:id", async (req, res) => {
 });
 
 /* =========================
-   CRIAR SUBMISSÃO
+   CRIAR SUBMISSÃƒO
 
    Recebe:
    - campos gerais
    - arquivos gerais
-   - imagens da página do Card
+   - imagens da pÃ¡gina do Card
 
-   Os arquivos são armazenados em:
+   Os arquivos sÃ£o armazenados em:
    uploads/submissoes
    ========================= */
 
@@ -3335,7 +3328,7 @@ app.post(
 
       if (!email || !tipo_proponente || !nome_responsavel || !tipo_submissao || !titulo || !descricao) {
         return res.status(400).json({
-          erro: "Preencha os campos obrigatórios da submissão."
+          erro: "Preencha os campos obrigatÃ³rios da submissÃ£o."
         });
       }
 
@@ -3343,7 +3336,7 @@ app.post(
 
       if (destinos.length === 0) {
         return res.status(400).json({
-          erro: `Tipo de submissão não configurado: ${tipo_submissao}`
+          erro: `Tipo de submissÃ£o nÃ£o configurado: ${tipo_submissao}`
         });
       }
 
@@ -3374,7 +3367,7 @@ app.post(
         evento_online === "true";
 
       /* =====================================================
-         VALIDAÇÕES ESPECÍFICAS DO CARD
+         VALIDAÃ‡Ã•ES ESPECÃFICAS DO CARD
          ===================================================== */
 
       const precisaCard = destinos.includes("card");
@@ -3389,7 +3382,7 @@ app.post(
 
         if (!paginasPermitidas.includes(paginaCardFinal)) {
           return res.status(400).json({
-            erro: "Página do Card inválida."
+            erro: "PÃ¡gina do Card invÃ¡lida."
           });
         }
 
@@ -3404,19 +3397,19 @@ app.post(
           (!titulo_pagina || !texto_pagina)
         ) {
           return res.status(400).json({
-            erro: "Para uma página interna, informe o título e o conteúdo da página."
+            erro: "Para uma pÃ¡gina interna, informe o tÃ­tulo e o conteÃºdo da pÃ¡gina."
           });
         }
       }
 
       /* =====================================================
-         TRANSAÇÃO
+         TRANSAÃ‡ÃƒO
          ===================================================== */
 
       await client.query("BEGIN");
 
       /* =====================================================
-         SUBMISSÃO
+         SUBMISSÃƒO
          ===================================================== */
 
       const configCard = {
@@ -3554,10 +3547,10 @@ app.post(
       }
 
       /* =====================================================
-         IMAGENS DA PÁGINA DO CARD
+         IMAGENS DA PÃGINA DO CARD
 
-         Elas também entram em submissao_arquivos.
-         Na aprovação serão usadas para paginas_imagens.
+         Elas tambÃ©m entram em submissao_arquivos.
+         Na aprovaÃ§Ã£o serÃ£o usadas para paginas_imagens.
          ===================================================== */
 
       for (const imagem of imagensPagina) {
@@ -3614,7 +3607,7 @@ app.post(
 );
 
 /* =========================
-   ALTERAR STATUS / OBSERVAÇÃO
+   ALTERAR STATUS / OBSERVAÃ‡ÃƒO
    ========================= */
 
 app.put("/submissoes/:id", async (req, res) => {
@@ -3654,17 +3647,17 @@ app.put("/submissoes/:id", async (req, res) => {
 });
 
 /* =====================================================
-   APROVAR SUBMISSÃO
+   APROVAR SUBMISSÃƒO
 
    GRUPO 1
    Evento / Workshop / Treinamento / Concurso /
-   Notícia / Iniciativa Local / Iniciativa Nacional /
+   NotÃ­cia / Iniciativa Local / Iniciativa Nacional /
    Projeto Curto
 
    -> EVENTO + CARD
 
    GRUPO 2
-   Projeto Longo / Publicação / Relatório /
+   Projeto Longo / PublicaÃ§Ã£o / RelatÃ³rio /
    Base de Dados / Mapa
 
    -> BIBLIOTECA
@@ -3673,7 +3666,7 @@ app.put("/submissoes/:id", async (req, res) => {
 
    -> EVENTO + CARD + BIBLIOTECA
 
-   NADA É PUBLICADO AUTOMATICAMENTE.
+   NADA Ã‰ PUBLICADO AUTOMATICAMENTE.
    ===================================================== */
 
 app.post("/submissoes/:id/aprovar", async (req, res) => {
@@ -3698,7 +3691,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 
     if (resultado.rows.length === 0) {
       return res.status(404).json({
-        erro: "Submissão não encontrada."
+        erro: "SubmissÃ£o nÃ£o encontrada."
       });
     }
 
@@ -3737,13 +3730,13 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 
     if (statusAtual === "aprovado") {
       return res.status(400).json({
-        erro: "Esta submissão já foi aprovada."
+        erro: "Esta submissÃ£o jÃ¡ foi aprovada."
       });
     }
 
     if (statusAtual === "rejeitado") {
       return res.status(400).json({
-        erro: "Esta submissão está rejeitada."
+        erro: "Esta submissÃ£o estÃ¡ rejeitada."
       });
     }
 
@@ -3757,7 +3750,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     if (destinos.length === 0) {
       return res.status(400).json({
         erro:
-          `Tipo de submissão não configurado: ${tipoOriginal}`
+          `Tipo de submissÃ£o nÃ£o configurado: ${tipoOriginal}`
       });
     }
 
@@ -3792,7 +3785,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     /* =====================================================
        IMAGEM ESCOLHIDA PARA O CARD
 
-       O formulário guarda imagem_card_index como índice
+       O formulÃ¡rio guarda imagem_card_index como Ã­ndice
        dentro do array de arquivos gerais.
        ===================================================== */
 
@@ -3854,7 +3847,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 
       if (!paginasPermitidas.includes(paginaCard)) {
         throw new Error(
-          "Página do Card inválida."
+          "PÃ¡gina do Card invÃ¡lida."
         );
       }
 
@@ -3865,7 +3858,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 
       if (!linkCard) {
         throw new Error(
-          "O Card não possui destino configurado."
+          "O Card nÃ£o possui destino configurado."
         );
       }
 
@@ -3916,7 +3909,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
       cardId = card.rows[0].id;
 
       /* =================================================
-         PÁGINA INTERNA
+         PÃGINA INTERNA
          ================================================= */
 
       if (ehPaginaInterna) {
@@ -3945,7 +3938,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
           pagina.rows[0].id;
 
         /* =============================================
-           ATÉ 5 FOTOS
+           ATÃ‰ 5 FOTOS
            ============================================= */
 
         const imagens = arquivos
@@ -3984,16 +3977,16 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     if (destinos.includes("biblioteca")) {
       const tipoBiblioteca =
         tipoOriginal === "Projeto Longo" ||
-        tipoOriginal === "Projeto climático" ||
-        tipoOriginal === "Projeto Climático" ||
-        tipoOriginal === "Projeto Climático (+6 meses)"
-          ? "Projeto climático"
+        tipoOriginal === "Projeto climÃ¡tico" ||
+        tipoOriginal === "Projeto ClimÃ¡tico" ||
+        tipoOriginal === "Projeto ClimÃ¡tico (+6 meses)"
+          ? "Projeto climÃ¡tico"
           : tipoOriginal === "Mapa" ||
-            tipoOriginal === "Mapa Estático" ||
+            tipoOriginal === "Mapa EstÃ¡tico" ||
             tipoOriginal === "Mapa estatico"
-          ? "Mapa estático"
+          ? "Mapa estÃ¡tico"
           : tipoOriginal === "Relatorio"
-          ? "Relatório"
+          ? "RelatÃ³rio"
           : tipoOriginal;
 
       const biblioteca = await client.query(
@@ -4036,7 +4029,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     }
 
     /* =====================================================
-       EVENTO / CALENDÁRIO
+       EVENTO / CALENDÃRIO
        ===================================================== */
 
     if (destinos.includes("evento")) {
@@ -4093,10 +4086,10 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     }
 
     /* =====================================================
-       MARCAR SUBMISSÃO COMO APROVADA
+       MARCAR SUBMISSÃƒO COMO APROVADA
 
-       Como a aprovação já publica o conteúdo, os destinos
-       são criados diretamente com ativo=true.
+       Como a aprovaÃ§Ã£o jÃ¡ publica o conteÃºdo, os destinos
+       sÃ£o criados diretamente com ativo=true.
        ===================================================== */
 
     await client.query(
@@ -4123,7 +4116,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 
     res.json({
       sucesso: true,
-      mensagem: "Submissão aprovada com sucesso.",
+      mensagem: "SubmissÃ£o aprovada com sucesso.",
       submissao_id: Number(id),
       evento_id: eventoId,
       card_id: cardId,
@@ -4142,14 +4135,14 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
     }
 
     console.error(
-      "Erro ao aprovar submissão:",
+      "Erro ao aprovar submissÃ£o:",
       err
     );
 
     res.status(500).json({
       erro:
         err.message ||
-        "Erro ao aprovar submissão."
+        "Erro ao aprovar submissÃ£o."
     });
   } finally {
     client.release();
@@ -4157,7 +4150,7 @@ app.post("/submissoes/:id/aprovar", async (req, res) => {
 });
 
 /* =========================
-   EXCLUIR SUBMISSÃO
+   EXCLUIR SUBMISSÃƒO
    ========================= */
 
 app.delete("/submissoes/:id", async (req, res) => {
@@ -4343,8 +4336,8 @@ app.get(
 
 
 /* =========================
-   PUBLICAÇÕES
-   Cards vindos de submissões
+   PUBLICAÃ‡Ã•ES
+   Cards vindos de submissÃµes
    ========================= */
 
 app.get("/publicacoes/:pagina", async (req, res) => {
@@ -4376,7 +4369,7 @@ app.get("/publicacoes/:pagina", async (req, res) => {
     console.log(err);
 
     res.status(500).json({
-      erro: "Erro ao carregar publicações."
+      erro: "Erro ao carregar publicaÃ§Ãµes."
     });
 
   }
@@ -4396,7 +4389,7 @@ app.get("/banners-herois", async (req, res) => {
   } catch (erro) {
     console.error("Erro ao consultar banners:", erro);
     res.status(500).json({
-      erro: "Erro ao consultar banners e heróis."
+      erro: "Erro ao consultar banners e herÃ³is."
     });
   }
 });
@@ -4426,7 +4419,7 @@ app.post(
 
       if (!tipo || !pagina || !titulo) {
         return res.status(400).json({
-          erro: "Preencha tipo, página e título."
+          erro: "Preencha tipo, pÃ¡gina e tÃ­tulo."
         });
       }
 
@@ -4469,7 +4462,7 @@ app.post(
       console.error("Erro ao salvar banner:", erro);
 
       res.status(500).json({
-        erro: "Erro ao salvar banner ou herói."
+        erro: "Erro ao salvar banner ou herÃ³i."
       });
     }
   }
@@ -4504,11 +4497,11 @@ app.put(
 
       if (!tipo || !pagina || !titulo) {
         return res.status(400).json({
-          erro: "Preencha tipo, página e título."
+          erro: "Preencha tipo, pÃ¡gina e tÃ­tulo."
         });
       }
 
-      // Busca a imagem atual para preservá-la se não houver upload
+      // Busca a imagem atual para preservÃ¡-la se nÃ£o houver upload
       const atual = await db.query(
         "SELECT imagem FROM banners_herois WHERE id = $1",
         [id]
@@ -4516,7 +4509,7 @@ app.put(
 
       if (atual.rows.length === 0) {
         return res.status(404).json({
-          erro: "Banner ou herói não encontrado."
+          erro: "Banner ou herÃ³i nÃ£o encontrado."
         });
       }
 
@@ -4576,7 +4569,7 @@ app.put(
       console.error("Erro ao atualizar banner:", erro);
 
       res.status(500).json({
-        erro: "Erro ao atualizar banner ou herói."
+        erro: "Erro ao atualizar banner ou herÃ³i."
       });
     }
   }
@@ -4597,18 +4590,18 @@ app.delete("/banners-herois/:id", async (req, res) => {
 
     if (resultado.rows.length === 0) {
       return res.status(404).json({
-        erro: "Banner ou herói não encontrado."
+        erro: "Banner ou herÃ³i nÃ£o encontrado."
       });
     }
 
     res.json({
-      mensagem: "Banner ou herói excluído com sucesso.",
+      mensagem: "Banner ou herÃ³i excluÃ­do com sucesso.",
       id: resultado.rows[0].id
     });
   } catch (erro) {
     console.error("Erro ao excluir banner:", erro);
     res.status(500).json({
-      erro: "Erro ao excluir banner ou herói."
+      erro: "Erro ao excluir banner ou herÃ³i."
     });
   }
 });
@@ -4618,35 +4611,29 @@ app.delete("/banners-herois/:id", async (req, res) => {
 
 
 /* =====================================================
-   CONFIGURAÇÕES DO RODAPÉ
+   CONFIGURAÃ‡Ã•ES DO RODAPÃ‰
 ===================================================== */
 
-// Cria a tabela automaticamente caso ainda não exista.
+// Cria a tabela automaticamente caso ainda nÃ£o exista.
 async function garantirTabelaConfiguracoesRodape() {
   await db.query(`
     CREATE TABLE IF NOT EXISTS configuracoes_rodape (
       id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
-      sobre_texto TEXT NOT NULL DEFAULT 'Portal Climático da Guiné-Bissau',
+      sobre_texto TEXT NOT NULL DEFAULT 'Portal ClimÃ¡tico da GuinÃ©-Bissau',
       sobre_pdf TEXT,
       sobre_pdf_nome TEXT,
       politica_pdf TEXT,
       politica_pdf_nome TEXT,
       facebook_url TEXT,
       instagram_url TEXT,
-<<<<<<< HEAD
       twitter_url TEXT,
       linkedin_url TEXT,
       email TEXT NOT NULL DEFAULT 'info@portaldoclima.gw',
-=======
-      linkedin_url TEXT,
-      email TEXT NOT NULL DEFAULT 'info@clima.gb',
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
       telefone TEXT NOT NULL DEFAULT '+245 XXX XXX',
       atualizado_em TIMESTAMP NOT NULL DEFAULT NOW()
     )
   `);
 
-<<<<<<< HEAD
   await db.query(`ALTER TABLE configuracoes_rodape ADD COLUMN IF NOT EXISTS twitter_url TEXT`);
   await db.query(`ALTER TABLE configuracoes_rodape ALTER COLUMN email SET DEFAULT 'info@portaldoclima.gw'`);
 
@@ -4667,12 +4654,6 @@ async function garantirTabelaConfiguracoesRodape() {
         WHEN configuracoes_rodape.email IN ('info@clima.gb', '') THEN EXCLUDED.email
         ELSE configuracoes_rodape.email
       END
-=======
-  await db.query(`
-    INSERT INTO configuracoes_rodape (id)
-    VALUES (1)
-    ON CONFLICT (id) DO NOTHING
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
   `);
 }
 
@@ -4684,8 +4665,8 @@ app.get("/configuracoes/rodape", async (req, res) => {
     );
     res.json(resultado.rows[0] || {});
   } catch (erro) {
-    console.error("Erro ao carregar configurações do rodapé:", erro);
-    res.status(500).json({ erro: "Não foi possível carregar as configurações do rodapé." });
+    console.error("Erro ao carregar configuraÃ§Ãµes do rodapÃ©:", erro);
+    res.status(500).json({ erro: "NÃ£o foi possÃ­vel carregar as configuraÃ§Ãµes do rodapÃ©." });
   }
 });
 
@@ -4727,49 +4708,37 @@ app.put(
              politica_pdf_nome = $5,
              facebook_url = $6,
              instagram_url = $7,
-<<<<<<< HEAD
              twitter_url = $8,
              linkedin_url = $9,
              email = $10,
              telefone = $11,
-=======
-             linkedin_url = $8,
-             email = $9,
-             telefone = $10,
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
              atualizado_em = NOW()
          WHERE id = 1
          RETURNING *`,
         [
-          (req.body.sobre_texto || "").trim() || "Portal Climático da Guiné-Bissau",
+          (req.body.sobre_texto || "").trim() || "Portal ClimÃ¡tico da GuinÃ©-Bissau",
           sobrePdf,
           sobrePdfNome,
           politicaPdf,
           politicaPdfNome,
           (req.body.facebook_url || "").trim() || null,
           (req.body.instagram_url || "").trim() || null,
-<<<<<<< HEAD
           (req.body.twitter_url || "").trim() || null,
           (req.body.linkedin_url || "").trim() || null,
           (req.body.email || "").trim() || "info@portaldoclima.gw",
-=======
-          (req.body.linkedin_url || "").trim() || null,
-          (req.body.email || "").trim() || "info@clima.gb",
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
           (req.body.telefone || "").trim() || "+245 XXX XXX"
         ]
       );
 
       res.json({ sucesso: true, configuracoes: resultado.rows[0] });
     } catch (erro) {
-      console.error("Erro ao salvar configurações do rodapé:", erro);
-      res.status(500).json({ erro: erro.message || "Não foi possível salvar as configurações do rodapé." });
+      console.error("Erro ao salvar configuraÃ§Ãµes do rodapÃ©:", erro);
+      res.status(500).json({ erro: erro.message || "NÃ£o foi possÃ­vel salvar as configuraÃ§Ãµes do rodapÃ©." });
     }
   }
 );
 
 
-<<<<<<< HEAD
 /* =====================================================
    MENSAGENS DE CONTATO
 ===================================================== */
@@ -4809,7 +4778,7 @@ app.post("/contato", async (req, res) => {
     res.json({ sucesso: true, mensagem: resultado.rows[0] });
   } catch (erro) {
     console.error("Erro ao guardar contacto:", erro);
-    res.status(500).json({ erro: "Não foi possível enviar a mensagem." });
+    res.status(500).json({ erro: "NÃ£o foi possÃ­vel enviar a mensagem." });
   }
 });
 
@@ -4822,18 +4791,15 @@ app.get("/contato", async (req, res) => {
     res.json(resultado.rows);
   } catch (erro) {
     console.error("Erro ao listar contactos:", erro);
-    res.status(500).json({ erro: "Não foi possível carregar as mensagens." });
+    res.status(500).json({ erro: "NÃ£o foi possÃ­vel carregar as mensagens." });
   }
 });
 
 
-=======
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
 /* =========================
    SERVIDOR
 ========================= */
 
-<<<<<<< HEAD
 const { garantirBanco } = require("./banco");
 
 const PORT = process.env.PORT || 3000;
@@ -4845,17 +4811,6 @@ garantirBanco()
     });
   })
   .catch((erro) => {
-    console.error("Não foi possível preparar a base de dados:", erro);
+    console.error("NÃ£o foi possÃ­vel preparar a base de dados:", erro);
     process.exit(1);
   });
-=======
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-
-  console.log(
-    `Servidor rodando porta ${PORT}`
-  );
-
-});
->>>>>>> 1574794efa33e06e7984fc624f650203a7d339e3
